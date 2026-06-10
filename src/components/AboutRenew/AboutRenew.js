@@ -66,7 +66,7 @@ export default function AboutRenew() {
         >
           <div className="about-renew-image-shell">
             <img
-              src="/images/About_renew.png"
+              src="https://renewhealthcare.in/wp-content/uploads/2024/12/ivf-treatment-near-me.png"
               alt="Renew Healthcare clinic, consultation spaces, and patient care team"
             />
           </div>

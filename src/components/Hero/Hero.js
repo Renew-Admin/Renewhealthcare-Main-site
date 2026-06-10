@@ -54,12 +54,18 @@ function Hero() {
   // Mobile gets a simple auto-rotating slider; reduced-motion stays static.
   const [animate, setAnimate] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
     const wide = window.matchMedia('(min-width: 901px)')
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
     const update = () => {
       setReduceMotion(reduce.matches)
       setAnimate(wide.matches && !reduce.matches)
+      const mobile = !wide.matches
+      setIsMobile(mobile)
+      if (mobile) {
+        setIndex(0)
+      }
     }
     update()
     wide.addEventListener('change', update)
@@ -78,12 +84,12 @@ function Hero() {
     setIndex(i)
   })
 
-  // Auto-rotate in the static fallback only (never under reduced-motion).
+  // Auto-rotate in the static fallback only (never under reduced-motion, and never on mobile).
   useEffect(() => {
-    if (animate || reduceMotion) return
+    if (animate || reduceMotion || isMobile) return
     const t = setInterval(() => setIndex(i => (i + 1) % total), 5000)
     return () => clearInterval(t)
-  }, [animate, reduceMotion])
+  }, [animate, reduceMotion, isMobile])
 
   const goTo = i => {
     const target = (i + total) % total
@@ -118,7 +124,7 @@ function Hero() {
             {SLIDES.map((slide, i) => (
               <motion.img
                 key={i}
-                src={slide.image}
+                src={isMobile && i === 0 ? '/images/About_renew.png' : slide.image}
                 alt={slide.alt}
                 className={`hero-photo-img ${slide.imgClass || ''}`}
                 initial={false}
@@ -190,32 +196,36 @@ function Hero() {
 
           <div className="journey-bottom">
             <p className="journey-desc">{s.cardDesc[0]}<br />{s.cardDesc[1]}</p>
-            <button className="journey-arrow" onClick={next} aria-label="Next slide">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true">
-                <path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+            {!isMobile && (
+              <button className="journey-arrow" onClick={next} aria-label="Next slide">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true">
+                  <path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            )}
           </div>
         </motion.div>
 
         {/* Slider pagination */}
-        <div className="slider">
-          <button className="slider-btn" onClick={prev} aria-label="Previous slide">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-              <path d="M14 6l-6 6 6 6" stroke="#374151" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          <span className="slider-num">
-            <span className="num-active">{pad(index + 1)}</span>
-            <span className="slider-dash" />
-            <span>{pad(total)}</span>
-          </span>
-          <button className="slider-btn" onClick={next} aria-label="Next slide">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-              <path d="M10 6l6 6-6 6" stroke="#374151" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
+        {!isMobile && (
+          <div className="slider">
+            <button className="slider-btn" onClick={prev} aria-label="Previous slide">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+                <path d="M14 6l-6 6 6 6" stroke="#374151" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <span className="slider-num">
+              <span className="num-active">{pad(index + 1)}</span>
+              <span className="slider-dash" />
+              <span>{pad(total)}</span>
+            </span>
+            <button className="slider-btn" onClick={next} aria-label="Next slide">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+                <path d="M10 6l6 6-6 6" stroke="#374151" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+        )}
       </section>
     </div>
   )

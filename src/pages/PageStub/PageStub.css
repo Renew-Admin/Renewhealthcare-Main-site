@@ -1,0 +1,40 @@
+.page-stub {
+  min-height: 52svh;
+  padding: clamp(110px, 12vw, 170px) 5%;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(224, 239, 228, 0.75), transparent 28%),
+    linear-gradient(135deg, #fbfaf7 0%, #fff 52%, #f1f7f5 100%);
+}
+
+.page-stub-inner {
+  width: min(1360px, 100%);
+  margin: 0 auto;
+}
+
+.page-stub-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #315342;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.page-stub-eyebrow::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: #7b9c70;
+}
+
+.page-stub h1 {
+  margin-top: 24px;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: clamp(3.1rem, 6vw, 5.6rem);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.07em;
+}

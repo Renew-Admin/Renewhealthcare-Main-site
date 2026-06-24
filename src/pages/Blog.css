@@ -821,6 +821,15 @@
 }
 .blogx-hero-figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
+@media (max-width: 768px) {
+  .blogx-post-head {
+    padding: clamp(20px, 4vw, 32px) 5% clamp(24px, 5vw, 36px);
+  }
+  .blogx-hero-figure {
+    margin: 0 auto clamp(24px, 4vw, 40px);
+  }
+}
+
 /* ═══════════ Blog list: 2-column with right-side form ═══════════ */
 .blogx-layout {
   display: grid;

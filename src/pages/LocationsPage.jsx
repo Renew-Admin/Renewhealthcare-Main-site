@@ -7,7 +7,7 @@ export default function LocationsPage() {
   return (
     <main className="content-page">
       <section className="service-banner">
-        <img src="https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg" alt="Renew Healthcare clinics" />
+        <img src="/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg" alt="Renew Healthcare clinics" />
         <div className="service-banner-overlay" />
         <div className="service-banner-content">
           <span>Home / Locations</span>

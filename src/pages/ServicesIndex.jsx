@@ -6,7 +6,7 @@ export default function ServicesIndex() {
   return (
     <main className="services-page">
       <section className="service-banner service-index-banner">
-        <img src="https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner.jpg" alt="Renew Healthcare services" />
+        <img src="/images/renew/uploads/2024/12/Inner-Page-Banner.jpg" alt="Renew Healthcare services" />
         <div className="service-banner-overlay" />
         <div className="service-banner-content">
           <span>Home / Services</span>

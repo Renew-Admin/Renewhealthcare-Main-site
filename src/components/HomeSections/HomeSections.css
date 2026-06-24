@@ -1,7 +1,7 @@
 .home-band {
   position: relative;
   overflow: hidden;
-  padding: clamp(88px, 9vw, 138px) 5%;
+  padding: clamp(54px, 6vw, 92px) 5%;
 }
 
 .home-band-inner {
@@ -38,10 +38,10 @@
 .home-section-heading h2 {
   color: var(--ink);
   font-family: var(--font-heading);
-  font-size: clamp(3rem, 5vw, 5.4rem);
-  font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: -0.07em;
+  font-size: clamp(2.75rem, 4.6vw, 4.9rem);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.022em;
 }
 
 .home-section-heading p {
@@ -55,10 +55,10 @@
 
 .home-card {
   overflow: hidden;
-  border: 1px solid rgba(7, 90, 145, 0.09);
+  border: var(--card-line);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 22px 55px rgba(20, 40, 70, 0.09);
+  background: #fff;
+  box-shadow: var(--shadow-card);
 }
 
 .why-renew-section,
@@ -75,6 +75,96 @@
   gap: 18px;
 }
 
+.card-carousel.why-grid,
+.card-carousel.journey-grid,
+.card-carousel.service-showcase,
+.card-carousel.doctor-grid,
+.card-carousel.blog-grid {
+  display: block;
+}
+
+.card-carousel-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.card-carousel-controls button {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(7, 90, 145, 0.14);
+  border-radius: 50%;
+  color: var(--navy);
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(20, 40, 70, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.card-carousel-controls button:hover:not(:disabled) {
+  color: #fff;
+  background: var(--navy);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(20, 40, 70, 0.14);
+}
+
+.card-carousel-controls button:disabled {
+  cursor: default;
+  opacity: 0.34;
+}
+
+.card-carousel-arrow {
+  width: 11px;
+  height: 11px;
+  display: block;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+
+.card-carousel-arrow-left {
+  transform: translateX(2px) rotate(-135deg);
+}
+
+.card-carousel-arrow-right {
+  transform: translateX(-2px) rotate(45deg);
+}
+
+.card-carousel-viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.card-carousel-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.card-carousel-track {
+  display: flex;
+  align-items: stretch;
+  gap: 18px;
+}
+
+.journey-grid .card-carousel-track {
+  gap: 16px;
+}
+
+.card-carousel-slide {
+  min-width: 0;
+  flex: 0 0 calc((100% - 54px) / 4);
+  display: flex;
+  scroll-snap-align: start;
+}
+
+.card-carousel-slide > * {
+  width: 100%;
+}
+
 .video-why-card {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
@@ -82,20 +172,20 @@
   align-items: center;
   margin-bottom: clamp(36px, 5vw, 68px);
   padding: clamp(24px, 3vw, 38px);
-  border: 1px solid rgba(7, 90, 145, 0.09);
+  border: var(--card-line);
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 26px 70px rgba(20, 40, 70, 0.1);
+  background: #fff;
+  box-shadow: var(--shadow-card);
 }
 
 .video-why-copy h3 {
   margin-bottom: 22px;
   color: var(--ink);
   font-family: var(--font-heading);
-  font-size: clamp(2.25rem, 4vw, 4.2rem);
-  font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: -0.07em;
+  font-size: clamp(2.15rem, 3.5vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.022em;
 }
 
 .video-why-copy p {
@@ -156,7 +246,7 @@
 .clinic-card:hover,
 .blog-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 30px 70px rgba(20, 40, 70, 0.13);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .why-icon {
@@ -184,7 +274,7 @@
   font-family: var(--font-heading);
   font-weight: 400;
   line-height: 1.16;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.022em;
 }
 
 .why-card h3 {
@@ -228,7 +318,7 @@
 
 .journey-stage-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 30px 70px rgba(20, 40, 70, 0.13);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .journey-stage-card img {
@@ -248,7 +338,7 @@
   font-size: 1.15rem;
   font-weight: 400;
   line-height: 1.22;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.022em;
 }
 
 .service-showcase {
@@ -270,8 +360,8 @@
   color: var(--blue);
   font-family: var(--font-heading);
   font-size: 2rem;
-  font-weight: 300;
-  letter-spacing: -0.05em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 
 .service-card h3 {
@@ -289,7 +379,7 @@
   gap: 12px;
   padding-top: 20px;
   color: var(--navy);
-  border-top: 1px solid rgba(7, 90, 145, 0.12);
+  border-top: 1px solid rgba(20, 40, 70, 0.07);
   font-size: 0.84rem;
   font-weight: 600;
   text-decoration: none;
@@ -355,10 +445,10 @@
 
 .media-carousel {
   overflow: hidden;
-  border: 1px solid rgba(7, 90, 145, 0.09);
+  border: var(--card-line);
   border-radius: 24px;
   background: #fff;
-  box-shadow: 0 22px 55px rgba(20, 40, 70, 0.08);
+  box-shadow: var(--shadow-card);
 }
 
 .media-track {
@@ -452,35 +542,108 @@
 
 .blog-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
 }
 
 .blog-card {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
   transition: transform 0.24s ease, box-shadow 0.24s ease;
 }
 
-.blog-card > img {
-  width: 100%;
-  height: 230px;
-  object-fit: cover;
+.blog-card-media {
+  position: relative;
+  overflow: hidden;
 }
 
-.blog-card > div {
-  min-height: 250px;
+.blog-card-media img {
+  width: 100%;
+  height: 200px;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.blog-card:hover .blog-card-media img {
+  transform: scale(1.06);
+}
+
+.blog-card-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--navy);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(20, 40, 70, 0.12);
+}
+
+.blog-card-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: 22px;
 }
 
-.blog-card h3 {
-  margin-bottom: 14px;
-  font-size: 1.45rem;
+.blog-card-date {
+  margin-bottom: 12px;
+  color: #8a94a0;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.blog-card-body h3 {
+  margin-bottom: 12px;
+  font-size: 1.18rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.blog-card-body p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.blog-card-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 18px;
+  color: var(--navy);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.blog-card-link span {
+  transition: transform 0.2s ease;
+}
+
+.blog-card:hover .blog-card-link span {
+  transform: translateX(4px);
 }
 
 @media (max-width: 1120px) {
+  .card-carousel-slide {
+    flex-basis: calc((100% - 18px) / 2);
+  }
+
   .service-showcase,
   .doctor-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -499,7 +662,21 @@
 
 @media (max-width: 720px) {
   .home-band {
-    padding: 84px 6%;
+    padding: 56px 6%;
+  }
+
+  .card-carousel-controls {
+    justify-content: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .card-carousel-controls button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .card-carousel-slide {
+    flex-basis: 100%;
   }
 
   .home-section-heading {

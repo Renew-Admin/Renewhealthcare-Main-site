@@ -2,7 +2,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(100px, 11vw, 170px) 5%;
+  padding: clamp(58px, 7vw, 104px) 5%;
   background:
     radial-gradient(circle at 12% 20%, rgba(224, 239, 228, 0.75), transparent 28%),
     linear-gradient(135deg, #fbfaf7 0%, #fff 52%, #f1f7f5 100%);
@@ -25,7 +25,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(390px, 0.92fr);
-  gap: clamp(52px, 6vw, 90px);
+  gap: clamp(34px, 4.5vw, 58px);
   align-items: center;
 }
 
@@ -57,9 +57,9 @@
   color: var(--ink);
   font-family: var(--font-heading);
   font-size: clamp(3.2rem, 5.2vw, 5.7rem);
-  font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: -0.07em;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
 
 .about-renew h2 span {
@@ -153,11 +153,13 @@
 }
 
 .about-renew-trust strong {
+  flex: 0 0 auto;
   color: var(--navy);
   font-family: var(--font-heading);
   font-size: 1.8rem;
   font-weight: 500;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .about-renew-visual {
@@ -171,19 +173,10 @@
   position: relative;
   height: clamp(540px, 54vw, 690px);
   overflow: hidden;
-  border: 8px solid rgba(255, 255, 255, 0.8);
+  border: var(--card-line);
   border-radius: 34px;
   background: #eee9df;
-  box-shadow: 0 35px 80px rgba(41, 66, 62, 0.18);
-}
-
-.about-renew-image-shell::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 26px;
+  box-shadow: var(--shadow-card);
 }
 
 .about-renew-image-shell img {
@@ -209,9 +202,9 @@
   background: rgba(255, 255, 255, 0.86);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  border: var(--card-line);
   border-radius: 18px;
-  box-shadow: 0 18px 40px rgba(31, 61, 51, 0.15);
+  box-shadow: var(--shadow-card);
 }
 
 .about-renew-floating-note svg {
@@ -255,6 +248,19 @@
 
   .about-renew-actions a {
     width: 100%;
+  }
+
+  .about-renew-trust {
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+  }
+
+  .about-renew-trust strong {
+    min-width: max-content;
+    font-size: 1.65rem;
+    line-height: 1;
   }
 
   .about-renew-image-shell {

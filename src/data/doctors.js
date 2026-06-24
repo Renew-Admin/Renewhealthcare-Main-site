@@ -1,4 +1,4 @@
-const uploadBase = 'https://renewhealthcare.in/wp-content/uploads/'
+const uploadBase = '/images/renew/uploads/'
 
 const photo = path => `${uploadBase}${path}`
 const slug = name => name.toLowerCase().replace(/dr\.?\s*/g, 'dr-').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')

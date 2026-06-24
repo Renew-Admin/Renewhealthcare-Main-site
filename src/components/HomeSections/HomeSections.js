@@ -1,13 +1,7 @@
-import { motion } from 'framer-motion'
+import { Children, useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useBlogs } from '../../hooks/useBlogs.js'
 import './HomeSections.css'
-
-const reveal = {
-  initial: { opacity: 0, y: 28 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.18 },
-  transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
-}
 
 const whyItems = [
   ['why-ch-ic1.png', 'More than two decades of experience', 'Highly experienced IVF fertility specialists in Kolkata for diagnosis and treatments for varied fertility issues.'],
@@ -26,32 +20,25 @@ const services = [
 ]
 
 const doctors = [
-  ['Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', 'https://renewhealthcare.in/wp-content/uploads/2024/07/Dr-rajeev-agarwal.png'],
-  ['Dr. Dorothy P Ghosh', 'Associate Consultant, Jamshedpur', 'https://renewhealthcare.in/wp-content/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg'],
-  ['Dr. Ruby Yadav', 'Associate Consultant', 'https://renewhealthcare.in/wp-content/uploads/2024/07/Dr-Ruby-Yadav-1.jpg'],
-  ['Dr. Neha Yadav', 'Associate Consultant', 'https://renewhealthcare.in/wp-content/uploads/2024/07/Dr-Neha-Yadav-1.jpg'],
+  ['Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png'],
+  ['Dr. Dorothy P Ghosh', 'Associate Consultant, Jamshedpur', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg'],
+  ['Dr. Ruby Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Ruby-Yadav-1.jpg'],
+  ['Dr. Neha Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg'],
 ]
 
 const mediaLogos = ['TOI.png', 'Zee-News.png', 'ABP-live.png', 'Daily-Hunt.png', 'Doctube.png', 'Hindusthan-Times.png', 'India-TV.png', 'Mid-Day.png', 'News-18.png', 'News-Nine.png']
 
 const journeyCards = [
-  ['I am having problems conceiving', 'https://renewhealthcare.in/wp-content/uploads/2024/12/best-ivf-treatment-centre-in-kolkata.png'],
-  ['I want to Start my family building journey', 'https://renewhealthcare.in/wp-content/uploads/2024/12/best-ivf-centre-in-kolkata.png'],
-  ['I am looking for a donor (Egg/Sperm)', 'https://renewhealthcare.in/wp-content/uploads/2024/12/low-cost-ivf-hospital-in-kolkata.png'],
-  ['I want to freeze my gametes (Egg/Sperm/Embryo)', 'https://renewhealthcare.in/wp-content/uploads/2024/12/top-ivf-centre-in-kolkata.png'],
-  ['Preconception Counselling', 'https://renewhealthcare.in/wp-content/uploads/2024/12/top-5-ivf-centre-in-kolkata.png'],
+  ['I am having problems conceiving', '/images/renew/uploads/2024/12/best-ivf-treatment-centre-in-kolkata.png'],
+  ['I want to Start my family building journey', '/images/renew/uploads/2024/12/best-ivf-centre-in-kolkata.png'],
+  ['I am looking for a donor (Egg/Sperm)', '/images/renew/uploads/2024/12/low-cost-ivf-hospital-in-kolkata.png'],
+  ['I want to freeze my gametes (Egg/Sperm/Embryo)', '/images/renew/uploads/2024/12/top-ivf-centre-in-kolkata.png'],
+  ['Preconception Counselling', '/images/renew/uploads/2024/12/top-5-ivf-centre-in-kolkata.png'],
 ]
 
 const clinics = [
-  ['Renew IVF Saltlake', 'Saltlake, Kolkata', 'https://renewhealthcare.in/wp-content/uploads/2025/03/renew-ivf-saltlake.jpg', '/locations/saltlake'],
-  ['Renew IVF Jamshedpur', 'Bistupur, Jamshedpur', 'https://renewhealthcare.in/wp-content/uploads/2025/03/renew-ivf-jamshedpur.jpg', '/locations/jamshedpur'],
-]
-
-const blogs = [
-  ['What is IVF and Test Tube Baby?', 'Understand IVF, test tube baby treatment, and how fertility specialists guide the process.', 'https://renewhealthcare.in/wp-content/uploads/2026/05/what-is-ivf-and-test-tube-baby.webp'],
-  ['Guide to a Healthy Pregnancy', 'Practical care guidance for a safe, informed, and supported pregnancy journey.', 'https://renewhealthcare.in/wp-content/uploads/2026/05/Guide-to-a-Healthy-Pregnancy.webp'],
-  ['Foods to Increase Sperm Count', 'Nutrition choices that can support sperm count and improve sperm quality.', 'https://renewhealthcare.in/wp-content/uploads/2026/04/foods-to-increase-sperm-count-and-improve-quality.webp'],
-  ['Safe Days To Have Sex To Avoid Pregnancy', 'A clear guide to fertility windows, ovulation timing, and safer planning.', 'https://renewhealthcare.in/wp-content/uploads/2026/04/safe-days-to-have-sex-avoid-pregnancy.webp'],
+  ['Renew IVF Saltlake', 'Saltlake, Kolkata', '/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg', '/locations/saltlake'],
+  ['Renew IVF Jamshedpur', 'Bistupur, Jamshedpur', '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg', '/locations/jamshedpur'],
 ]
 
 function SectionHeading({ eyebrow, title, text }) {
@@ -64,7 +51,76 @@ function SectionHeading({ eyebrow, title, text }) {
   )
 }
 
+function CardCarousel({ children, className, label }) {
+  const viewportRef = useRef(null)
+  const [canGoBack, setCanGoBack] = useState(false)
+  const [canGoForward, setCanGoForward] = useState(false)
+  const [hasOverflow, setHasOverflow] = useState(false)
+  const items = Children.toArray(children)
+
+  const updateControls = useCallback(() => {
+    const viewport = viewportRef.current
+    if (!viewport) return
+
+    const maxScroll = viewport.scrollWidth - viewport.clientWidth
+    setHasOverflow(maxScroll > 4)
+    setCanGoBack(viewport.scrollLeft > 4)
+    setCanGoForward(viewport.scrollLeft < maxScroll - 4)
+  }, [])
+
+  useEffect(() => {
+    const viewport = viewportRef.current
+    if (!viewport) return undefined
+
+    updateControls()
+    const handleResize = () => updateControls()
+    viewport.addEventListener('scroll', updateControls, { passive: true })
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      viewport.removeEventListener('scroll', updateControls)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [updateControls, items.length])
+
+  const moveCarousel = (direction) => {
+    const viewport = viewportRef.current
+    if (!viewport) return
+
+    viewport.scrollBy({
+      left: direction * viewport.clientWidth,
+      behavior: 'smooth',
+    })
+  }
+
+  return (
+    <div className={`card-carousel ${className} ${hasOverflow ? 'is-scrollable' : ''}`} aria-label={label}>
+      {hasOverflow && (
+        <div className="card-carousel-controls">
+          <button type="button" onClick={() => moveCarousel(-1)} disabled={!canGoBack} aria-label={`Previous ${label}`}>
+            <span className="card-carousel-arrow card-carousel-arrow-left" aria-hidden="true" />
+          </button>
+          <button type="button" onClick={() => moveCarousel(1)} disabled={!canGoForward} aria-label={`Next ${label}`}>
+            <span className="card-carousel-arrow card-carousel-arrow-right" aria-hidden="true" />
+          </button>
+        </div>
+      )}
+      <div className="card-carousel-viewport" ref={viewportRef}>
+        <div className="card-carousel-track">
+          {items.map((item, index) => (
+            <div className="card-carousel-slide" key={index}>
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function HomeSections() {
+  const { blogs } = useBlogs()
+  const homeBlogs = blogs.slice(0, 4)
   return (
     <>
       <section className="home-band why-renew-section" id="why-renew">
@@ -75,43 +131,45 @@ export default function HomeSections() {
             text="Our IVF Centre in Kolkata offers advanced and reliable solutions for couples looking to start their parenthood journey, with strict protocols, global expertise, and compassionate support."
           />
 
-          <motion.div className="video-why-card" {...reveal}>
+          <div className="video-why-card">
             <div className="video-why-copy">
               <h3>Why Renew Healthcare</h3>
               <p>Our IVF Centre in Kolkata offers advanced and reliable solutions for couples looking to start their parenthood journey. Our IVF laboratories follow strict international protocols for handling eggs and sperm, ensuring the safest and most optimal conditions.</p>
               <p>We provide a wide range of infertility treatments under one roof, making the process seamless and convenient. Backed by experienced embryologists, gynaecologists, and specialists with global expertise, we focus on delivering high-quality care with a personalized approach.</p>
             </div>
             <a className="video-why-media" href="https://www.youtube.com/watch?v=lepLNR46L-c" target="_blank" rel="noreferrer" aria-label="Watch Renew Healthcare video">
-              <img src="https://renewhealthcare.in/wp-content/uploads/2025/01/Collage-Banner2.png" alt="Renew Healthcare patient success collage" />
+              <img src="/images/renew/uploads/2025/01/Collage-Banner2.png" alt="Renew Healthcare patient success collage" />
               <span aria-hidden="true">▶</span>
             </a>
-          </motion.div>
+          </div>
 
-          <motion.div className="why-grid" {...reveal}>
-            {whyItems.map(([icon, title, text]) => (
-              <article className="home-card why-card" key={title}>
-                <div className="why-icon">
-                  <img src={`https://renewhealthcare.in/wp-content/uploads/2024/07/${icon}`} alt="" />
-                </div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </article>
-            ))}
-          </motion.div>
+          <div>
+            <CardCarousel className="why-grid" label="Why Renew Healthcare blocks">
+              {whyItems.map(([icon, title, text]) => (
+                <article className="home-card why-card" key={title}>
+                  <div className="why-icon">
+                    <img src={`/images/renew/uploads/2024/07/${icon}`} alt="" />
+                  </div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </article>
+              ))}
+            </CardCarousel>
+          </div>
         </div>
       </section>
 
       <section className="home-band journey-section" id="parenthood-journey">
         <div className="home-band-inner">
           <SectionHeading eyebrow="Parenthood Journey" title="Where are you in your journey to parenthood?" />
-          <div className="journey-grid">
+          <CardCarousel className="journey-grid" label="Parenthood journey blocks">
             {journeyCards.map(([title, image]) => (
               <button type="button" className="home-card journey-stage-card" key={title}>
                 <img src={image} alt={title} />
                 <span>{title}</span>
               </button>
             ))}
-          </div>
+          </CardCarousel>
         </div>
       </section>
 
@@ -122,23 +180,23 @@ export default function HomeSections() {
             title="Treatments Provided By Renew Healthcare"
             text="End-to-end support through advanced fertility treatments, varied gynaecology services, and women’s aesthetic health services."
           />
-          <div className="service-showcase">
+          <CardCarousel className="service-showcase" label="Treatment blocks">
             {services.map(([title, text, to], index) => (
-              <motion.article className="home-card service-card" key={title} {...reveal} transition={{ ...reveal.transition, delay: index * 0.04 }}>
+              <article className="home-card service-card" key={title}>
                 <span>{String(index + 1).padStart(2, '0')}</span>
                 <h3>{title}</h3>
                 <p>{text}</p>
                 <Link to={to}>Explore Services <span aria-hidden="true">→</span></Link>
-              </motion.article>
+              </article>
             ))}
-          </div>
+          </CardCarousel>
         </div>
       </section>
 
       <section className="home-band doctors-section" id="doctors">
         <div className="home-band-inner">
           <SectionHeading eyebrow="Doctors" title="Meet Our Team Of Infertility Specialists" />
-          <div className="doctor-grid">
+          <CardCarousel className="doctor-grid" label="Doctor blocks">
             {doctors.map(([name, role, image]) => (
               <article className="home-card doctor-card" key={name}>
                 <div className="doctor-image">
@@ -151,7 +209,7 @@ export default function HomeSections() {
                 </div>
               </article>
             ))}
-          </div>
+          </CardCarousel>
           <div className="home-center-action">
             <Link to="/doctors" className="home-pill-link">View All</Link>
           </div>
@@ -165,7 +223,7 @@ export default function HomeSections() {
             <div className="media-track">
               {[...mediaLogos, ...mediaLogos].map((logo, index) => (
                 <div className="media-logo" key={`${logo}-${index}`}>
-                  <img src={`https://renewhealthcare.in/wp-content/uploads/2024/08/${logo}`} alt={logo.replace('.png', '').replace(/-/g, ' ')} />
+                  <img src={`/images/renew/uploads/2024/08/${logo}`} alt={logo.replace('.png', '').replace(/-/g, ' ')} />
                 </div>
               ))}
             </div>
@@ -194,17 +252,24 @@ export default function HomeSections() {
       <section className="home-band blogs-section" id="blogs">
         <div className="home-band-inner">
           <SectionHeading eyebrow="Latest Blogs" title="Fertility and pregnancy care insights" />
-          <div className="blog-grid">
-            {blogs.map(([title, text, image]) => (
-              <article className="home-card blog-card" key={title}>
-                <img src={image} alt={title} />
-                <div>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                  <Link to="/blogs">Read More <span aria-hidden="true">→</span></Link>
+          <CardCarousel className="blog-grid" label="Blog blocks">
+            {homeBlogs.map(blog => (
+              <Link className="home-card blog-card" to={`/blogs/${blog.slug}`} key={blog.slug}>
+                <div className="blog-card-media">
+                  <img src={blog.image} alt={blog.title} loading="lazy" />
+                  <span className="blog-card-tag">{blog.category}</span>
                 </div>
-              </article>
+                <div className="blog-card-body">
+                  <span className="blog-card-date">{blog.date}</span>
+                  <h3>{blog.title}</h3>
+                  <p>{blog.excerpt}</p>
+                  <strong className="blog-card-link">Read More <span aria-hidden="true">→</span></strong>
+                </div>
+              </Link>
             ))}
+          </CardCarousel>
+          <div className="home-center-action">
+            <Link to="/blogs" className="home-pill-link">View All Blogs</Link>
           </div>
         </div>
       </section>

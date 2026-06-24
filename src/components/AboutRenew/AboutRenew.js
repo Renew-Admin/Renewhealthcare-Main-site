@@ -1,12 +1,4 @@
-import { motion } from 'framer-motion'
 import './AboutRenew.css'
-
-const reveal = {
-  initial: { opacity: 0, y: 28 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.25 },
-  transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
-}
 
 export default function AboutRenew() {
   return (
@@ -14,7 +6,7 @@ export default function AboutRenew() {
       <div className="about-renew-glow" aria-hidden="true" />
 
       <div className="about-renew-inner">
-        <motion.div className="about-renew-copy" {...reveal}>
+        <div className="about-renew-copy">
           <div className="about-renew-eyebrow">
             <span className="about-renew-eyebrow-mark" aria-hidden="true" />
             Welcome To Renew Healthcare
@@ -55,18 +47,12 @@ export default function AboutRenew() {
             <strong>2,000+</strong>
             <span>families supported with compassionate, expert care</span>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="about-renew-visual"
-          initial={{ opacity: 0, x: 45 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-        >
+        <div className="about-renew-visual">
           <div className="about-renew-image-shell">
             <img
-              src="https://renewhealthcare.in/wp-content/uploads/2024/12/ivf-treatment-near-me.png"
+              src="/images/renew/uploads/2024/12/ivf-treatment-near-me.png"
               alt="Renew Healthcare clinic, consultation spaces, and patient care team"
             />
           </div>
@@ -78,7 +64,7 @@ export default function AboutRenew() {
             </svg>
             <span>Advanced technology.<br />Human-centered care.</span>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

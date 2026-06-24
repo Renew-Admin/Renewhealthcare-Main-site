@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
+
 export default function DoctorCard({ doctor }) {
   return (
-    <article className="people-card">
+    <Link className="people-card" to={`/doctor/${doctor.slug}`}>
       <div className="people-card-image">
         <img src={doctor.photo} alt={doctor.name} />
       </div>
@@ -9,6 +11,6 @@ export default function DoctorCard({ doctor }) {
         {doctor.qualification && <p>{doctor.qualification}</p>}
         <span>{doctor.role}</span>
       </div>
-    </article>
+    </Link>
   )
 }

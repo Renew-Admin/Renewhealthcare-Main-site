@@ -28,10 +28,10 @@
 .contact-info-card,
 .final-article {
   overflow: hidden;
-  border: 1px solid rgba(7, 90, 145, 0.09);
+  border: var(--card-line);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 22px 55px rgba(20, 40, 70, 0.09);
+  background: #fff;
+  box-shadow: var(--shadow-card);
 }
 .final-blog-card {
   display: flex;
@@ -40,7 +40,7 @@
   text-decoration: none;
   transition: transform .24s ease, box-shadow .24s ease;
 }
-.final-blog-card:hover { transform: translateY(-6px); box-shadow: 0 30px 70px rgba(20, 40, 70, 0.13); }
+.final-blog-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
 .final-blog-card img { width: 100%; height: 230px; object-fit: cover; }
 .final-blog-card div, .package-card { padding: 24px; }
 .final-blog-card span,
@@ -60,7 +60,7 @@
   font-size: 1.45rem;
   font-weight: 400;
   line-height: 1.16;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.022em;
 }
 .final-blog-card p,
 .package-card p,
@@ -77,18 +77,50 @@
   color: var(--navy);
 }
 .final-article {
-  padding: clamp(24px, 4vw, 48px);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: clamp(28px, 4vw, 56px);
 }
-.final-article p + p { margin-top: 16px; }
-.final-related { margin-top: clamp(70px, 8vw, 115px); }
+.final-article p {
+  font-size: clamp(1rem, 1.15vw, 1.12rem);
+  line-height: 1.85;
+}
+.final-article p + p { margin-top: 18px; }
+.final-article .final-meta {
+  display: inline-flex;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(20, 40, 70, 0.07);
+}
+/* Lead paragraph */
+.final-article p:first-of-type {
+  color: #3c4651;
+  font-size: clamp(1.1rem, 1.35vw, 1.28rem);
+  line-height: 1.7;
+}
+.final-related { margin-top: clamp(46px, 6vw, 80px); }
 .final-feature-image {
-  max-width: 760px;
-  margin: 0 auto 28px;
+  margin: 0;
   overflow: hidden;
   border-radius: 24px;
-  box-shadow: 0 22px 55px rgba(20, 40, 70, 0.09);
+  box-shadow: var(--shadow-card);
+  align-self: stretch;
+  min-height: 320px;
 }
-.final-feature-image img { width: 100%; display: block; }
+.final-feature-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  display: block;
+  object-fit: cover;
+}
+.final-intro-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+  margin-bottom: clamp(34px, 5vw, 58px);
+}
 .contact-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 390px;
@@ -137,23 +169,156 @@
 }
 .contact-map-card {
   overflow: hidden;
-  min-height: 360px;
+  min-height: 250px;
   margin-bottom: 28px;
-  border: 1px solid rgba(7, 90, 145, 0.09);
+  border: var(--card-line);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 22px 55px rgba(20, 40, 70, 0.09);
+  background: #fff;
+  box-shadow: var(--shadow-card);
 }
 .contact-map-card iframe {
   display: block;
   width: 100%;
-  height: 360px;
+  height: 250px;
   border: 0;
 }
 @media (max-width: 1000px) {
   .final-card-grid, .package-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-grid { grid-template-columns: 1fr; }
+  .final-intro-split { grid-template-columns: 1fr; }
 }
 @media (max-width: 680px) {
   .blog-filter-bar, .final-card-grid, .package-grid { grid-template-columns: 1fr; }
+
+  .final-article,
+  .contact-form,
+  .contact-info-card,
+  .package-card,
+  .final-blog-card div {
+    padding: 22px;
+  }
+
+  .final-blog-card img {
+    height: min(220px, 58vw);
+  }
+
+  .contact-map-card,
+  .contact-map-card iframe {
+    min-height: 240px;
+    height: 240px;
+  }
+
+  .contact-social-row a {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.final-back-link {
+  display: inline-flex;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(20, 40, 70, 0.07);
+  color: var(--navy);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.final-back-link:hover { text-decoration: underline; }
+
+/* ── Contact: quick-contact row ── */
+.contact-quick-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.contact-quick-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: var(--card-line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.contact-quick-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(7, 90, 145, 0.25);
+  box-shadow: var(--shadow-card-hover);
+}
+.contact-quick-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 13px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--blue), var(--navy));
+}
+.contact-quick-card span:last-child { display: flex; flex-direction: column; line-height: 1.3; }
+.contact-quick-card strong { color: var(--ink); font-size: 0.96rem; font-weight: 600; }
+.contact-quick-card small { color: #7a8593; font-size: 0.8rem; }
+
+/* ── Contact: clinic cards ── */
+.contact-clinics { margin: 30px 0 28px; }
+.contact-clinics-title {
+  margin-bottom: 18px;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 400;
+  letter-spacing: -0.022em;
+}
+.contact-clinics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.contact-clinic-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px;
+  border: var(--card-line);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+}
+.contact-clinic-card h4 {
+  margin-bottom: 12px;
+  color: var(--navy);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.contact-clinic-card p { color: #59636e; font-size: 0.92rem; line-height: 1.65; }
+.contact-clinic-card > a {
+  margin-top: 12px;
+  color: var(--navy);
+  font-weight: 700;
+  text-decoration: none;
+}
+.contact-clinic-dir { margin-top: auto; padding-top: 14px; font-size: 0.86rem; }
+
+@media (max-width: 1000px) {
+  .contact-quick-row { grid-template-columns: repeat(2, 1fr); }
+  .contact-clinics-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .contact-quick-row { grid-template-columns: 1fr; }
+
+  .contact-quick-card {
+    padding: 16px;
+  }
+
+  .contact-clinic-card {
+    padding: 22px;
+  }
 }

@@ -1,12 +1,27 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import './ContentPages.css'
 import './ServicesPages.css'
+
+const reveal = {
+  initial: { opacity: 1, y: 0 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+}
+
+const stats = [
+  ['27+', 'Years of expertise'],
+  ['12,000+', 'Happy clients'],
+  ['6,000+', 'Babies delivered'],
+  ['9,000+', 'IVF procedures'],
+]
 
 export default function AboutPage() {
   return (
     <main className="content-page">
       <section className="service-banner">
-        <img src="https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner.jpg" alt="Renew Healthcare about us" />
+        <img src="/images/renew/uploads/2024/12/Inner-Page-Banner.jpg" alt="Renew Healthcare about us" />
         <div className="service-banner-overlay" />
         <div className="service-banner-content">
           <span>Home / About Us</span>
@@ -16,7 +31,7 @@ export default function AboutPage() {
 
       <section className="service-content-band">
         <div className="service-content-inner">
-          <div className="split-feature">
+          <motion.div className="split-feature" {...reveal}>
             <div className="service-heading-block is-left">
               <span>Welcome to Renew Healthcare</span>
               <h2>Welcome to Renew Healthcare!</h2>
@@ -24,21 +39,30 @@ export default function AboutPage() {
               <p>We offer a range of services including IVF treatment, gynaecology, aesthetic gynaecology, and pregnancy care. Our IVF clinic is equipped with state-of-the-art technology, and our highly experienced team of fertility specialists are committed to providing personalized and comprehensive care.</p>
             </div>
             <div className="feature-image-card">
-              <img src="https://renewhealthcare.in/wp-content/uploads/2024/07/Dr-rajeev-agarwal.png" alt="Dr. Rajeev Agarwal" />
+              <img src="/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png" alt="Dr. Rajeev Agarwal" />
               <h3>Dr. Rajeev Agarwal</h3>
               <p>Medical Director | Fertility Specialist | IVF Doctor</p>
             </div>
-          </div>
+          </motion.div>
 
-          <section className="content-panel">
+          <motion.div className="stat-band" {...reveal}>
+            {stats.map(([value, label]) => (
+              <div className="stat-band-item" key={label}>
+                <strong>{value}</strong>
+                <span>{label}</span>
+              </div>
+            ))}
+          </motion.div>
+
+          <motion.section className="content-panel" {...reveal}>
             <h3>Renew Healthcare attempts to make changes in your lives by:</h3>
             <p>Renew Healthcare offers comprehensive medical care that focuses on the unique needs of women. This includes preconception planning, fertility testing, fertility treatment, and care for associated health conditions.</p>
             <p>Modern technologies such as telemedicine, electronic health records, and mobile applications can help improve access to care, promote continuity of care, and reduce healthcare costs.</p>
             <p>Many women lack access to comprehensive information about fertility and reproductive health. Renew Healthcare provides educational resources such as blog posts, videos, and infographics to educate women about fertility, reproductive health, and family planning.</p>
             <p>Renew Healthcare advocates for policies that promote women’s health and access to care, including advocating for insurance coverage of fertility services and supporting legislation that addresses disparities in healthcare access and quality.</p>
-          </section>
+          </motion.section>
 
-          <div className="values-grid">
+          <motion.div className="values-grid" {...reveal}>
             {[
               ['Mission', 'Our mission is to provide comprehensive, accessible, and patient-centered healthcare services that address the unique health needs of women at all stages of life.'],
               ['Vision', 'All women of every age should achieve best possible health through Renew Healthcare.'],
@@ -49,7 +73,7 @@ export default function AboutPage() {
                 <p>{text}</p>
               </article>
             ))}
-          </div>
+          </motion.div>
 
           <section className="service-cta-band">
             <div>

@@ -2,7 +2,7 @@ export const finalPages = {
   "packages": {
     "title": "Packages",
     "path": "/packages/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-2.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg",
     "eyebrow": "Packages",
     "intro": "Fertility enhancing surgery or minimally invasive reproductive surgery can be used to treat infertility, improve fertility treatment outcomes, or preserve fertility. This is particularly indicative in cases of endometriosis, PCOS, uterine fibroids, fallopian tube blockage etc. However, reproductive surgery may not improve fertility outcomes and may, in some instances, damage ovarian reserve. There fore it is always advised to get the surgery done under the same fertility specialist who is treati",
     "sections": [
@@ -19,7 +19,7 @@ export const finalPages = {
   "male-infertility": {
     "title": "Male Infertility",
     "path": "/male-infertility/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg",
     "eyebrow": "Resources",
     "intro": "How Does Diet Play a Key Role in Male Fertility? You can think of sperm production as a manufacturing process. Like any production line, the output is going to be as good as the raw materials that are going in.... The world is moving faster than ever in 2025. With changing social dynamics, longer working hours and digital advancements reshaping modern lifestyle, these changes are undoubtedly affecting male and female fertility in a big way. Both sexes are experiencing fertility-related... Excessive levels of stress, sedentary lifestyle, poor dietary habits, lack of enough exercise, genetic problems, and other factors are increasingly coming in the way of healthy male fertility. Across the globe, male infertility has become a big problem that needs...",
     "sections": [
@@ -32,9 +32,9 @@ export const finalPages = {
   "female-infertility": {
     "title": "Female Infertility",
     "path": "/female-infertility/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg",
     "eyebrow": "Resources",
-    "image": "https://renewhealthcare.in/wp-content/uploads/2024/07/counseling-img.png",
+    "image": "/images/renew/uploads/2024/07/counseling-img.png",
     "intro": "What Are the Common Female Infertility Symptoms? Treatment Options for Female Infertility Advised IVF but is unsure of the treatment plan?",
     "sections": [
       {
@@ -74,7 +74,7 @@ export const finalPages = {
   "injection-instruction": {
     "title": "Injection Instruction",
     "path": "/injection-instruction/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg",
     "eyebrow": "Resources",
     "intro": "रिन्यु हेल्‍थ केयर जमशेदपुर, “रिन्यु फरटिलिटि” उन दंपत्तियों के लिए है जो अभी तक अपने संतान सुख से वंचित है। यहाँ आप हमारे कोलकाता के प्रसिद्ध डॉक्टर बांझपन विशेषज्ञ डॉ० डॉरोथी घोष से परामर्श कर सकते है। जोकि पिछले 10 सालों से आपके सपनों को साकार कर रहे है। रिन्यु फरटिलिटि मैत्रीपूर्ण वातावरण में प्रजनन सेवाओं और उपचारों की एक विस्तृत श्रृंखला पेश करती है।",
     "sections": [
@@ -103,7 +103,7 @@ export const finalPages = {
   "mental-health": {
     "title": "Mental Health",
     "path": "/mental-health/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-2.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg",
     "eyebrow": "Resources",
     "intro": "रिन्यु हेल्‍थ केयर जमशेदपुर, “रिन्यु फरटिलिटि” उन दंपत्तियों के लिए है जो अभी तक अपने संतान सुख से वंचित है। यहाँ आप हमारे कोलकाता के प्रसिद्ध डॉक्टर बांझपन विशेषज्ञ डॉ० डॉरोथी घोष से परामर्श कर सकते है। जोकि पिछले 10 सालों से आपके सपनों को साकार कर रहे है। रिन्यु फरटिलिटि मैत्रीपूर्ण वातावरण में प्रजनन सेवाओं और उपचारों की एक विस्तृत श्रृंखला पेश करती है।",
     "sections": [
@@ -136,7 +136,7 @@ export const finalPages = {
   "international-patients": {
     "title": "International Patients",
     "path": "/international-patients/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg",
     "eyebrow": "International Patients",
     "intro": "We are a team of highly experienced and dedicated healthcare professionals, under the leadership of Dr. Rajeev Agarwal, committed to providing the highest quality reproductive and gynaecological care to our patients. We offer a range of services, including fertility treatment in Kolkata , gynaecology, aesthetic gynecology, and pregnancy care.\n\nRenew Healthcare makes it simple for international patients visiting India for fertility and gynaecological treatment. We offer a comprehensive range of g",
     "sections": [
@@ -165,7 +165,7 @@ export const finalPages = {
   "bangladesh": {
     "title": "Bangladesh",
     "path": "/bangladesh/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-2.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg",
     "eyebrow": "International Patients",
     "intro": "বন্ধ্যাত্ব ও স্ত্রীরোগ নিয়ে চিকিৎসা করতে India যাওয়ার কথা ভাবছেন ? কিন্তু বুঝতে পারছেন না কিভাবে সঠিক চিকিৎসা পদ্ধতি খুঁজবেন, বা কোথায় চিকিৎসা করাবেন ? কিভাবে যাবেন, কোথায় থাকবেন, কতো খরচ হবে, কতদিন থাকতে হবে – এইসব নানাবিধ প্রশ্ন আমাদের মাথায় আসে । সবচেয়ে বড়ো চিন্তা, যে Clinic এ কিংবা যে ডাক্তার এর কাছে যাচ্ছি, সেটা সঠিক চিকিৎসা দেবে কি তো ? এইসব প্রশ্নের উত্তর না জেনে শুধুমাত্র লোকমুখে শুনে কোনোরকম সিদ্ধান্ত নেবেন না। আসুন, আমরা দেখি ঠিক কি কি প্রশ্ন করবেন এবং তার সঠিক উত্তর কি। আমার চিকিৎসা সংক্রান্ত প্রশ্নের সঠিক উত্তর দেবার জন্য Clinic এ কি কেউ আছে ? Visa সংক্রান্ত সমস্যার জন্য কি করবো ?",
     "sections": [
@@ -206,9 +206,9 @@ export const finalPages = {
   "12-months-fellowship-in-reproductive-medicine": {
     "title": "12 Months Fellowship in Reproductive Medicine",
     "path": "/course/12-months-fellowship-in-reproductive-medicine/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/07/MEDICINE-BANNER.webp",
+    "banner": "/images/renew/uploads/2024/07/MEDICINE-BANNER.webp",
     "eyebrow": "Fellowship Programs",
-    "image": "https://renewhealthcare.in/wp-content/uploads/2024/07/felow-img.png",
+    "image": "/images/renew/uploads/2024/07/felow-img.png",
     "intro": "12 Months Fellowship in Reproductive Medicine",
     "sections": [
       {
@@ -236,9 +236,9 @@ export const finalPages = {
   "3-months-course-on-reproductive-medicine": {
     "title": "3 Months Course on Reproductive Medicine",
     "path": "/course/3-months-course-on-reproductive-medicine/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg",
     "eyebrow": "Fellowship Programs",
-    "image": "https://renewhealthcare.in/wp-content/uploads/2024/07/felow-img.png",
+    "image": "/images/renew/uploads/2024/07/felow-img.png",
     "intro": "3 Months Course on Reproductive Medicine",
     "sections": [
       {
@@ -266,13 +266,55 @@ export const finalPages = {
   "genetic": {
     "title": "Genetic",
     "path": "/genetic/",
-    "banner": "https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg",
     "eyebrow": "Genetics",
     "intro": "Clinical genetics is the branch of medicine that focuses on the diagnosis, management, and prevention of genetic disorders. With advances in genetic technology and research, clinical genetics service has opened up numerous opportunities in healthcare, including:\n- Personalized medicine: Tailoring treatments to individual genetic profiles.\n- Genetic counseling: Empowering patients to make informed decisions about their health.\n- Prenatal diagnosis: Identifying genetic disorders before birth.\n- Ge",
     "sections": [
       {
         "heading": "Clinical genetics and opportunities in healthcare:",
         "body": "Clinical genetics is the branch of medicine that focuses on the diagnosis, management, and prevention of genetic disorders. With advances in genetic technology and research, clinical genetics service has opened up numerous opportunities in healthcare, including:\n- Personalized medicine: Tailoring treatments to individual genetic profiles.\n- Genetic counseling: Empowering patients to make informed decisions about their health.\n- Prenatal diagnosis: Identifying genetic disorders before birth.\n- Gene therapy: Treating genetic disorders at the molecular level.\n- Pharmacogenomics: Optimizing medication effectiveness based on genetic factors.\n- Cancer genetics: Understanding genetic mutations driving cancer growth.\n- Rare disease diagnosis: Identifying and managing rare genetic conditions.\n- Genomic medicine: Integrating genetic data into routine healthcare.\n\nThese opportunities enable healthcare professionals to provide more precise, effective, and compassionate care, revolutionizing the way we approach patient health.\n\nGenetic counseling is the process of helping individuals and families understand and adapt to the medical, psychological, and familial implications of genetic contributions to disease. Genetic counselors provide expert guidance and support to help individuals make informed decisions about their health and reproductive options. They also help patients understand factors such as the Genetic test cost, which can influence decision-making and access to appropriate testing. Services provided by genetic counselors include:\n- Risk assessment: Evaluating the likelihood of inherited disorders.\n- Genetic testing: Interpreting results and explaining implications.\n- Diagnosis: Identifying genetic conditions and explaining their effects.\n- Family planning: Guiding reproductive decisions based on genetic risks.\n- Prenatal testing: Explaining options and results for pregnant individuals.\n- Pediatric genetics: Diagnosing and managing genetic conditions in children.\n- Cancer genetics: Assessing risk and guiding prevention strategies.\n- Neurogenetics: Diagnosing and managing genetic neurological disorders.\n- Psychiatric genetics: Understanding genetic contributions to mental health.\n- Education and support: Empowering individuals to make informed decisions.\n\nGenetic counselors work in various settings, including:\n- Specialty clinics (e.g., cancer, neurology)\n\nBy providing these services, genetic counselors play a vital role in helping individuals and families navigate the complexities of genetic information and make informed decisions about their health.\n\nGenetic counseling is beneficial for individuals and families who:\n- Have a personal or family history of genetic disorders or birth defects.\n- Are considering pregnancy and want to understand their risk for passing on genetic conditions.\n- Are pregnant or planning to become pregnant and want to discuss prenatal testing options.\n- Have a child with a genetic disorder or developmental delay.\n- Have a family member with a genetic disorder and want to understand their own risk.\n- Are from ethnic groups with higher risks for specific genetic disorders (e.g., sickle cell anemia, Tay-Sachs disease).\n- Have a history of multiple miscarriages or failed pregnancies.\n- Are experiencing unexplained medical symptoms or conditions.\n- Are considering assisted reproductive technologies (e.g., IVF, egg/sperm donation).\n- Want to learn more about their genetic health and risk factors.\n\nSpecifically, genetic counseling may be beneficial for:\n- Parents of children with genetic disorders\n- Individuals with a personal history of cancer or other genetic conditions\n- Individuals with a family history of genetic disorders\n- Individuals from high-risk ethnic groups\n- Individuals with unexplained medical conditions\n\nGenetic counseling can provide valuable insights and guidance for anyone concerned about the role of genetics in their health or the health of their family.\n\nA Familial Cancer Genetic Counselling Clinic is a specialized clinic that provides expert guidance and support to individuals and families with a history of cancer. The clinic’s primary goal is to help families understand their inherited cancer risk and make informed decisions about their health.\n- Risk assessment: Evaluating the likelihood of inherited cancer predisposition.\n- Genetic testing: Interpreting results and explaining implications.\n- Cancer risk management: Guiding strategies for early detection and prevention.\n- Family history analysis: Identifying patterns and potential inherited cancer syndromes.\n- Genetic counseling: Empowering individuals to make informed decisions.\n- Psychosocial support: Addressing emotional and psychological concerns.\n- Coordination of care: Referrals to specialists and management of care.\n- Personalized risk assessment and management.\n- Early detection and prevention strategies.\n- Informed decision-making about genetic testing and treatment options.\n- Connection to resources and support groups.\n- Individuals with a personal or family history of cancer.\n- Those with a known genetic mutation (e.g., BRCA1/2, Lynch syndrome).\n- Families with multiple cases of cancer.\n- Individuals with rare or unusual cancer presentations.\n- Those seeking guidance on cancer risk management.\n\nThe clinic’s multidisciplinary team includes:\n\nBy providing comprehensive genetic counseling and support, the Familial Cancer Genetic Counselling Clinic empowers individuals and families to take control of their cancer risk and make informed decisions about their health.\n\nEligibility for Infertility Genetic Counseling: Individuals or couples experiencing:\n- Failed fertility treatments (e.g., IVF, IUI)\n- Family history of genetic disorders or birth defects\n- Male factor infertility (e.g., low sperm count, poor motility)\n- History of genetic disorders or chromosomal abnormalities\n- Comprehensive medical and reproductive history\n- Genetic testing (e.g., karyotyping, microarray analysis)\n- Carrier screening for genetic disorders (e.g., cystic fibrosis, sickle cell)\n- Risk assessment for chromosomal abnormalities (e.g., Down syndrome)\n- Discussion of reproductive options (e.g., IVF, egg/sperm donation)\n- Guidance on prenatal testing and diagnosis\n- Understanding underlying genetic causes of infertility\n- Identification of potential risks for future pregnancies\n- Informed decision-making about reproductive options\n- Personalized guidance on prenatal testing and diagnosis\n- Microarray analysis (genetic mutation screening)\n- Carrier screening (e.g., cystic fibrosis, sickle cell)\n- Preimplantation genetic diagnosis (PGD) for IVF patients\n- Family planning and future reproductive decisions\n\nBy providing comprehensive genetic counseling and testing, individuals and couples struggling with infertility can gain a deeper understanding of their reproductive health and make informed decisions about their future family planning.\n\nGenetic counseling in prenatal diagnosis is a vital service that provides expectant parents with information and guidance on the risks and implications of genetic disorders in their unborn child. This counseling is typically offered when:\n- Positive screening tests (e.g., non-invasive prenatal testing, NIPT)\n- Previous child with a genetic disorder\n- Risk assessment for chromosomal abnormalities (e.g., Down syndrome)\n- Explanation of prenatal testing options (e.g., amniocentesis, CVS)\n- Interpretation of test results and implications\n- Discussion of management options (e.g., continuation of pregnancy, termination)\n- Non-invasive prenatal testing (NIPT)\n- Understanding test results and risks\n- Genetic disorders and their implications\n- Reproductive options and decision-making\n- Informed decision-making about prenatal testing and pregnancy management\n- Understanding of genetic risks and implications\n- Empowerment to make informed reproductive choices\n\nBy providing comprehensive genetic counseling in prenatal diagnosis, expectant parents can make informed decisions about their pregnancy and reproductive health, and receive emotional support and guidance throughout the process.\n\nGenetic counseling in autism spectrum disorder (ASD) is a vital service that provides families with information and guidance on the genetic aspects of autism. This counseling is typically offered when:\n- There is a family history of ASD or other developmental disorders\n- Risk assessment for genetic syndromes associated with ASD\n- Explanation of genetic testing options (e.g., chromosomal microarray, whole exome sequencing)\n- Interpretation of test results and implications\n- Discussion of recurrence risks for future pregnancies\n- Guidance on management and treatment options\n- Chromosomal microarray analysis (CMA)\n- Understanding the genetic basis of ASD\n- Recurrence risks and family planning\n- Understanding the underlying genetic causes of ASD\n- Informed decision-making about genetic testing and family planning\n- Personalized guidance on management and treatment options\n- Connection to resources and support groups\n\nBy providing comprehensive genetic counseling in autism, families can gain a deeper understanding of the genetic aspects of ASD, make informed decisions about their reproductive health, and receive emotional support and guidance throughout their journey.\n\nGenetic counseling in cardiology is a specialized service that provides patients and families with information and guidance on the genetic aspects of cardiovascular disease. This counseling is typically offered when:\n- A patient is diagnosed with a genetic cardiovascular disorder (e.g., hypertrophic cardiomyopathy, long QT syndrome)\n- There is a family history of sudden cardiac death or genetic cardiovascular disease\n- Risk assessment for genetic cardiovascular disorders\n- Explanation of genetic testing options (e.g., genetic panel testing, whole exome sequencing)\n- Interpretation of test results and implications\n- Discussion of management and treatment options\n- Guidance on family screening and risk reduction strategies\n- Understanding the genetic basis of cardiovascular disease\n- Risk assessment and management strategies\n- Family planning and reproductive options\n- Identification of genetic causes of cardiovascular disease\n- Informed decision-making about genetic testing and management options\n- Personalized guidance on risk reduction strategies\n- Connection to resources and support groups\n- Arrhythmogenic right ventricular cardiomyopathy (ARVC)\n\nBy providing comprehensive genetic counseling in cardiology, patients and families can gain a deeper understanding of the genetic aspects of cardiovascular disease, make informed decisions about their health, and receive emotional support and guidance throughout their journey.\n\nGenetic counseling in pediatric neurology is a vital service that provides families with information and guidance on the genetic aspects of neurological disorders affecting children. This counseling is typically offered when:\n- A child is diagnosed with a genetic neurological disorder (e.g., epilepsy, intellectual disability)\n- There is a family history of neurological disorders\n- Risk assessment for genetic neurological disorders\n- Explanation of genetic testing options (e.g., chromosomal microarray, whole exome sequencing)\n- Interpretation of test results and implications\n- Discussion of management and treatment options\n- Guidance on developmental and educational planning\n- Understanding the genetic basis of neurological disorders\n- Risk assessment and management strategies\n- Developmental and educational planning\n- Identification of genetic causes of neurological disorders\n- Informed decision-making about genetic testing and management options\n- Personalized guidance on developmental and educational planning\n- Connection to resources and support groups\n- Neurodegenerative disorders (e.g., Tay-Sachs, Niemann-Pick)\n- Neuromuscular disorders (e.g., muscular dystrophy, spinal muscular atrophy)\n\nBy providing comprehensive genetic counseling in pediatric neurology, families can gain a deeper understanding of the genetic aspects of their child’s neurological disorder, make informed decisions about their care, and receive emotional support and guidance throughout their journey.\n\nI’ll write about genetic counseling in nephrology.\n\nGenetic counseling in nephrology is a specialized service that provides patients and families with information and guidance on the genetic aspects of kidney disease. This counseling is typically offered when:\n- A patient is diagnosed with a genetic kidney disorder (e.g., polycystic kidney disease, Alport syndrome)\n- There is a family history of kidney disease\n- Risk assessment for genetic kidney disorders\n- Explanation of genetic testing options (e.g., genetic panel testing, whole exome sequencing)\n- Interpretation of test results and implications\n- Discussion of management and treatment options\n- Guidance on family planning and reproductive options\n- Understanding the genetic basis of kidney disease\n- Risk assessment and management strategies\n- Family planning and reproductive options\n- Identification of genetic causes of kidney disease\n- Informed decision-making about genetic testing and management options\n- Personalized guidance on family planning and reproductive options\n- Connection to resources and support groups\n- Congenital anomalies of the kidney and urinary tract (CAKUT)\n\nBy providing comprehensive genetic counseling in nephrology, patients and families can gain a deeper understanding of the genetic aspects of kidney disease, make informed decisions about their care, and receive emotional support and guidance throughout their journey."
+      }
+    ]
+  },
+  "privacy-policy": {
+    "title": "Privacy Policy",
+    "path": "/privacy-policy/",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg",
+    "eyebrow": "Legal",
+    "intro": "Renew Healthcare is committed to protecting the privacy and confidentiality of every patient. This policy explains how we collect, use, and safeguard your information.",
+    "sections": [
+      {
+        "heading": "Information We Collect",
+        "body": "When you contact us, book an appointment, or fill in a form, we may collect your name, phone number, email address, and details relevant to your care. We collect only the information needed to respond to your enquiry and provide medical services."
+      },
+      {
+        "heading": "How We Use Your Information",
+        "body": "Your information is used to schedule appointments, provide consultations and treatment, respond to your queries, and improve our services. We do not sell or rent your personal information to third parties."
+      },
+      {
+        "heading": "Confidentiality & Security",
+        "body": "All patient medical records are treated as strictly confidential and are handled in line with applicable medical confidentiality standards. We apply reasonable technical and organisational safeguards to protect your data against unauthorised access."
+      },
+      {
+        "heading": "Your Choices",
+        "body": "You may request access to, correction of, or deletion of your personal information at any time by contacting us at info@renewhealthcare.in or 062922 69060."
+      }
+    ]
+  },
+  "patient-rights-responsibilities": {
+    "title": "Patient Rights & Responsibilities",
+    "path": "/patient-rights-responsibilities/",
+    "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg",
+    "eyebrow": "Legal",
+    "intro": "At Renew Healthcare, we believe informed, respected, and engaged patients receive the best care. These are the rights you can expect and the responsibilities that help us care for you safely.",
+    "sections": [
+      {
+        "heading": "Your Rights",
+        "body": "- To be treated with dignity, respect, and without discrimination\n- To receive clear information about your diagnosis, treatment options, and costs\n- To privacy and confidentiality of your medical records\n- To give informed consent before any procedure\n- To seek a second opinion and to access your medical records"
+      },
+      {
+        "heading": "Your Responsibilities",
+        "body": "- To provide accurate and complete information about your health and history\n- To follow the agreed treatment plan and ask questions when unsure\n- To keep appointments or inform us in advance if you cannot attend\n- To treat staff and other patients with courtesy and respect\n- To settle fees as per the agreed financial counselling"
       }
     ]
   }

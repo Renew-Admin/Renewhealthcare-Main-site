@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { doctors } from '../../data/doctors.js'
 import './GlobalHeader.css'
 
 const serviceColumns = [
@@ -67,12 +68,11 @@ const serviceColumns = [
   },
 ]
 
-const dropdowns = [
-  ['Fellowship Programs', ['12 Months Fellowship', '3 Months Course']],
-  ['About Us', ['Fertility Without Borders', 'IVF Success Factors And Rates']],
-  ['Resources', ['Male Infertility', 'Female Infertility', 'Injection Instruction', 'Mental Health']],
-  ['International Patients', ['Bangladesh']],
-  ['Our Clinics', ['Jamshedpur', 'Saltlake', 'Gariahat']],
+const moreGroups = [
+  ['About', ['About Us', 'Fertility Without Borders', 'IVF Success Factors And Rates']],
+  ['Resources', ['Blogs', 'Male Infertility', 'Female Infertility', 'Injection Instruction', 'Mental Health']],
+  ['Programs', ['12 Months Fellowship', '3 Months Course', 'Packages']],
+  ['Patients & Clinics', ['International Patients', 'Bangladesh', 'Jamshedpur', 'Saltlake', 'Gariahat', 'Contact']],
 ]
 
 const routeMap = {
@@ -107,25 +107,27 @@ function toPath(label) {
   return routeMap[label] || '/services'
 }
 
-function Dropdown({ label, items }) {
+function NavChevron() {
   return (
-    <div className="global-nav-dropdown">
+    <svg className="chevron-icon" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  )
+}
+
+function SimpleDropdown({ label, children, className = '' }) {
+  return (
+    <div className={`global-nav-dropdown ${className}`}>
       <button type="button" className="global-nav-link">
         {label}
-        <svg className="chevron-icon" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
+        <NavChevron />
       </button>
-      <div className="global-nav-panel is-small">
-        {items.map(item => externalMap[item] ? (
-          <a key={item} href={externalMap[item]} target="_blank" rel="noreferrer">{item}</a>
-        ) : (
-          <Link key={item} to={toPath(item)}>{item}</Link>
-        ))}
-      </div>
+      {children}
     </div>
   )
 }
+
+const featuredDoctors = doctors.filter(doctor => doctor.category === 'Our Experts').slice(0, 6)
 
 export default function GlobalHeader({ onCallback }) {
   const [open, setOpen] = useState(false)
@@ -133,77 +135,73 @@ export default function GlobalHeader({ onCallback }) {
 
   return (
     <>
-      <div className="top-strip">
-        <div className="top-strip-inner">
-          <Link to="/" className="top-logo" aria-label="Renew Healthcare home">
-            <img src="https://renewhealthcare.in/wp-content/uploads/2024/07/renew-healthcare-logo.jpg.webp" alt="Renew Healthcare" />
-          </Link>
-
-          <div className="top-contact">
-            <a href="tel:06292269060" className="top-contact-item">
-              <svg className="top-contact-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-              <span>CALL US NOW <strong>062922 69060</strong></span>
-            </a>
-            <a href="mailto:info@renewhealthcare.in" className="top-contact-item">
-              <svg className="top-contact-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-              </svg>
-              <span>EMAIL US <strong>info@renewhealthcare.in</strong></span>
-            </a>
-            <span className="top-contact-sep">|</span>
-            <div className="top-consultation-modes">
-              <Link to="/contact" className="top-consultation-tag">
-                <span className="dot-pulse"></span>
-                Online Consultation
-              </Link>
-              <Link to="/contact" className="top-consultation-tag">
-                <span className="dot-pulse"></span>
-                Center Consultation
-              </Link>
-            </div>
-          </div>
-
-          <div className="top-actions">
-            <Link to="/contact" className="btn-book">Book Your Appointment</Link>
-            <button type="button" onClick={onCallback} className="btn-callback">Request Call Back</button>
-          </div>
-        </div>
-      </div>
-
       <header className="global-header">
         <div className="global-header-inner">
+          <Link to="/" className="top-logo" aria-label="Renew Healthcare home">
+            <img src="/images/renew/uploads/2024/07/renew-healthcare-logo.webp" alt="Renew Healthcare" />
+          </Link>
+
           <nav className="global-nav" aria-label="Main navigation">
             <Link to="/why-renew" className="global-nav-link">Why Renew</Link>
 
             <div className="global-nav-dropdown is-mega">
               <Link to="/services" className="global-nav-link">
                 Services
-                <svg className="chevron-icon" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
+                <NavChevron />
               </Link>
               <div className="global-nav-panel global-mega">
                 {serviceColumns.map(column => (
                   <div className="global-mega-column" key={column.title}>
                     <h3>{column.title}</h3>
-                    {column.items.map(([item, slug]) => (
+                    {column.items.slice(0, 5).map(([item, slug]) => (
                       <Link key={slug} to={`/services/${slug}`}>{item}</Link>
                     ))}
+                    <Link className="global-mega-all" to="/services">View all services</Link>
                   </div>
                 ))}
               </div>
             </div>
 
-            <Link to="/doctors" className="global-nav-link">Our Doctors</Link>
-            {dropdowns.map(([label, items]) => <Dropdown key={label} label={label} items={items} />)}
-            <Link to="/success-stories" className="global-nav-link">Success Stories</Link>
-            <Link to="/blogs" className="global-nav-link">Blogs</Link>
-            <Link to="/packages" className="global-nav-link">Packages</Link>
-            <Link to="/contact" className="global-nav-link">Contact</Link>
+            <SimpleDropdown label="Doctors" className="is-doctors">
+              <div className="global-nav-panel doctor-panel">
+                <div className="doctor-panel-head">
+                  <span>Fertility Experts</span>
+                  <Link to="/doctors">View all doctors</Link>
+                </div>
+                <div className="doctor-panel-grid">
+                  {featuredDoctors.map(doctor => (
+                    <Link className="doctor-panel-card" to={`/doctor/${doctor.slug}`} key={doctor.slug}>
+                      <img src={doctor.photo} alt="" />
+                      <span>
+                        <strong>{doctor.name}</strong>
+                        <small>{doctor.role}</small>
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </SimpleDropdown>
+            <Link to="/success-stories" className="global-nav-link">Stories</Link>
+            <SimpleDropdown label="More" className="is-more">
+              <div className="global-nav-panel more-panel">
+                {moreGroups.map(([group, items]) => (
+                  <div className="more-panel-group" key={group}>
+                    <h3>{group}</h3>
+                    {items.map(item => externalMap[item] ? (
+                      <a key={item} href={externalMap[item]} target="_blank" rel="noreferrer">{item}</a>
+                    ) : (
+                      <Link key={item} to={toPath(item)}>{item}</Link>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </SimpleDropdown>
           </nav>
+
+          <div className="top-actions">
+            <Link to="/contact" className="btn-book">Book Your Appointment</Link>
+            <button type="button" onClick={onCallback} className="btn-callback">Request Call Back</button>
+          </div>
 
           <button className={`global-menu-toggle ${open ? 'is-open' : ''}`} type="button" onClick={() => setOpen(value => !value)} aria-label="Toggle navigation menu" aria-expanded={open}>
             <span />
@@ -221,32 +219,39 @@ export default function GlobalHeader({ onCallback }) {
                 {serviceColumns.map(column => (
                   <div key={column.title}>
                     <strong>{column.title}</strong>
-                    {column.items.map(([item, slug]) => <Link key={slug} to={`/services/${slug}`} onClick={() => setOpen(false)}>{item}</Link>)}
+                    {column.items.slice(0, 2).map(([item, slug]) => <Link key={slug} to={`/services/${slug}`} onClick={() => setOpen(false)}>{item}</Link>)}
                   </div>
                 ))}
+                <Link to="/services" onClick={() => setOpen(false)}>View all services</Link>
               </div>
             )}
-            <Link to="/doctors" onClick={() => setOpen(false)}>Our Doctors</Link>
-            {dropdowns.map(([label, items]) => (
-              <div key={label}>
-                <button type="button" onClick={() => setPanel(panel === label ? '' : label)}>{label} <span>{panel === label ? '−' : '+'}</span></button>
-                {panel === label && (
-                  <div className="mobile-panel">
+            <button type="button" onClick={() => setPanel(panel === 'Doctors' ? '' : 'Doctors')}>Doctors <span>{panel === 'Doctors' ? '−' : '+'}</span></button>
+            {panel === 'Doctors' && (
+              <div className="mobile-panel">
+                <Link to="/doctors" onClick={() => setOpen(false)}>All Doctors</Link>
+                {featuredDoctors.map(doctor => <Link key={doctor.slug} to={`/doctor/${doctor.slug}`} onClick={() => setOpen(false)}>{doctor.name}</Link>)}
+              </div>
+            )}
+            <Link to="/success-stories" onClick={() => setOpen(false)}>Stories</Link>
+            <button type="button" onClick={() => setPanel(panel === 'More' ? '' : 'More')}>More <span>{panel === 'More' ? '−' : '+'}</span></button>
+            {panel === 'More' && (
+              <div className="mobile-panel">
+                {moreGroups.map(([group, items]) => (
+                  <div key={group}>
+                    <strong>{group}</strong>
                     {items.map(item => externalMap[item] ? (
                       <a key={item} href={externalMap[item]} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>{item}</a>
                     ) : (
                       <Link key={item} to={toPath(item)} onClick={() => setOpen(false)}>{item}</Link>
                     ))}
                   </div>
-                )}
+                ))}
               </div>
-            ))}
-            {[
-              ['Success Stories', '/success-stories'],
-              ['Blogs', '/blogs'],
-              ['Packages', '/packages'],
-              ['Contact', '/contact'],
-            ].map(([label, path]) => <Link key={path} to={path} onClick={() => setOpen(false)}>{label}</Link>)}
+            )}
+            <div className="mobile-contact-block">
+              <a href="tel:06292269060">Call: 062922 69060</a>
+              <a href="mailto:info@renewhealthcare.in">info@renewhealthcare.in</a>
+            </div>
           </div>
         )}
       </header>

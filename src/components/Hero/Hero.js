@@ -42,16 +42,74 @@ const SLIDES = [
   },
 ]
 
+const HERO_STATS = [
+  { label: 'Years of Experience', value: 27 },
+  { label: 'Happy Clients', value: 12000, short: 'k' },
+  { label: 'Number Of Babies Delivered', value: 6000, short: 'k' },
+  { label: 'Number of IVFs', value: 9000, short: 'k' },
+]
+
+const HERO_CHIPS = [
+  'IVF clinic Kolkata',
+  'Fertility Consultation',
+  'IVF hospital Kolkata',
+  'Pregnancy Checkup',
+  'IVF doctor consultant',
+  'Gynaecology Checkup',
+  'IVF doctor near me',
+  'Ultrasonography',
+  'IVF treatment near me',
+  'Pathology/Blood test',
+  'best IVF centre in Kolkata',
+  'Home Collection',
+]
+
 const pad = n => String(n).padStart(2, '0')
 const total = SLIDES.length
 const SLIDE_SCROLL = 600 // px of fake-scroll per slide
 const PIN_DISTANCE = SLIDE_SCROLL * total // total pinned scroll distance
 
+function useCountUp(target, duration = 1400) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) {
+      setCount(target)
+      return undefined
+    }
+
+    let frame
+    const started = performance.now()
+    const tick = now => {
+      const progress = Math.min((now - started) / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.round(target * eased))
+      if (progress < 1) frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [target, duration])
+
+  return count
+}
+
+function HeroStat({ stat }) {
+  const count = useCountUp(stat.value)
+  const display = stat.short === 'k' ? `${Math.round(count / 1000)}k` : count
+  return (
+    <div className="hero-stat">
+      <strong>+{display}</strong>
+      <span>{stat.label}</span>
+    </div>
+  )
+}
+
 function Hero() {
   const [index, setIndex] = useState(0)
 
-  // Pinned fake-scroll only on desktop + when motion is allowed.
-  // Mobile gets a simple auto-rotating slider; reduced-motion stays static.
+  // Keep the hero as a normal page section. The previous pinned fake-scroll
+  // made the homepage feel heavy and created a long empty scroll track.
   const [animate, setAnimate] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -60,7 +118,7 @@ function Hero() {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
     const update = () => {
       setReduceMotion(reduce.matches)
-      setAnimate(wide.matches && !reduce.matches)
+      setAnimate(false)
       const mobile = !wide.matches
       setIsMobile(mobile)
       if (mobile) {
@@ -87,7 +145,7 @@ function Hero() {
   // Auto-rotate in the static fallback only (never under reduced-motion, and never on mobile).
   useEffect(() => {
     if (animate || reduceMotion || isMobile) return
-    const t = setInterval(() => setIndex(i => (i + 1) % total), 5000)
+    const t = setInterval(() => setIndex(i => (i + 1) % total), 3200)
     return () => clearInterval(t)
   }, [animate, reduceMotion, isMobile])
 
@@ -154,6 +212,18 @@ function Hero() {
             <motion.span className="heading-underline" {...item} />
 
             <motion.p className="hero-desc" {...item}>{s.desc}</motion.p>
+
+            <motion.div className="hero-stats" {...item}>
+              {HERO_STATS.map(stat => <HeroStat key={stat.label} stat={stat} />)}
+            </motion.div>
+
+            <motion.div className="hero-chip-marquee" aria-label="Popular fertility searches and services" {...item}>
+              <div className="hero-chip-track">
+                {[...HERO_CHIPS, ...HERO_CHIPS].map((chip, i) => (
+                  <span key={`${chip}-${i}`}>{chip}</span>
+                ))}
+              </div>
+            </motion.div>
 
             <motion.div className="trust-block" {...item}>
               <div className="avatar-row">
@@ -226,6 +296,13 @@ function Hero() {
             </button>
           </div>
         )}
+
+        <a className="hero-consult-cursor" href="#contact" aria-label="Get consultation">
+          <span>
+            <img src="/images/renew/uploads/2024/07/right-arrow.png" alt="" />
+          </span>
+          <strong>Get Consultation</strong>
+        </a>
       </section>
     </div>
   )

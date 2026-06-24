@@ -1,13 +1,22 @@
+import { motion } from 'framer-motion'
 import DoctorCard from '../components/DoctorCard.jsx'
-import { doctorCategories, doctors } from '../data/doctors.js'
+import { useDoctors } from '../hooks/useContent.js'
 import './ContentPages.css'
 import './ServicesPages.css'
 
+const reveal = {
+  initial: { opacity: 1, y: 0 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.12 },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+}
+
 export default function DoctorsPage() {
+  const { doctors, categories } = useDoctors()
   return (
     <main className="content-page">
       <section className="service-banner">
-        <img src="https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner.jpg" alt="Renew Healthcare doctors" />
+        <img src="/images/renew/uploads/2024/12/Inner-Page-Banner.jpg" alt="Renew Healthcare doctors" />
         <div className="service-banner-overlay" />
         <div className="service-banner-content">
           <span>Home / Doctors</span>
@@ -24,10 +33,10 @@ export default function DoctorsPage() {
           </div>
 
           <div className="people-category-stack">
-            {doctorCategories.map(category => {
+            {categories.map(category => {
               const categoryDoctors = doctors.filter(doctor => doctor.category === category)
               return (
-                <section className="people-category" key={category}>
+                <motion.section className="people-category" key={category} {...reveal}>
                   <div className="service-category-head">
                     <h3>{category}</h3>
                     <span>{categoryDoctors.length} Members</span>
@@ -35,7 +44,7 @@ export default function DoctorsPage() {
                   <div className="people-grid">
                     {categoryDoctors.map(doctor => <DoctorCard doctor={doctor} key={doctor.slug} />)}
                   </div>
-                </section>
+                </motion.section>
               )
             })}
           </div>

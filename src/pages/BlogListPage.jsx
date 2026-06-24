@@ -1,41 +1,156 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { blogs } from '../data/blogs.js'
-import './FinalPages.css'
+import { useBlogs } from '../hooks/useBlogs.js'
+import { useLeadSubmit } from '../hooks/useLeadSubmit.js'
+import Seo, { SITE } from '../components/Seo.js'
 import './ServicesPages.css'
+import './Blog.css'
+
+const PAGE = 4
 
 export default function BlogListPage() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
-  const categories = ['All', ...new Set(blogs.map(blog => blog.category))]
+  const [page, setPage] = useState(0)
+  const topRef = useRef(null)
+  const { blogs, categories } = useBlogs()
+
   const filtered = useMemo(() => blogs.filter(blog => {
-    const matchesQuery = `${blog.title} ${blog.excerpt}`.toLowerCase().includes(query.toLowerCase())
+    const matchesQuery = `${blog.title} ${blog.excerpt} ${blog.category}`.toLowerCase().includes(query.toLowerCase())
     const matchesCategory = category === 'All' || blog.category === category
     return matchesQuery && matchesCategory
-  }), [query, category])
+  }), [blogs, query, category])
+
+  const isDefault = category === 'All' && !query.trim()
+  const featured = isDefault ? (filtered.find(blog => blog.isFeatured) || filtered[0]) : null
+  const rest = isDefault && featured ? filtered.filter(blog => blog.slug !== featured.slug) : filtered
+  const firstPageRestCount = featured ? PAGE - 1 : PAGE
+  const remainingAfterFirstPage = Math.max(0, rest.length - firstPageRestCount)
+  const pageCount = isDefault
+    ? 1 + Math.ceil(remainingAfterFirstPage / PAGE)
+    : Math.max(1, Math.ceil(rest.length / PAGE))
+  const current = Math.min(page, pageCount - 1)
+  const shownStart = isDefault && current > 0
+    ? firstPageRestCount + (current - 1) * PAGE
+    : current * PAGE
+  const shownCount = isDefault && current === 0 ? firstPageRestCount : PAGE
+  const shown = rest.slice(shownStart, shownStart + shownCount)
+
+  const reset = fn => { fn(); setPage(0) }
+  const goToPage = p => {
+    setPage(p)
+    if (topRef.current) topRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Renew Healthcare Blog',
+    url: `${SITE}/blogs`,
+    description: 'Expert articles on IVF, IUI, fertility, pregnancy, and reproductive health from Renew Healthcare, Kolkata.',
+    blogPost: blogs.slice(0, 20).map(b => ({
+      '@type': 'BlogPosting',
+      headline: b.title,
+      datePublished: b.iso,
+      url: `${SITE}/blogs/${b.slug}`,
+      image: SITE + b.image,
+    })),
+  }
 
   return (
     <main className="content-page">
+      <Seo
+        title="Blogs — IVF, Fertility & Pregnancy Insights"
+        description="Read Renew Healthcare articles on IVF, IUI, fertility, pregnancy, gynaecology, and reproductive health — written by Kolkata's leading fertility specialists."
+        path="/blogs"
+        type="website"
+        jsonLd={jsonLd}
+      />
       <section className="service-banner">
-        <img src="https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg" alt="Renew Healthcare blogs" />
+        <img src="/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg" alt="Renew Healthcare blogs" />
         <div className="service-banner-overlay" />
         <div className="service-banner-content"><span>Home / Blogs</span><h1>Blogs</h1></div>
       </section>
+
       <section className="service-content-band">
         <div className="service-content-inner">
           <div className="service-heading-block">
             <span>Renew Healthcare Blog</span>
-            <h2>Latest fertility and healthcare insights</h2>
-            <p>Read Renew Healthcare articles on IVF, pregnancy, fertility, wellness, and reproductive health.</p>
+            <h2>Fertility &amp; pregnancy care insights</h2>
+            <p>{blogs.length} expert articles on IVF, IUI, fertility, pregnancy, wellness, and reproductive health.</p>
           </div>
-          <div className="blog-filter-bar">
-            <input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search blogs" />
-            <select value={category} onChange={event => setCategory(event.target.value)}>
-              {categories.map(item => <option key={item}>{item}</option>)}
-            </select>
-          </div>
-          <div className="final-card-grid">
-            {filtered.map(blog => <BlogCard blog={blog} key={blog.slug} />)}
+
+          <div className="blogx-layout">
+            <div className="blogx-main">
+              {featured && current === 0 && (
+                <div>
+                  <Link className="blogx-feature" to={`/blogs/${featured.slug}`}>
+                    <div className="blogx-feature-media">
+                      <img src={featured.image} alt={featured.title} />
+                      <span className="blogx-feature-badge">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.8.7-5.1 4.6 1.4 6.7L12 17.8 6 20.6l1.4-6.7L2.3 9l6.8-.7L12 2z" /></svg>
+                        Featured
+                      </span>
+                    </div>
+                    <div className="blogx-feature-body">
+                      <span className="blogx-feature-tag">{featured.category}</span>
+                      <h2>{featured.title}</h2>
+                      <p>{featured.excerpt}</p>
+                      <div className="blogx-feature-foot">
+                        <span>{featured.date} · {featured.readMins} min read</span>
+                        <strong>Read article <span className="blogx-inline-arrow" aria-hidden="true" /></strong>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              )}
+
+              <div className="blogx-toolbar" ref={topRef}>
+                <div className="blogx-search">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+                  <input value={query} onChange={e => reset(() => setQuery(e.target.value))} placeholder="Search articles…" />
+                </div>
+                <div className="blogx-chips">
+                  {categories.map(cat => (
+                    <button
+                      key={cat}
+                      type="button"
+                      className={cat === category ? 'is-active' : ''}
+                      onClick={() => reset(() => setCategory(cat))}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <p className="blogx-count">
+                {filtered.length} {filtered.length === 1 ? 'article' : 'articles'}{category !== 'All' ? ` in ${category}` : ''}
+                {pageCount > 1 && <span className="blogx-count-page"> · Page {current + 1} of {pageCount}</span>}
+              </p>
+
+              {shown.length > 0 ? (
+                <div className="blogx-grid">
+                  {shown.map(blog => <BlogCard blog={blog} key={blog.slug} />)}
+                </div>
+              ) : (
+                <p className="blogx-empty">No articles match your search. Try a different keyword or category.</p>
+              )}
+
+              <Pagination page={current} pageCount={pageCount} onChange={goToPage} />
+            </div>
+
+            <aside className="blogx-side">
+              <BlogEnquiryForm />
+              <div className="blogx-side-topics">
+                <h4>Browse by topic</h4>
+                <div className="blogx-side-chips">
+                  {categories.filter(c => c !== 'All').map(cat => (
+                    <button key={cat} type="button" className={cat === category ? 'is-active' : ''} onClick={() => { reset(() => setCategory(cat)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>{cat}</button>
+                  ))}
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
       </section>
@@ -43,15 +158,101 @@ export default function BlogListPage() {
   )
 }
 
+function pageWindow(current, count) {
+  const cur = current + 1
+  if (count <= 7) return Array.from({ length: count }, (_, i) => i + 1)
+  const out = [1]
+  if (cur > 3) out.push('gap-l')
+  for (let i = Math.max(2, cur - 1); i <= Math.min(count - 1, cur + 1); i++) out.push(i)
+  if (cur < count - 2) out.push('gap-r')
+  out.push(count)
+  return out
+}
+
+function Pagination({ page, pageCount, onChange }) {
+  if (pageCount <= 1) return null
+  const Arrow = ({ dir }) => (
+    <span className={`blogx-pager-chevron blogx-pager-chevron-${dir}`} aria-hidden="true" />
+  )
+  return (
+    <nav className="blogx-pager" aria-label="Blog pages">
+      <button type="button" className="blogx-pager-arrow" disabled={page === 0} onClick={() => onChange(page - 1)} aria-label="Previous page">
+        <Arrow dir="prev" />
+      </button>
+      <div className="blogx-pager-nums">
+        {pageWindow(page, pageCount).map((item, i) => (
+          typeof item === 'string'
+            ? <span key={item} className="blogx-pager-gap" aria-hidden="true">…</span>
+            : <button key={i} type="button" className={`blogx-pager-num ${item - 1 === page ? 'is-active' : ''}`} onClick={() => onChange(item - 1)} aria-current={item - 1 === page ? 'page' : undefined}>{item}</button>
+        ))}
+      </div>
+      <button type="button" className="blogx-pager-arrow" disabled={page === pageCount - 1} onClick={() => onChange(page + 1)} aria-label="Next page">
+        <Arrow dir="next" />
+      </button>
+    </nav>
+  )
+}
+
+function BlogEnquiryForm() {
+  const { status, error, submit } = useLeadSubmit()
+  const onSubmit = async event => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const data = new FormData(form)
+    const ok = await submit({
+      name: data.get('name'),
+      phone: data.get('phone'),
+      email: data.get('email'),
+      service: data.get('service'),
+      message: data.get('message'),
+      source: 'blog-enquiry',
+    })
+    if (ok) form.reset()
+  }
+  return (
+    <form className="blogx-side-form" onSubmit={onSubmit}>
+      <div className="blogx-side-form-head">
+        <span className="blogx-side-form-dot" />
+        <div>
+          <strong>Request a Call Back</strong>
+          <small>Free consultation with our fertility experts</small>
+        </div>
+      </div>
+      <input type="text" name="name" placeholder="Your name" required />
+      <input type="tel" name="phone" placeholder="Phone number" required />
+      <input type="email" name="email" placeholder="Email address" />
+      <select name="service" defaultValue="">
+        <option value="" disabled>Choose a service</option>
+        <option>IVF Consultation</option>
+        <option>IUI</option>
+        <option>Pregnancy Care</option>
+        <option>Gynaecology</option>
+        <option>Genetic Counselling</option>
+      </select>
+      <textarea name="message" placeholder="Your message (optional)" rows={3} />
+      <button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Get a Free Consultation'}</button>
+      {status === 'sent' && <p className="lead-form-msg ok">Thank you! We&rsquo;ll be in touch shortly.</p>}
+      {status === 'error' && <p className="lead-form-msg err">{error}</p>}
+      <a className="blogx-side-call" href="tel:06292269060">or call 062922 69060</a>
+    </form>
+  )
+}
+
 export function BlogCard({ blog }) {
   return (
-    <Link className="final-blog-card" to={`/blogs/${blog.slug}`}>
-      <img src={blog.image} alt={blog.title} />
-      <div>
-        <span>{blog.date}</span>
+    <Link
+      className="blogx-card"
+      to={`/blogs/${blog.slug}`}
+    >
+      <div className="blogx-card-media">
+        <img src={blog.image} alt={blog.title} loading="lazy" />
+        <span className="blogx-card-tag">{blog.category}</span>
+      </div>
+      <div className="blogx-card-body">
+        <span className="blogx-card-meta">{blog.date} · {blog.readMins} min read</span>
         <h3>{blog.title}</h3>
         <p>{blog.excerpt}</p>
-        <strong>Read More →</strong>
+        <strong className="blogx-card-link">Read article <span className="blogx-inline-arrow" aria-hidden="true" /></strong>
       </div>
     </Link>
   )

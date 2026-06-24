@@ -8,8 +8,8 @@ export const locations = [
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1841.890894700904!2d88.40033064837824!3d22.58726325812174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0275e065555555%3A0x3629f2d77c8e0af1!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1721464477531!5m2!1sen!2sin',
     services: ['Conception', 'Women’s Health', 'Endoscopy', 'Genetic Health', 'Wellness & Nutrition'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Ruby Yadav', 'Dr. Neha Yadav'],
-    image: 'https://renewhealthcare.in/wp-content/uploads/2025/03/renew-ivf-saltlake.jpg',
-    gallery: ['https://renewhealthcare.in/wp-content/uploads/2025/03/renew-ivf-saltlake.jpg', 'https://renewhealthcare.in/wp-content/uploads/2025/03/ivf-saltlake.jpg'],
+    image: '/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg',
+    gallery: ['/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg', '/images/renew/uploads/2025/03/ivf-saltlake.jpg'],
     intro: 'Renew Healthcare Saltlake offers fertility, gynaecology, genetic health, endoscopy, wellness, and nutrition support from a modern clinic in Bidhannagar.',
   },
   {
@@ -21,8 +21,8 @@ export const locations = [
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.1898182412465!2d86.17949957587665!3d22.79542932476553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3f61c108ad7%3A0x67728bfba5628131!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1721464534308!5m2!1sen!2sin',
     services: ['Preconception Counselling', 'Infertility Workup', 'IUI', 'IVF', 'ICSI', 'Surrogacy', 'Embryo Freezing', 'Oocyte Freezing', 'Semen Bank', 'Andrology Clinic', 'Genetic Counseling'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Dorothy P Ghosh', 'Dr. Ruby Yadav', 'Dr. Neha Yadav'],
-    image: 'https://renewhealthcare.in/wp-content/uploads/2025/03/renew-ivf-jamshedpur.jpg',
-    gallery: ['https://renewhealthcare.in/wp-content/uploads/2025/03/renew-ivf-jamshedpur.jpg', 'https://renewhealthcare.in/wp-content/uploads/2025/03/renew-healthcare-jamshedpur.jpg'],
+    image: '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg',
+    gallery: ['/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg', '/images/renew/uploads/2025/03/renew-healthcare-jamshedpur.jpg'],
     intro: 'Renew Health Care Jamshedpur, “Renew Fertility” is for couples who are still deprived of the joy of having a child. Here you can consult our renowned infertility specialist Dr. Dorothy Ghosh.',
   },
   {
@@ -34,8 +34,8 @@ export const locations = [
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3685.514009787549!2d88.36441927480993!3d22.522410134808943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277589dea95db%3A0x62e182948ab063d!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1745338420632!5m2!1sen!2sin',
     services: ['Conception', 'Women’s Health', 'Pregnancy Care', 'Gynaecology', 'Genetic Health'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Ruby Yadav', 'Dr. Neha Yadav'],
-    image: 'https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-2.jpg',
-    gallery: ['https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-2.jpg'],
+    image: '/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg',
+    gallery: ['/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg'],
     intro: 'Renew Healthcare Gariahat supports fertility, gynaecology, pregnancy care, and women’s health services from Mandeville Gardens, Ballygunge.',
   },
 ]

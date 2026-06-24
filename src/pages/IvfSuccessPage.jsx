@@ -6,7 +6,7 @@ export default function IvfSuccessPage() {
   return (
     <main className="content-page">
       <section className="service-banner">
-        <img src="https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-2.jpg" alt="IVF success factors" />
+        <img src="/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg" alt="IVF success factors" />
         <div className="service-banner-overlay" />
         <div className="service-banner-content">
           <span>Home / IVF Success Factors And Rates</span>

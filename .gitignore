@@ -6,3 +6,6 @@ dist/
 .env
 .env.*
 !.env.example
+
+# WordPress migration exports (large binaries — keep out of git)
+*.wpress

@@ -11,11 +11,18 @@ const reasons = [
   'Patient-oriented approach guided by expert consultants and top IVF doctors in Kolkata.',
 ]
 
+const proofItems = [
+  ['+27', 'Years of Experience'],
+  ['+12k', 'Happy Clients'],
+  ['+6k', 'Babies Delivered'],
+  ['+9k', 'IVF Journeys'],
+]
+
 export default function WhyRenewPage() {
   return (
     <main className="content-page">
       <section className="service-banner">
-        <img src="https://renewhealthcare.in/wp-content/uploads/2024/12/Inner-Page-Banner-3.jpg" alt="Why Renew Healthcare" />
+        <img src="/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg" alt="Why Renew Healthcare" />
         <div className="service-banner-overlay" />
         <div className="service-banner-content">
           <span>Home / Why Renew</span>
@@ -25,6 +32,22 @@ export default function WhyRenewPage() {
 
       <section className="service-content-band">
         <div className="service-content-inner">
+          <section className="why-proof-band">
+            <div>
+              <span>Why families choose Renew</span>
+              <h2>Specialist-led fertility and women&apos;s health care without unnecessary noise.</h2>
+              <p>Renew keeps the focus on diagnosis, ethical guidance, clear choices, and treatment plans that match each patient&apos;s real clinical need.</p>
+            </div>
+            <div className="why-proof-grid">
+              {proofItems.map(([value, label]) => (
+                <article key={label}>
+                  <strong>{value}</strong>
+                  <span>{label}</span>
+                </article>
+              ))}
+            </div>
+          </section>
+
           <div className="split-feature">
             <div className="service-heading-block is-left">
               <span>Why Renew Healthcare?</span>
@@ -33,14 +56,14 @@ export default function WhyRenewPage() {
               <p>Modes of ethical treatment are called such because patients are prioritised for natural conception. If artificial intervention is absolutely deemed necessary by our experts, only then will it be recommended.</p>
             </div>
             <div className="feature-image-card">
-              <img src="https://renewhealthcare.in/wp-content/uploads/2024/12/why_renew-img1.webp" alt="Why Renew Healthcare" />
+              <img src="/images/renew/uploads/2024/12/why_renew-img1.webp" alt="Why Renew Healthcare" />
             </div>
           </div>
 
           <div className="reason-grid">
             {reasons.map((reason, index) => (
               <article className="content-panel reason-card" key={reason}>
-                <img src={index % 2 === 0 ? 'https://renewhealthcare.in/wp-content/uploads/2024/12/why_renew-icon1.webp' : 'https://renewhealthcare.in/wp-content/uploads/2024/12/why_renew-img2.webp'} alt="" />
+                <img src={index % 2 === 0 ? '/images/renew/uploads/2024/12/why_renew-icon1.webp' : '/images/renew/uploads/2024/12/why_renew-img2.webp'} alt="" />
                 <h3>{String(index + 1).padStart(2, '0')}</h3>
                 <p>{reason}</p>
               </article>

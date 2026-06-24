@@ -8,6 +8,7 @@ import ServicePage from './pages/ServicePage.jsx'
 import ServicesIndex from './pages/ServicesIndex.jsx'
 import AboutPage from './pages/AboutPage.jsx'
 import DoctorsPage from './pages/DoctorsPage.jsx'
+import DoctorDetailPage from './pages/DoctorDetailPage.jsx'
 import IvfSuccessPage from './pages/IvfSuccessPage.jsx'
 import LocationPage from './pages/LocationPage.jsx'
 import LocationsPage from './pages/LocationsPage.jsx'
@@ -16,6 +17,8 @@ import WhyRenewPage from './pages/WhyRenewPage.jsx'
 import BlogListPage from './pages/BlogListPage.jsx'
 import BlogPostPage from './pages/BlogPostPage.jsx'
 import FinalContentPage, { CoursePage, FinalContentByKey } from './pages/FinalContentPage.jsx'
+import NotFound from './pages/NotFound.jsx'
+import AdminApp from './admin/AdminApp.jsx'
 import './index.css'
 
 const routes = [
@@ -25,11 +28,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
+        <Route path="/admin/*" element={<AdminApp />} />
         <Route element={<App />}>
           <Route index element={<Home />} />
           <Route path="/services" element={<ServicesIndex />} />
           <Route path="/services/:slug" element={<ServicePage />} />
           <Route path="/doctors" element={<DoctorsPage />} />
+          <Route path="/doctor/:slug" element={<DoctorDetailPage />} />
           <Route path="/locations" element={<LocationsPage />} />
           <Route path="/locations/:slug" element={<LocationPage />} />
           <Route path="/about-us" element={<AboutPage />} />
@@ -53,6 +58,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           {routes.map(([path, title]) => (
             <Route key={path} path={path} element={<PageStub title={title} />} />
           ))}
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

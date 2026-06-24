@@ -680,6 +680,7 @@
   }
 
   .home-section-heading {
+    margin-bottom: 30px;
     text-align: left;
   }
 
@@ -688,7 +689,8 @@
   }
 
   .home-section-heading h2 {
-    font-size: clamp(2.65rem, 13vw, 4rem);
+    font-size: clamp(2.15rem, 9.6vw, 3.1rem);
+    line-height: 1.08;
   }
 
   .why-grid,
@@ -708,6 +710,21 @@
   .video-why-media,
   .video-why-media img {
     min-height: 270px;
+  }
+
+  .journey-stage-card {
+    min-height: 0;
+  }
+
+  .journey-stage-card img {
+    height: auto;
+    object-fit: contain;
+    background: #f1f7f5;
+  }
+
+  .journey-stage-card span {
+    min-height: 0;
+    padding: 20px 18px 22px;
   }
 
   .doctor-image {

@@ -1,6 +1,7 @@
 // Shared labels for lead form sources + pipeline statuses.
 export const SOURCE_LABELS = {
   'callback-modal': 'Call-back popup',
+  appointment: 'Appointment form',
   footer: 'Footer form',
   'blog-enquiry': 'Blog sidebar',
   'contact-page': 'Contact page',

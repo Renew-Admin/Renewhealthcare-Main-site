@@ -16,6 +16,7 @@ import SuccessStoriesPage from './pages/SuccessStoriesPage.jsx'
 import WhyRenewPage from './pages/WhyRenewPage.jsx'
 import BlogListPage from './pages/BlogListPage.jsx'
 import BlogPostPage from './pages/BlogPostPage.jsx'
+import NewsPage from './pages/NewsPage.jsx'
 import FinalContentPage, { CoursePage, FinalContentByKey } from './pages/FinalContentPage.jsx'
 import NotFound from './pages/NotFound.jsx'
 import AdminApp from './admin/AdminApp.jsx'
@@ -43,6 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/success-stories" element={<SuccessStoriesPage />} />
           <Route path="/blogs" element={<BlogListPage />} />
           <Route path="/blogs/:slug" element={<BlogPostPage />} />
+          <Route path="/news" element={<NewsPage />} />
           <Route path="/packages" element={<FinalContentByKey pageKey="packages" />} />
           <Route path="/contact" element={<FinalContentByKey pageKey="contact" />} />
           <Route path="/male-infertility" element={<FinalContentByKey pageKey="male-infertility" />} />

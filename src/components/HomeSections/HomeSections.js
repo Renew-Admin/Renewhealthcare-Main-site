@@ -41,7 +41,7 @@ const clinics = [
   ['Renew IVF Jamshedpur', 'Bistupur, Jamshedpur', '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg', '/locations/jamshedpur'],
 ]
 
-function SectionHeading({ eyebrow, title, text }) {
+export function SectionHeading({ eyebrow, title, text }) {
   return (
     <div className="home-section-heading">
       <span>{eyebrow}</span>
@@ -51,7 +51,7 @@ function SectionHeading({ eyebrow, title, text }) {
   )
 }
 
-function CardCarousel({ children, className, label }) {
+export function CardCarousel({ children, className, label }) {
   const viewportRef = useRef(null)
   const [canGoBack, setCanGoBack] = useState(false)
   const [canGoForward, setCanGoForward] = useState(false)
@@ -218,7 +218,7 @@ export default function HomeSections() {
 
       <section className="home-band media-section" id="media">
         <div className="home-band-inner">
-          <SectionHeading eyebrow="Publications" title="Renew In The News" />
+          <SectionHeading eyebrow="As Featured In" title="Trusted by leading media houses" />
           <div className="media-carousel" aria-label="Media logos">
             <div className="media-track">
               {[...mediaLogos, ...mediaLogos].map((logo, index) => (

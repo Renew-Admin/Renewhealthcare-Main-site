@@ -1,6 +1,7 @@
 import Hero from '../../components/Hero/Hero.js'
 import AboutRenew from '../../components/AboutRenew/AboutRenew.js'
 import HomeSections from '../../components/HomeSections/HomeSections.js'
+import HomeFeatures from '../../components/HomeFeatures/HomeFeatures.js'
 import HomeFaq from '../../components/HomeFaq/HomeFaq.js'
 import Seo, { SITE } from '../../components/Seo.js'
 
@@ -41,6 +42,7 @@ export default function Home() {
       <Hero />
       <AboutRenew />
       <HomeSections />
+      <HomeFeatures />
       <HomeFaq />
     </main>
   )

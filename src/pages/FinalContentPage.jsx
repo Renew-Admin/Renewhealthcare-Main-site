@@ -88,15 +88,17 @@ export function FinalContentByKey({ pageKey }) {
             </div>
           )}
           {isContact && <ContactBlock />}
-          {isPackages && <PackageCards />}
-          <div className="service-section-stack">
-            {page.sections.map(section => (
-              <article className="service-detail-card" key={section.heading}>
-                <h3>{section.heading}</h3>
-                <div className="service-rich-text">{section.body.split('\n').filter(Boolean).map((line, i) => line.startsWith('- ') ? <li key={i}>{line.slice(2)}</li> : <p key={i}>{line}</p>)}</div>
-              </article>
-            ))}
-          </div>
+          {isPackages && <PackageContent />}
+          {!isPackages && (
+            <div className="service-section-stack">
+              {page.sections.map(section => (
+                <article className="service-detail-card" key={section.heading}>
+                  <h3>{section.heading}</h3>
+                  <div className="service-rich-text">{section.body.split('\n').filter(Boolean).map((line, i) => line.startsWith('- ') ? <li key={i}>{line.slice(2)}</li> : <p key={i}>{line}</p>)}</div>
+                </article>
+              ))}
+            </div>
+          )}
           <section className="service-cta-band">
             <div><span>Renew Healthcare</span><h2>Talk to our team</h2><p>For appointments, treatment planning, and patient guidance.</p></div>
             <div className="service-cta-actions"><Link to="/contact">Book Appointment</Link><a href="tel:06292269060">Call 062922 69060</a></div>
@@ -116,13 +118,91 @@ export function CoursePage({ pageKey }) {
   return <FinalContentByKey pageKey={pageKey} />
 }
 
-function PackageCards() {
-  const cards = [
-    ['Fertility Enhancing Surgery', 'Used to treat infertility, improve fertility treatment outcomes, or preserve fertility in selected cases.', 'Transparent costing discussed after clinical evaluation'],
-    ['IVF Planning', 'Costs depend on protocol, medication, injections, lab needs, and individual treatment plan.', 'Discuss with care team'],
-    ['Transparency', 'Renew Healthcare shares detailed information from stimulation, egg retrieval, embryo development, and expected outcomes.', 'Clear counselling before treatment'],
-  ]
-  return <div className="package-grid">{cards.map(([name, body, price]) => <article className="package-card" key={name}><h3>{name}</h3><p>{body}</p><strong>{price}</strong></article>)}</div>
+const packageRows = [
+  ['1', 'Consultations with the Consultant/ Counsellor/ Coordinator after registering for the package from Day 2 till Ovum Retrieval', '3,000/-'],
+  ['2', 'TVS for Folliculometry and Endometrial Preparation (Ave 4 scans)', '3,000/-'],
+  ['3', 'Stimulation Injections (Urinary: Fixed Dose)', '40,000/-'],
+  ['4', 'Antagonist (Fixed Dose)', '5,000/-'],
+  ['5', 'Pre - Anesthesia Checkup Charges', '1,000/-'],
+  ['6', 'Oocyte Retrieval and embryo transfer charges which include the OT Charges, Consultant Charges, Anesthesiologist Charges, Embryologist Charges, Nursing Team Charges and all Consumables used for Oocyte Retrieval and Embryo transfer procedure in the Fresh IVF Cycle.', '85,000/-'],
+  ['7', 'Daycare Bed Charges', '8,000/-'],
+  ['8', 'Fresh Embryo Transfer (Day 3/5 from OPU)', '10,000/-'],
+  ['9', 'Intra Cytoplasmic Sperm Injection (ICSI)', '10,000/-'],
+]
+
+const graphImages = [
+  ['/images/renew/uploads/2024/12/grphs-img2.webp', 'Renew Healthcare success graph'],
+  ['/images/renew/uploads/2024/12/grphs-img1.webp', 'Renew Healthcare treatment graph'],
+  ['/images/renew/uploads/2024/12/grphs-img3.webp', 'Renew Healthcare outcome graph'],
+]
+
+const fertilitySurgeryCopy = 'Fertility enhancing surgery or minimally invasive reproductive surgery can be used to treat infertility, improve fertility treatment outcomes, or preserve fertility. This is particularly indicative in cases of endometriosis, PCOS, uterine fibroids, fallopian tube blockage etc. However, reproductive surgery may not improve fertility outcomes and may, in some instances, damage ovarian reserve. There fore it is always advised to get the surgery done under the same fertility specialist who is treating the patient for infertility treatment. The treating consultant will understand the boundary conditions of the surgery & will approach accordingly rather than regular surgeons. The success of the following treatment depends heavily on the quality of the surgery that takes place. The minimally invasive surgery is a part of the entire treatment process. In Renew Healthcare, we encompass every aspect of the treatment under one roof & provide 360degree solution. So before going under the knife, ask yourself, am I getting the best possible & holistic treatment under a single consultant & a single clinic? And last but not least, ensure that the surgery is documented & a video recording is provided to you. This helps a lot in your case discussion & future treatment plan.'
+
+const transparencyCopy = 'Renew Healthcare is absolutely transparent in terms of clinical practices, costing & success rate. We are one of the few clinics in India who share detailed information right from the time of stimulation. We inform the patient on the number of eggs retrieved once ovum pick up is done, we keep the patient informed on the development of the embryos, and we discuss what is the best possible outcome. We are one of the few clinics in the country who promote "self cycle first" policy, which means that we try to reach conception through self egg & self sperm. As a policy, we counsel patients for self cycle & then if needed we go for donor support. Our self: donor cycle ratio is 90:10. In terms of financial counselling, we assure patients that there is no hidden costs unlike other IVF clinics. On the very first meeting we explain every aspect of the treatment plan with payment schedules. This apparently look to be on the higher side, but since we discuss every aspect of the treatment during financial counselling, patients do not end up paying anything more than what has been discussed. We are proud to share our detailed success rate in our website, month on month for the last 12 months. We update the details every month so that patients get clarity in terms of the quality of work that is done in Renew Healthcare.'
+
+function PackageContent() {
+  return (
+    <div className="packages-content">
+      <section className="packages-pricing">
+        <div className="packages-section-head">
+          <span>IVF Package</span>
+          <h3>Our Honest Pricing Philosophy</h3>
+        </div>
+        <div className="packages-table-wrap">
+          <table className="packages-table">
+            <thead>
+              <tr>
+                <th>SL</th>
+                <th>IVF Package Inclusions</th>
+                <th>Standard Clinic Price</th>
+                <th>Freedom From Infertility Package In Renew Fertility</th>
+              </tr>
+            </thead>
+            <tbody>
+              {packageRows.map(([sl, inclusion, price]) => (
+                <tr key={sl}>
+                  <td>{sl}</td>
+                  <td>{inclusion}</td>
+                  <td>{price}</td>
+                  <td><span className="package-check" aria-label="Included">Yes</span></td>
+                </tr>
+              ))}
+              <tr className="packages-total-row">
+                <td />
+                <td>Total</td>
+                <td>150000</td>
+                <td>100000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="packages-copy-block">
+        <h3>Fertility Enhancing Surgery</h3>
+        <p>{fertilitySurgeryCopy}</p>
+      </section>
+
+      <section className="packages-graphs">
+        <div className="packages-section-head">
+          <span>Clinical Reporting</span>
+          <h3>Graphs</h3>
+        </div>
+        <div className="packages-graph-grid">
+          {graphImages.map(([src, alt]) => (
+            <figure className="packages-graph-card" key={src}>
+              <img src={src} alt={alt} loading="lazy" />
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section className="packages-copy-block">
+        <h3>Transparency</h3>
+        <p>{transparencyCopy}</p>
+      </section>
+    </div>
+  )
 }
 
 const quickContacts = [

@@ -3,17 +3,21 @@
   --blue: #0767a5;
   --lime: #b9c900;
   --sage: #A7B985;
+  --brand-green: #7b9c70;
   --ink: #202124;
   --muted: #555e68;
   --frame: #e9ebee;
-  --font-heading: 'Fraunces', 'Georgia', 'Times New Roman', serif;
-  --font-body: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-subheading: var(--font-body);
+  --display-heading-size: clamp(3rem, min(5.1vw, 8.6vh), 4.85rem);
+  --display-heading-size-mobile: clamp(1.72rem, 7.15vw, 1.9rem);
 
   /* Neutral surfaces avoid blue/dark seam lines between adjacent cards. */
-  --card-line: 1px solid rgba(20, 40, 70, 0.045);
-  --shadow-soft: 0 1px 2px rgba(20, 40, 70, 0.025);
-  --shadow-card: 0 1px 2px rgba(20, 40, 70, 0.025);
-  --shadow-card-hover: 0 10px 24px rgba(20, 40, 70, 0.07);
+  --card-line: 2px solid rgba(123, 156, 112, 0.12);
+  --shadow-soft: none;
+  --shadow-card: none;
+  --shadow-card-hover: none;
 }
 
 *, *::before, *::after {
@@ -40,16 +44,57 @@ body {
   text-rendering: optimizeLegibility;
   overflow-x: clip;
   line-height: 1.5;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
   -webkit-user-select: none;
   user-select: none;
 }
 
-/* Premium typographic defaults for the new serif display face. */
-h1, h2, h3, h4, h5, h6 {
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+}
+
+/* Site-wide typography: main headings stay serif; subheadings and UI stay sans. */
+h1,
+h2,
+:where([class*="-heading"] h1, [class*="-heading"] h2),
+:where(.hero-heading, .wr-title) {
   font-family: var(--font-heading);
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: 0;
+  overflow-wrap: normal;
+  text-wrap: balance;
+  word-break: normal;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-subheading) !important;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+:where(
+  [class*="eyebrow"],
+  [class*="badge"],
+  [class*="subtitle"],
+  [class*="subhead"],
+  [class*="label"],
+  [class*="desc"],
+  [class*="text"],
+  [class*="copy"],
+  [class*="nav"],
+  [class*="btn"],
+  [class*="button"]
+) {
+  font-family: var(--font-body);
+  letter-spacing: 0;
 }
 
 ::selection {
@@ -124,10 +169,14 @@ strong {
   .greview-card,
   .wr-feature-card
 ) {
+  background: #fff;
   background-clip: padding-box;
-  border-color: rgba(20, 40, 70, 0.045);
-  box-shadow: var(--shadow-card);
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(123, 156, 112, 0.12);
+  box-shadow: none;
   isolation: isolate;
+  transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
 :where(
@@ -138,10 +187,16 @@ strong {
   .story-card,
   .blogx-card,
   .blogx-feature,
+  .final-blog-card,
+  .contact-quick-card,
   .greview-card,
+  .rh-news-card,
+  .rh-testimonial-card,
   .wr-feature-card
 ):hover {
-  box-shadow: var(--shadow-card-hover);
+  border-color: var(--brand-green);
+  box-shadow: none;
+  transform: translateY(-4px);
 }
 
 /* Shared feedback message shown under every lead form on the site. */

@@ -196,7 +196,7 @@ export default function SiteFooter({ onCallback }) {
                       <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="your-number">
                           <select className="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false" name="your-number" defaultValue="">
-                            <option value="">Book Your Appointment</option>
+                            <option value="">Select a service</option>
                             <option value="Online Consultation">Online Consultation</option>
                             <option value="Center Consultation">Center Consultation</option>
                           </select>

@@ -494,7 +494,7 @@
 
 @media (max-width: 767px) {
   .footer_sec.custom-pad {
-    padding: 50px 0;
+    padding: 38px 0;
   }
 
   .footer_sec .container,
@@ -513,6 +513,12 @@
   .footer-manu li a,
   .footer-bottom p {
     font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .footer-left p {
+    max-height: 4.35em;
+    overflow: hidden;
   }
 
   .footer-manu li {
@@ -604,11 +610,22 @@
   }
 
   .footer-form {
-    padding: 18px;
+    padding: 14px;
+  }
+
+  .footer-form input,
+  .footer-form textarea,
+  .footer-form select {
+    margin-bottom: 6px;
+    padding: 7px 8px;
+  }
+
+  .footer-form textarea {
+    height: 70px;
   }
 
   .footer-form .custom-button {
     width: 100%;
-    min-height: 48px;
+    min-height: 44px;
   }
 }

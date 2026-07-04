@@ -32,7 +32,7 @@ const reveal = {
 const STATIC_FAQS = FAQS.map(([question, answer]) => ({ question, answer }))
 
 export default function HomeFaq() {
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState(() => (typeof window !== 'undefined' && window.innerWidth <= 720 ? -1 : 0))
   const { faqs: remoteFaqs } = useFaqs()
   // Supabase FAQs replace the in-code defaults once they exist.
   const items = remoteFaqs.length ? remoteFaqs : STATIC_FAQS

@@ -1,0 +1,19 @@
+{
+  "backend": {
+    "@supabase/supabase-js": "^2.108.2"
+  },
+  "includedReactAdmin": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.17.0",
+    "@supabase/supabase-js": "^2.108.2"
+  },
+  "optionalExistingProjectDependencies": {
+    "vite": "^5.4.1"
+  },
+  "notes": [
+    "Only @supabase/supabase-js is required for a non-React integration.",
+    "The included admin panel expects React and React Router.",
+    "Use the target framework's public environment variable naming if it is not Vite."
+  ]
+}

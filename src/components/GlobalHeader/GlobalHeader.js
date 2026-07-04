@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { doctors } from '../../data/doctors.js'
 import './GlobalHeader.css'
@@ -132,6 +132,8 @@ const featuredDoctors = doctors.filter(doctor => doctor.category === 'Our Expert
 export default function GlobalHeader({ onCallback }) {
   const [open, setOpen] = useState(false)
   const [panel, setPanel] = useState('')
+  const { pathname } = useLocation()
+  const isContactPage = pathname.replace(/\/+$/, '') === '/contact'
 
   return (
     <>
@@ -199,7 +201,7 @@ export default function GlobalHeader({ onCallback }) {
           </nav>
 
           <div className="top-actions">
-            <Link to="/contact" className="btn-book">Book Your Appointment</Link>
+            {!isContactPage && <Link to="/contact" className="btn-book">Book Your Appointment</Link>}
             <button type="button" onClick={onCallback} className="btn-callback">Request Call Back</button>
           </div>
 

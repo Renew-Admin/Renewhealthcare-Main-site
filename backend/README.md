@@ -27,7 +27,7 @@ Row Level Security decides what it can do).
 ## One-time setup (about 3 minutes)
 
 ### 1. Create the structure
-1. Open your project: <https://supabase.com/dashboard/project/uexrkzdgxcngehmjzczz>
+1. Open your Supabase project: <https://supabase.com/dashboard/projects>
 2. **SQL Editor → New query** → paste all of [`schema.sql`](./schema.sql) → **Run**.
    - Safe to run repeatedly (idempotent). Re-run it now to add the new tables.
 
@@ -55,7 +55,8 @@ npm run dev
 - Public site: <http://localhost:5173/>
 - Admin panel: <http://localhost:5173/admin>
 
-The Supabase URL + anon key are already in the project `.env`.
+Add the Supabase URL + anon key from **Project Settings → API** to `.env`.
+Use [`.env.example`](../.env.example) for the required variable names.
 
 ---
 

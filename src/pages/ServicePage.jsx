@@ -4,6 +4,13 @@ import { services } from '../data/services.js'
 import './ServicesPages.css'
 
 function TextBlock({ text }) {
+  const compactText = part => {
+    const clean = String(part || '').replace(/\s+/g, ' ').trim()
+    const sentence = clean.match(/^(.{70,220}?[.!?])(\s|$)/)
+    if (sentence) return sentence[1]
+    return clean.split(' ').slice(0, 24).join(' ')
+  }
+
   return String(text || '')
     .split('\n')
     .filter(Boolean)
@@ -11,12 +18,17 @@ function TextBlock({ text }) {
       if (part.startsWith('- ')) {
         return <li key={index}>{part.slice(2)}</li>
       }
-      return <p key={index}>{part}</p>
+      return (
+        <p key={index}>
+          <span className="mobile-copy-short">{compactText(part)}</span>
+          <span className="desktop-copy-full">{part}</span>
+        </p>
+      )
     })
 }
 
 function FaqItem({ faq, index }) {
-  const [open, setOpen] = useState(index === 0)
+  const [open, setOpen] = useState(() => (typeof window !== 'undefined' && window.innerWidth <= 720 ? false : index === 0))
 
   return (
     <div className={`service-faq-item ${open ? 'is-open' : ''}`}>

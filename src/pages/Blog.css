@@ -8,16 +8,17 @@
   padding: clamp(14px, 1.6vw, 18px);
   border: var(--card-line);
   border-radius: 26px;
-  background: linear-gradient(135deg, #ffffff 0%, #f6fbff 100%);
-  box-shadow: var(--shadow-card);
+  background: #fff;
+  box-shadow: none;
   color: inherit;
   text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
 .blogx-feature:hover {
+  border-color: var(--brand-green);
+  box-shadow: none;
   transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover);
 }
 
 .blogx-feature-media {
@@ -214,15 +215,16 @@
   border: var(--card-line);
   border-radius: 22px;
   background: #fff;
-  box-shadow: var(--shadow-card);
+  box-shadow: none;
   color: inherit;
   text-decoration: none;
-  transition: transform 0.24s ease, box-shadow 0.24s ease;
+  transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
 .blogx-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-card-hover);
+  border-color: var(--brand-green);
+  box-shadow: none;
+  transform: translateY(-4px);
 }
 
 .blogx-card-media {
@@ -721,6 +723,52 @@
 @media (max-width: 620px) {
   .blogx-grid { grid-template-columns: 1fr; }
 
+  .blogx-feature {
+    gap: 14px;
+    padding: 12px;
+    border-radius: 20px;
+  }
+
+  .blogx-feature-body,
+  .blogx-card-body,
+  .blogx-aside-card {
+    padding: 18px;
+  }
+
+  .blogx-feature-body p,
+  .blogx-card-body p,
+  .blogx-aside-card.is-cta p {
+    display: none;
+  }
+
+  .blogx-feature-body h2 {
+    font-size: 1.24rem;
+    line-height: 1.18;
+  }
+
+  .blogx-card-body h3,
+  .blogx-aside-link h5 {
+    display: block;
+    max-height: 3.9em;
+    overflow: hidden;
+    -webkit-line-clamp: unset;
+    line-height: 1.3;
+  }
+
+  .blogx-card-link {
+    padding-top: 14px;
+  }
+
+  .blogx-prose {
+    font-size: 0.94rem;
+    line-height: 1.58;
+  }
+
+  .blogx-prose h1 { margin: 30px 0 12px; }
+  .blogx-prose h2 { margin: 28px 0 12px; }
+  .blogx-prose h3 { margin: 22px 0 10px; }
+  .blogx-prose p { margin-bottom: 12px; }
+
   .blogx-pager {
     gap: 8px;
     justify-content: flex-start;
@@ -790,7 +838,7 @@
   margin: 0 auto;
   color: var(--ink);
   font-family: var(--font-heading);
-  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  font-size: var(--display-heading-size);
   font-weight: 400;
   line-height: 1.13;
   letter-spacing: -0.022em;

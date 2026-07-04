@@ -64,7 +64,6 @@ const HERO_CHIPS = [
   'Home Collection',
 ]
 
-const pad = n => String(n).padStart(2, '0')
 const total = SLIDES.length
 const SLIDE_SCROLL = 600 // px of fake-scroll per slide
 const PIN_DISTANCE = SLIDE_SCROLL * total // total pinned scroll distance
@@ -142,10 +141,10 @@ function Hero() {
     setIndex(i)
   })
 
-  // Auto-rotate in the static fallback only (never under reduced-motion, and never on mobile).
+  // Auto-rotate in the static fallback only, respecting reduced-motion.
   useEffect(() => {
-    if (animate || reduceMotion || isMobile) return
-    const t = setInterval(() => setIndex(i => (i + 1) % total), 3200)
+    if (animate || reduceMotion) return
+    const t = setInterval(() => setIndex(i => (i + 1) % total), isMobile ? 3800 : 3200)
     return () => clearInterval(t)
   }, [animate, reduceMotion, isMobile])
 
@@ -182,7 +181,7 @@ function Hero() {
             {SLIDES.map((slide, i) => (
               <motion.img
                 key={i}
-                src={isMobile && i === 0 ? '/images/About_renew.png' : slide.image}
+                src={slide.image}
                 alt={slide.alt}
                 className={`hero-photo-img ${slide.imgClass || ''}`}
                 initial={false}
@@ -210,6 +209,38 @@ function Hero() {
             </motion.h1>
 
             <motion.span className="heading-underline" {...item} />
+
+            <motion.div className="hero-mobile-photo" aria-label="Hero image slider" {...item}>
+              {SLIDES.map((slide, i) => (
+                <motion.img
+                  key={slide.image}
+                  src={slide.image}
+                  alt=""
+                  aria-hidden="true"
+                  className={`hero-mobile-photo-img ${slide.imgClass || ''}`}
+                  initial={false}
+                  animate={{ opacity: index === i ? 1 : 0, scale: index === i ? 1 : 1.04 }}
+                  transition={{ duration: 0.65, ease: 'easeInOut' }}
+                />
+              ))}
+              <div className="hero-mobile-slider-controls">
+                <button type="button" onClick={prev} aria-label="Previous hero image">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+                    <path d="M14 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                <div className="hero-mobile-slider-dots" aria-hidden="true">
+                  {SLIDES.map((slide, i) => (
+                    <span className={index === i ? 'is-active' : ''} key={slide.image} />
+                  ))}
+                </div>
+                <button type="button" onClick={next} aria-label="Next hero image">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+                    <path d="M10 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </div>
+            </motion.div>
 
             <motion.p className="hero-desc" {...item}>{s.desc}</motion.p>
 
@@ -275,27 +306,6 @@ function Hero() {
             )}
           </div>
         </motion.div>
-
-        {/* Slider pagination */}
-        {!isMobile && (
-          <div className="slider">
-            <button className="slider-btn" onClick={prev} aria-label="Previous slide">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-                <path d="M14 6l-6 6 6 6" stroke="#374151" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <span className="slider-num">
-              <span className="num-active">{pad(index + 1)}</span>
-              <span className="slider-dash" />
-              <span>{pad(total)}</span>
-            </span>
-            <button className="slider-btn" onClick={next} aria-label="Next slide">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-                <path d="M10 6l6 6-6 6" stroke="#374151" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-        )}
 
         <a className="hero-consult-cursor" href="#contact" aria-label="Get consultation">
           <span>

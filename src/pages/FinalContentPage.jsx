@@ -39,6 +39,13 @@ const pageByRoute = {
   genetic: 'genetic',
 }
 
+function compactText(part) {
+  const clean = String(part || '').replace(/\s+/g, ' ').trim()
+  const sentence = clean.match(/^(.{70,220}?[.!?])(\s|$)/)
+  if (sentence) return sentence[1]
+  return clean.split(' ').slice(0, 24).join(' ')
+}
+
 const contactPage = {
   title: 'Contact',
   banner: '/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg',
@@ -94,15 +101,24 @@ export function FinalContentByKey({ pageKey }) {
               {page.sections.map(section => (
                 <article className="service-detail-card" key={section.heading}>
                   <h3>{section.heading}</h3>
-                  <div className="service-rich-text">{section.body.split('\n').filter(Boolean).map((line, i) => line.startsWith('- ') ? <li key={i}>{line.slice(2)}</li> : <p key={i}>{line}</p>)}</div>
+                  <div className="service-rich-text">
+                    {section.body.split('\n').filter(Boolean).map((line, i) => line.startsWith('- ')
+                      ? <li key={i}>{line.slice(2)}</li>
+                      : (
+                        <p key={i}>
+                          <span className="mobile-copy-short">{compactText(line)}</span>
+                          <span className="desktop-copy-full">{line}</span>
+                        </p>
+                      ))}
+                  </div>
                 </article>
               ))}
             </div>
           )}
-          <section className="service-cta-band">
+          {!isContact && <section className="service-cta-band">
             <div><span>Renew Healthcare</span><h2>Talk to our team</h2><p>For appointments, treatment planning, and patient guidance.</p></div>
             <div className="service-cta-actions"><Link to="/contact">Book Appointment</Link><a href="tel:06292269060">Call 062922 69060</a></div>
-          </section>
+          </section>}
         </div>
       </section>
     </main>
@@ -209,7 +225,6 @@ const quickContacts = [
   ['Call us', '062922 69060', 'tel:06292269060', 'phone'],
   ['WhatsApp', 'Chat with our team', 'https://api.whatsapp.com/send?phone=916292269060', 'whatsapp'],
   ['Email', 'info@renewhealthcare.in', 'mailto:info@renewhealthcare.in', 'mail'],
-  ['Online consultation', 'Book a video consult', '/contact', 'video'],
 ]
 
 function QuickIcon({ name }) {

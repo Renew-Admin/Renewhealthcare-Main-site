@@ -123,7 +123,7 @@
   max-width: 760px;
   color: var(--ink);
   font-family: var(--font-heading);
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-size: var(--display-heading-size);
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: -0.022em;

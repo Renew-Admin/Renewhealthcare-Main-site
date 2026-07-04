@@ -121,6 +121,7 @@ export function CardCarousel({ children, className, label }) {
 export default function HomeSections() {
   const { blogs } = useBlogs()
   const homeBlogs = blogs.slice(0, 4)
+  const [whyExpanded, setWhyExpanded] = useState(false)
   return (
     <>
       <section className="home-band why-renew-section" id="why-renew">
@@ -132,10 +133,20 @@ export default function HomeSections() {
           />
 
           <div className="video-why-card">
-            <div className="video-why-copy">
+            <div className={`video-why-copy ${whyExpanded ? 'is-expanded' : ''}`}>
               <h3>Why Renew Healthcare</h3>
-              <p>Our IVF Centre in Kolkata offers advanced and reliable solutions for couples looking to start their parenthood journey. Our IVF laboratories follow strict international protocols for handling eggs and sperm, ensuring the safest and most optimal conditions.</p>
-              <p>We provide a wide range of infertility treatments under one roof, making the process seamless and convenient. Backed by experienced embryologists, gynaecologists, and specialists with global expertise, we focus on delivering high-quality care with a personalized approach.</p>
+              <p className="video-why-summary">Advanced IVF care with safe lab protocols and compassionate support.</p>
+              <p className="video-why-intro" id="why-renew-mobile-copy">Our IVF Centre in Kolkata offers advanced and reliable solutions for couples looking to start their parenthood journey. Our IVF laboratories follow strict international protocols for handling eggs and sperm, ensuring the safest and most optimal conditions.</p>
+              <p className="video-why-detail">We provide a wide range of infertility treatments under one roof, making the process seamless and convenient. Backed by experienced embryologists, gynaecologists, and specialists with global expertise, we focus on delivering high-quality care with a personalized approach.</p>
+              <button
+                className="video-why-read-more"
+                type="button"
+                aria-expanded={whyExpanded}
+                aria-controls="why-renew-mobile-copy"
+                onClick={() => setWhyExpanded(value => !value)}
+              >
+                {whyExpanded ? 'Read less' : 'Read more'}
+              </button>
             </div>
             <a className="video-why-media" href="https://www.youtube.com/watch?v=lepLNR46L-c" target="_blank" rel="noreferrer" aria-label="Watch Renew Healthcare video">
               <img src="/images/renew/uploads/2025/01/Collage-Banner2.png" alt="Renew Healthcare patient success collage" />

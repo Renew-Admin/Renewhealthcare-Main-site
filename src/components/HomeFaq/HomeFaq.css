@@ -34,7 +34,7 @@
 .home-faq-intro h2 {
   color: var(--ink);
   font-family: var(--font-heading);
-  font-size: clamp(2.1rem, 3.4vw, 3.2rem);
+  font-size: var(--display-heading-size);
   font-weight: 400;
   line-height: 1.04;
   letter-spacing: -0.02em;
@@ -137,11 +137,53 @@
 }
 
 @media (max-width: 860px) {
+  .home-faq {
+    padding: 42px 6%;
+  }
+
   .home-faq-inner {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
 
   .home-faq-intro {
     position: static;
+  }
+
+  .home-faq-intro h2 {
+    font-size: var(--display-heading-size-mobile);
+    line-height: 1.08;
+  }
+
+  .home-faq-intro p {
+    display: none;
+  }
+
+  .home-faq-cta {
+    margin-top: 18px;
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 0.84rem;
+  }
+
+  .home-faq-list {
+    gap: 9px;
+  }
+
+  .home-faq-item > button {
+    padding: 15px 16px;
+    gap: 12px;
+    font-size: 0.94rem;
+    line-height: 1.28;
+  }
+
+  .home-faq-answer > p {
+    padding: 0 16px;
+    font-size: 0.88rem;
+    line-height: 1.52;
+  }
+
+  .home-faq-item.is-open .home-faq-answer > p {
+    padding: 0 16px 16px;
   }
 }

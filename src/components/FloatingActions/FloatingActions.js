@@ -135,7 +135,7 @@ export default function FloatingActions({ onCallback }) {
                 <span className="fab-opt-icon"><Icon name="instagram" /></span>
                 <span><strong>Follow on Instagram</strong><small>@renewhealthcare</small></span>
               </a>
-              <Link className="fab-panel-foot" to="/contact" onClick={() => setOpen(false)}>
+              <Link className="fab-panel-foot" to="/#book-appointment" onClick={() => setOpen(false)}>
                 Book your appointment online →
               </Link>
             </motion.div>

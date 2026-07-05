@@ -15,11 +15,10 @@ begin
   if (select count(*) from public.doctors) = 0 then
     insert into public.doctors (name, role, qualification, category, photo, display_order, active) values
     ('Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '', 'Our Experts', '/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png', 0, true),
-    ('Dr. Ruby Yadav', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2024/07/Dr-Ruby-Yadav-1.jpg', 1, true),
-    ('Dr. Neha Yadav', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg', 2, true),
-    ('Dr. Dorothy P Ghosh', 'Associate Consultant, Jamshedpur', '', 'Our Experts', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg', 3, true),
-    ('Dr. Sonam Agarwal', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2026/05/Dr-Sonam.jpg', 4, true),
-    ('Dr. Arnab Kundu', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2025/06/Dr-Arnab-Side-View-rotated.jpg', 5, true),
+    ('Dr. Neha Yadav', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg', 1, true),
+    ('Dr. Dorothy P Ghosh', 'Associate Consultant, Jamshedpur', '', 'Our Experts', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg', 2, true),
+    ('Dr. Sonam Agarwal', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2026/05/Dr-Sonam.jpg', 3, true),
+    ('Dr. Arnab Kundu', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2025/06/Dr-Arnab-Side-View-rotated.jpg', 4, true),
     ('Dr. Dipanjana Dutta', 'Geneticist', '', 'Genetics', '/images/renew/uploads/2024/12/Dr-Dipanjana-Datta-1.jpg', 6, true),
     ('Dr. Roohi Khanna', 'Obesity Medicine Specialist', '', 'Visiting Consultant', '/images/renew/uploads/2026/05/Dr-Roohi-Khanna.png', 7, true),
     ('Dr. Goutam Das', 'Consultant Homeopath', '', 'Visiting Consultant', '/images/renew/uploads/2024/12/Dr-Goutam-Das.jpg', 8, true),

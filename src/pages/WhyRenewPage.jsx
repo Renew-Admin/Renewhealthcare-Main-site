@@ -63,12 +63,27 @@ export default function WhyRenewPage() {
           <div className="reason-grid">
             {reasons.map((reason, index) => (
               <article className="content-panel reason-card" key={reason}>
-                <img src={index % 2 === 0 ? '/images/renew/uploads/2024/12/why_renew-icon1.webp' : '/images/renew/uploads/2024/12/why_renew-img2.webp'} alt="" />
                 <h3>{String(index + 1).padStart(2, '0')}</h3>
                 <p>{reason}</p>
               </article>
             ))}
           </div>
+
+          <section className="why-visual-band">
+            <div className="service-heading-block is-left">
+              <span>Inside Renew</span>
+              <h2>Care spaces designed around clarity and comfort.</h2>
+              <p>Visuals are separated from the numbered cards so each point stays clean, readable, and easy to scan.</p>
+            </div>
+            <div className="why-visual-grid">
+              <figure>
+                <img src="/images/renew/uploads/2024/12/why_renew-img1.webp" alt="Renew Healthcare care environment" />
+              </figure>
+              <figure>
+                <img src="/images/renew/uploads/2024/12/why_renew-img2.webp" alt="Renew Healthcare patient support" />
+              </figure>
+            </div>
+          </section>
 
           <section className="service-cta-band">
             <div>

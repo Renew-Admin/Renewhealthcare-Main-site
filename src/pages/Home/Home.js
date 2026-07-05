@@ -1,3 +1,4 @@
+import { useOutletContext } from 'react-router-dom'
 import Hero from '../../components/Hero/Hero.js'
 import AboutRenew from '../../components/AboutRenew/AboutRenew.js'
 import HomeSections from '../../components/HomeSections/HomeSections.js'
@@ -31,6 +32,8 @@ const homeJsonLd = {
 }
 
 export default function Home() {
+  const { onCallback } = useOutletContext() || {}
+
   return (
     <main>
       <Seo
@@ -40,7 +43,7 @@ export default function Home() {
         jsonLd={homeJsonLd}
       />
       <Hero />
-      <AboutRenew />
+      <AboutRenew onCallback={onCallback} />
       <HomeSections />
       <HomeFeatures />
       <HomeFaq />

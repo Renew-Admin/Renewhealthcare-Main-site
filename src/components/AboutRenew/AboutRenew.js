@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom'
 import './AboutRenew.css'
 
-export default function AboutRenew() {
+export default function AboutRenew({ onCallback }) {
   return (
     <section className="about-renew" id="about-renew">
       <div className="about-renew-glow" aria-hidden="true" />
@@ -31,16 +32,16 @@ export default function AboutRenew() {
           </p>
 
           <div className="about-renew-actions">
-            <a className="about-renew-primary" href="#about-renew">
+            <Link className="about-renew-primary" to="/about-us">
               More About Us
               <span aria-hidden="true">→</span>
-            </a>
-            <a className="about-renew-secondary" href="#contact">
+            </Link>
+            <button className="about-renew-secondary" type="button" onClick={onCallback}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M7.2 3.5 10 8.7 7.8 10c1.3 2.8 3.5 5 6.3 6.3l1.3-2.2 5.2 2.8-.8 3c-.2.8-.9 1.3-1.7 1.4C10.2 21.7 2.3 13.8 2.7 5.9c0-.8.6-1.5 1.4-1.7l3.1-.7Z" />
               </svg>
               Request A Call Back
-            </a>
+            </button>
           </div>
 
           <div className="about-renew-trust">

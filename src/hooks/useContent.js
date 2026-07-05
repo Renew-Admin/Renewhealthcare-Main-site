@@ -37,6 +37,7 @@ const doctorsRes = createResource(() => doctorsApi.listActive(), [])
 const testimonialsRes = createResource(() => testimonialsApi.listActive(), [])
 const faqsRes = createResource(() => faqsApi.listActive(), [])
 const settingsRes = createResource(() => fetchSettings(), {})
+const hiddenDoctorSlugs = new Set(['dr-ruby-yadav'])
 
 export const invalidateDoctors = doctorsRes.invalidate
 export const invalidateTestimonials = testimonialsRes.invalidate
@@ -58,7 +59,7 @@ export function useDoctors() {
   }))
   // Once Supabase has doctors (e.g. after seeding), it is the source of truth.
   // The in-code list is only a fallback when the table is empty.
-  const doctors = remote.length ? remote : staticDoctors
+  const doctors = (remote.length ? remote : staticDoctors).filter((d) => !hiddenDoctorSlugs.has(d.slug))
   const categories = [...new Set(doctors.map((d) => d.category))]
   return { doctors, categories, loading }
 }

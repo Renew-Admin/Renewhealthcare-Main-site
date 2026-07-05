@@ -5,7 +5,6 @@ const slug = name => name.toLowerCase().replace(/dr\.?\s*/g, 'dr-').replace(/[^a
 
 const rows = [
   ['Our Experts', 'Dr. Rajeev Agarwal', '', 'Medical Director | Fertility Specialist | IVF Doctor', '2024/07/Dr-rajeev-agarwal.png'],
-  ['Our Experts', 'Dr. Ruby Yadav', '', 'Associate Consultant', '2024/07/Dr-Ruby-Yadav-1.jpg'],
   ['Our Experts', 'Dr. Neha Yadav', '', 'Associate Consultant', '2024/07/Dr-Neha-Yadav-1.jpg'],
   ['Our Experts', 'Dr. Dorothy P Ghosh', '', 'Associate Consultant, Jamshedpur', '2024/07/Dr-Dorothy-Ghosh-1.jpg'],
   ['Our Experts', 'Dr. Sonam Agarwal', '', 'Associate Consultant', '2026/05/Dr-Sonam.jpg'],

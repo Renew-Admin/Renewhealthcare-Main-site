@@ -22,7 +22,6 @@ const services = [
 const doctors = [
   ['Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png'],
   ['Dr. Dorothy P Ghosh', 'Associate Consultant, Jamshedpur', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg'],
-  ['Dr. Ruby Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Ruby-Yadav-1.jpg'],
   ['Dr. Neha Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg'],
 ]
 

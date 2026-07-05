@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import DoctorCard from '../components/DoctorCard.jsx'
 import { useDoctors } from '../hooks/useContent.js'
 import './ContentPages.css'
@@ -15,22 +16,31 @@ const reveal = {
 function ScrollSection({ category, doctors }) {
   const trackRef = useRef(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
+  const [canScrollRight, setCanScrollRight] = useState(false)
+  const [hasOverflow, setHasOverflow] = useState(false)
 
-  const updateScrollState = () => {
+  const updateScrollState = useCallback(() => {
     const el = trackRef.current
     if (!el) return
+    const maxScroll = el.scrollWidth - el.clientWidth
+    setHasOverflow(maxScroll > 4)
     setCanScrollLeft(el.scrollLeft > 4)
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4)
-  }
+    setCanScrollRight(el.scrollLeft < maxScroll - 4)
+  }, [])
+
+  useEffect(() => {
+    updateScrollState()
+    window.addEventListener('resize', updateScrollState)
+    return () => window.removeEventListener('resize', updateScrollState)
+  }, [updateScrollState, doctors.length])
 
   const scroll = (direction) => {
     const el = trackRef.current
     if (!el) return
     const card = el.querySelector('.people-card')
     if (!card) return
-    const amount = card.offsetWidth + (el.children.length > 1 ? parseFloat(getComputedStyle(el).gap) : 0)
-    el.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' })
+    const gap = parseFloat(getComputedStyle(el).gap) || 0
+    el.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: 'smooth' })
     setTimeout(updateScrollState, 350)
   }
 
@@ -40,41 +50,57 @@ function ScrollSection({ category, doctors }) {
         <h3>{category}</h3>
         <span>{doctors.length} Members</span>
       </div>
-      <div className="people-scroll-track-wrap">
-        <button
-          className={`scroll-overlay-btn left ${!canScrollLeft ? 'is-hidden' : ''}`}
-          disabled={!canScrollLeft}
-          onClick={() => scroll('left')}
-          aria-label="Scroll left"
-        >
-          <span className="scroll-btn-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
-          </span>
-        </button>
+      <div className="people-scroll-viewport">
         <div className="people-scroll-track" ref={trackRef} onScroll={updateScrollState}>
           {doctors.map(doctor => <DoctorCard doctor={doctor} key={doctor.slug} />)}
         </div>
-        <button
-          className={`scroll-overlay-btn right ${!canScrollRight ? 'is-hidden' : ''}`}
-          disabled={!canScrollRight}
-          onClick={() => scroll('right')}
-          aria-label="Scroll right"
-        >
-          <span className="scroll-btn-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-          </span>
-        </button>
       </div>
+      {hasOverflow && (
+        <div className="people-scroll-controls" aria-label={`${category} carousel controls`}>
+          <button type="button" onClick={() => scroll(-1)} disabled={!canScrollLeft} aria-label={`Previous ${category}`}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <button type="button" onClick={() => scroll(1)} disabled={!canScrollRight} aria-label={`Next ${category}`}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+      )}
+    </motion.section>
+  )
+}
+
+function LeadDoctor({ doctor }) {
+  return (
+    <motion.section className="lead-doctor-section" {...reveal}>
+      <div className="people-scroll-header">
+        <h3>Medical Director</h3>
+      </div>
+      <Link className="lead-profile-card" to={`/doctor/${doctor.slug}`}>
+        <div className="lead-profile-media">
+          <img src={doctor.photo} alt={doctor.name} />
+        </div>
+        <div className="lead-profile-body">
+          <span>Medical Director</span>
+          <h3>{doctor.name}</h3>
+          <p>{doctor.role}</p>
+          <strong>View Profile</strong>
+        </div>
+      </Link>
     </motion.section>
   )
 }
 
 export default function DoctorsPage() {
   const { doctors, categories } = useDoctors()
-
-  const featured = doctors.find(d => d.slug === 'dr-rajeev-agarwal')
-  const restDoctors = doctors.filter(d => d.slug !== 'dr-rajeev-agarwal')
-  const restCategories = [...new Set(restDoctors.map(d => d.category))]
+  const leadDoctor = doctors.find(doctor => doctor.slug === 'dr-rajeev-agarwal')
+  const carouselDoctors = doctors.filter(doctor => doctor.slug !== 'dr-rajeev-agarwal')
+  const carouselCategories = categories.filter(category =>
+    carouselDoctors.some(doctor => doctor.category === category)
+  )
 
   return (
     <main className="content-page">
@@ -95,16 +121,11 @@ export default function DoctorsPage() {
             <p>Renew Healthcare brings together fertility specialists, genetic experts, embryologists, counsellors, nursing, operations, and support teams across departments.</p>
           </div>
 
-          {featured && (
-            <div className="featured-doctor">
-              <div className="featured-doctor-label">Medical Director</div>
-              <DoctorCard doctor={featured} />
-            </div>
-          )}
+          {leadDoctor && <LeadDoctor doctor={leadDoctor} />}
 
           <div className="people-category-stack">
-            {restCategories.map(category => {
-              const categoryDoctors = restDoctors.filter(doctor => doctor.category === category)
+            {carouselCategories.map(category => {
+              const categoryDoctors = carouselDoctors.filter(doctor => doctor.category === category)
               return <ScrollSection key={category} category={category} doctors={categoryDoctors} />
             })}
           </div>

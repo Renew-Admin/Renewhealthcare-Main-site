@@ -133,7 +133,9 @@ export default function GlobalHeader({ onCallback }) {
   const [open, setOpen] = useState(false)
   const [panel, setPanel] = useState('')
   const { pathname } = useLocation()
-  const isContactPage = pathname.replace(/\/+$/, '') === '/contact'
+  const normalizedPath = pathname.replace(/\/+$/, '') || '/'
+  const isContactPage = normalizedPath === '/contact'
+  const appointmentPath = normalizedPath === '/' ? '#book-appointment' : '/#book-appointment'
 
   return (
     <>
@@ -201,7 +203,7 @@ export default function GlobalHeader({ onCallback }) {
           </nav>
 
           <div className="top-actions">
-            {!isContactPage && <Link to="/contact" className="btn-book">Book Your Appointment</Link>}
+            {!isContactPage && <Link to={appointmentPath} className="btn-book">Book Your Appointment</Link>}
             <button type="button" onClick={onCallback} className="btn-callback">Request Call Back</button>
           </div>
 

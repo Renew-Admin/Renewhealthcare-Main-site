@@ -9,17 +9,29 @@ import './App.css'
 
 export default function App() {
   const [callbackOpen, setCallbackOpen] = useState(false)
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-  }, [pathname])
+    if (!hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+      return undefined
+    }
+
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById(hash.slice(1))
+      if (target) {
+        target.scrollIntoView({ behavior: 'auto', block: 'start' })
+      }
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [pathname, hash])
 
   return (
     <div className="rh-root">
       <AnnouncementBanner />
       <GlobalHeader onCallback={() => setCallbackOpen(true)} />
-      <Outlet />
+      <Outlet context={{ onCallback: () => setCallbackOpen(true) }} />
       <SiteFooter onCallback={() => setCallbackOpen(true)} />
       <FloatingActions onCallback={() => setCallbackOpen(true)} />
       <CallbackModal open={callbackOpen} onClose={() => setCallbackOpen(false)} />

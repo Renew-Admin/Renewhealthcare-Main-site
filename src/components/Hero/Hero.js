@@ -307,7 +307,7 @@ function Hero() {
           </div>
         </motion.div>
 
-        <a className="hero-consult-cursor" href="#contact" aria-label="Get consultation">
+        <a className="hero-consult-cursor" href="#book-appointment" aria-label="Get consultation">
           <span>
             <img src="/images/renew/uploads/2024/07/right-arrow.png" alt="" />
           </span>

@@ -208,8 +208,6 @@ function Hero() {
               <span className="heading-blue">{s.titleB}</span>
             </motion.h1>
 
-            <motion.span className="heading-underline" {...item} />
-
             <motion.div className="hero-mobile-photo" aria-label="Hero image slider" {...item}>
               {SLIDES.map((slide, i) => (
                 <motion.img

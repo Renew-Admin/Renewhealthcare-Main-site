@@ -12,6 +12,10 @@
   --font-subheading: var(--font-body);
   --display-heading-size: clamp(3rem, min(5.1vw, 8.6vh), 4.85rem);
   --display-heading-size-mobile: clamp(1.72rem, 7.15vw, 1.9rem);
+  --rh-section-y: clamp(36px, 3.8vw, 58px);
+  --rh-section-y-mobile: 24px;
+  --rh-heading-gap: clamp(20px, 2.3vw, 30px);
+  --rh-heading-gap-mobile: 14px;
 
   /* Neutral surfaces avoid blue/dark seam lines between adjacent cards. */
   --card-line: 2px solid rgba(123, 156, 112, 0.12);
@@ -216,4 +220,263 @@ strong {
   background: #fdeef0;
   color: #a31f36;
   border: 1px solid #f3c2cb;
+}
+
+/* Consistent public-site section rhythm across desktop and mobile. */
+.rh-root :where(
+  .home-band,
+  .about-renew,
+  .home-faq,
+  .rh-failed-cta-inner,
+  .service-content-band,
+  .wr-showcase,
+  .page-stub,
+  .notfound-band,
+  #contact .footer_sec.custom-pad
+) {
+  padding-top: var(--rh-section-y) !important;
+  padding-bottom: var(--rh-section-y) !important;
+}
+
+.rh-root :where(
+  .home-section-heading,
+  .service-heading-block:not(.is-left),
+  .packages-section-head,
+  .rh-news-page-intro
+) {
+  margin-bottom: var(--rh-heading-gap) !important;
+}
+
+.rh-root :where(
+  .service-faq-section,
+  .service-related-section,
+  .service-cta-band,
+  .final-related,
+  .packages-copy-block,
+  .packages-graphs,
+  .greviews
+) {
+  margin-top: var(--rh-heading-gap) !important;
+}
+
+.rh-root :where(
+  .service-intro-grid,
+  .final-intro-split,
+  .why-proof-band,
+  .why-visual-band,
+  .video-why-card
+) {
+  margin-bottom: var(--rh-heading-gap) !important;
+}
+
+.rh-root .service-content-band.blogx-band {
+  padding-top: 0 !important;
+}
+
+/* Mobile content alignment requested across headings, captions, and descriptions. */
+@media (max-width: 720px) {
+  .rh-root :where(
+    .home-band,
+    .about-renew,
+    .home-faq,
+    .rh-failed-cta-inner,
+    .service-content-band,
+    .wr-showcase,
+    .page-stub,
+    .notfound-band,
+    #contact .footer_sec.custom-pad
+  ) {
+    padding-top: var(--rh-section-y-mobile) !important;
+    padding-bottom: var(--rh-section-y-mobile) !important;
+  }
+
+  .rh-root :where(
+    .home-section-heading,
+    .service-heading-block:not(.is-left),
+    .packages-section-head,
+    .rh-news-page-intro
+  ) {
+    margin-bottom: var(--rh-heading-gap-mobile) !important;
+  }
+
+  .rh-root :where(
+    .service-faq-section,
+    .service-related-section,
+    .service-cta-band,
+    .final-related,
+    .packages-copy-block,
+    .packages-graphs,
+    .greviews
+  ) {
+    margin-top: var(--rh-heading-gap-mobile) !important;
+  }
+
+  .rh-root :where(
+    .service-intro-grid,
+    .final-intro-split,
+    .why-proof-band,
+    .why-visual-band,
+    .video-why-card
+  ) {
+    margin-bottom: var(--rh-heading-gap-mobile) !important;
+  }
+
+  .rh-root :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    li,
+    a,
+    button,
+    span,
+    strong,
+    small,
+    figcaption,
+    blockquote,
+    th,
+    td,
+    [class*="heading"],
+    [class*="title"],
+    [class*="subhead"],
+    [class*="subtitle"],
+    [class*="desc"],
+    [class*="caption"],
+    [class*="copy"],
+    [class*="text"],
+    [class*="meta"],
+    [class*="eyebrow"],
+    [class*="label"]
+  ) {
+    text-align: center !important;
+  }
+
+  .rh-root :where(
+    .home-section-heading,
+    .service-banner-content,
+    .service-heading-block,
+    .service-heading-block.is-left,
+    .packages-section-head,
+    .packages-copy-block,
+    .blogx-post-head,
+    .blogx-feature-body,
+    .blogx-card-body,
+    .blogx-aside-card,
+    .final-article,
+    .content-panel,
+    .people-card-body,
+    .location-card > div,
+    .story-card > div,
+    .service-side-card,
+    .service-detail-card,
+    .service-index-card div,
+    .package-card,
+    .contact-info-card,
+    .final-blog-card div,
+    .home-faq-intro,
+    .fab-panel
+  ) {
+    text-align: center !important;
+  }
+
+  .rh-root :where(
+    .card-carousel-controls,
+    .blogx-chips,
+    .blogx-feature-foot,
+    .blogx-pager,
+    .service-category-head,
+    .service-cta-band,
+    .service-cta-actions,
+    .doctor-detail-actions,
+    .contact-social-row,
+    .sidebar_btn ul,
+    .mobile-accordion > a,
+    .mobile-accordion button
+  ) {
+    justify-content: center !important;
+  }
+
+  .rh-root :where(
+    .service-category-head,
+    .service-cta-band,
+    .reviews-panel,
+    .people-card-body,
+    .service-index-card div,
+    .blogx-feature-foot,
+    .fab-panel-head,
+    .fab-opt
+  ) {
+    align-items: center !important;
+  }
+
+  .rh-root :where(
+    .why-icon,
+    .avatar-row,
+    .service-side-card img,
+    .service-index-card img,
+    .contact-info-card img,
+    .home-section-heading h2,
+    .home-section-heading p,
+    .service-heading-block h2,
+    .service-heading-block p,
+    .packages-section-head,
+    .packages-copy-block,
+    .blogx-post-head h1,
+    .final-article .final-meta
+  ) {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .rh-root :where(
+    .hero-consult-cursor,
+    .service-index-card span,
+    .service-side-card a,
+    .service-pill-link,
+    .final-blog-card strong,
+    .package-card strong,
+    .blogx-card-link,
+    .blogx-back
+  ) {
+    align-self: center !important;
+  }
+
+  .rh-root #contact :where(
+    .footer_sec,
+    .footer_sec .row,
+    .footer-form,
+    .footer-mobile-content,
+    .footer-desktop-content,
+    .about-content,
+    .footer_sec h4,
+    .foot-location h5,
+    .footer-left p,
+    .footer-left .read-more,
+    .footer-manu li,
+    .footer-manu a,
+    .foot-location p,
+    .foot-location a,
+    .footer-bottom,
+    .footer-bottom-links,
+    .footer-bottom p,
+    .footer-bottom a,
+    .footer-bottom li,
+    .footer-form input,
+    .footer-form textarea,
+    .footer-form select,
+    .lead-form-msg
+  ) {
+    text-align: left !important;
+  }
+
+  .rh-root #contact :where(.footer-bottom ul) {
+    justify-content: flex-start !important;
+  }
+
+  .rh-root #contact :where(.footer-left, .footer-manu, .foot-location) {
+    align-items: flex-start !important;
+  }
 }

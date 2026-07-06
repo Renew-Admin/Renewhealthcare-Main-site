@@ -602,13 +602,15 @@
 }
 
 .lead-doctor-section {
-  margin-bottom: clamp(34px, 4.5vw, 56px);
+  max-width: 1040px;
+  margin: 0 auto clamp(34px, 4.5vw, 56px);
 }
 
 .lead-profile-card {
-  width: min(920px, 100%);
+  width: min(1040px, 100%);
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
   overflow: hidden;
   border: var(--card-line);
   border-radius: 24px;

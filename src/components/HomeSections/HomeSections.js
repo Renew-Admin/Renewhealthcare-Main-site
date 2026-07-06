@@ -36,8 +36,24 @@ const journeyCards = [
 ]
 
 const clinics = [
-  ['Renew IVF Saltlake', 'Saltlake, Kolkata', '/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg', '/locations/saltlake'],
-  ['Renew IVF Jamshedpur', 'Bistupur, Jamshedpur', '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg', '/locations/jamshedpur'],
+  {
+    name: 'Renew IVF Saltlake',
+    place: 'Saltlake, Kolkata',
+    image: '/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg',
+    to: '/locations/saltlake',
+  },
+  {
+    name: 'Renew IVF Jamshedpur',
+    place: 'Bistupur, Jamshedpur',
+    image: '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg',
+    to: '/locations/jamshedpur',
+  },
+  {
+    name: 'Renew Ballygunge',
+    place: 'Ballygunge, Kolkata',
+    image: '/images/renew/uploads/2026/07/renew-healthcare-mandeville-gardens.webp',
+    to: '/locations/gariahat',
+  },
 ]
 
 export function SectionHeading({ eyebrow, title, text }) {
@@ -50,11 +66,12 @@ export function SectionHeading({ eyebrow, title, text }) {
   )
 }
 
-export function CardCarousel({ children, className, label }) {
+export function CardCarousel({ children, className, label, autoPlayMs = 0, autoPlayOnlyMobile = false }) {
   const viewportRef = useRef(null)
   const [canGoBack, setCanGoBack] = useState(false)
   const [canGoForward, setCanGoForward] = useState(false)
   const [hasOverflow, setHasOverflow] = useState(false)
+  const [isMobileViewport, setIsMobileViewport] = useState(false)
   const items = Children.toArray(children)
 
   const updateControls = useCallback(() => {
@@ -81,6 +98,54 @@ export function CardCarousel({ children, className, label }) {
       window.removeEventListener('resize', handleResize)
     }
   }, [updateControls, items.length])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+
+    const media = window.matchMedia('(max-width: 720px)')
+    const handleChange = () => setIsMobileViewport(media.matches)
+
+    handleChange()
+    if (media.addEventListener) {
+      media.addEventListener('change', handleChange)
+    } else {
+      media.addListener(handleChange)
+    }
+
+    return () => {
+      if (media.removeEventListener) {
+        media.removeEventListener('change', handleChange)
+      } else {
+        media.removeListener(handleChange)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!autoPlayMs) return undefined
+    if (autoPlayOnlyMobile && !isMobileViewport) return undefined
+    if (typeof window === 'undefined') return undefined
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+
+    const timer = window.setInterval(() => {
+      const viewport = viewportRef.current
+      if (!viewport) return
+
+      const slides = viewport.querySelectorAll('.card-carousel-slide')
+      if (!slides.length) return
+
+      const track = viewport.querySelector('.card-carousel-track')
+      const gap = track ? Number.parseFloat(window.getComputedStyle(track).gap || '0') || 0 : 0
+      const step = slides[0].getBoundingClientRect().width + gap
+      const maxScroll = viewport.scrollWidth - viewport.clientWidth
+      const nextLeft = viewport.scrollLeft + step
+      const target = nextLeft >= maxScroll - 4 ? 0 : nextLeft
+
+      viewport.scrollTo({ left: target, behavior: 'smooth' })
+    }, autoPlayMs)
+
+    return () => window.clearInterval(timer)
+  }, [autoPlayMs, autoPlayOnlyMobile, isMobileViewport])
 
   const moveCarousel = (direction) => {
     const viewport = viewportRef.current
@@ -190,7 +255,7 @@ export default function HomeSections() {
             title="Treatments Provided By Renew Healthcare"
             text="End-to-end support through advanced fertility treatments, varied gynaecology services, and women’s aesthetic health services."
           />
-          <CardCarousel className="service-showcase" label="Treatment blocks">
+          <CardCarousel className="service-showcase" label="Treatment blocks" autoPlayMs={2000} autoPlayOnlyMobile>
             {services.map(([title, text, to], index) => (
               <article className="home-card service-card" key={title}>
                 <span>{String(index + 1).padStart(2, '0')}</span>
@@ -245,13 +310,13 @@ export default function HomeSections() {
         <div className="home-band-inner">
           <SectionHeading eyebrow="Our Clinics" title="Locate Renew Healthcare near you" />
           <div className="clinic-grid">
-            {clinics.map(([name, place, image, to]) => (
+            {clinics.map(({ name, place, image, to }) => (
               <Link className="home-card clinic-card" to={to} key={name}>
                 <img src={image} alt={name} />
                 <div>
                   <span>{place}</span>
                   <h3>{name}</h3>
-                  <p>Get directions <span aria-hidden="true">→</span></p>
+                  <p className="clinic-card-link">Get directions <span aria-hidden="true">→</span></p>
                 </div>
               </Link>
             ))}

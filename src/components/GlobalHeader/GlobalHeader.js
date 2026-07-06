@@ -217,7 +217,7 @@ export default function GlobalHeader({ onCallback }) {
         {open && (
           <div className="mobile-accordion">
             <Link to="/why-renew" onClick={() => setOpen(false)}>Why Renew</Link>
-            <button type="button" onClick={() => setPanel(panel === 'Services' ? '' : 'Services')}>Services <span>{panel === 'Services' ? '−' : '+'}</span></button>
+            <Link to="/services" onClick={() => { setPanel(''); setOpen(false) }}>Services</Link>
             {panel === 'Services' && (
               <div className="mobile-panel">
                 {serviceColumns.map(column => (

@@ -517,7 +517,11 @@
   }
 
   .rh-appointment-form-wrap {
-    padding: 20px 18px;
+    padding: 22px 18px 20px;
+  }
+
+  .rh-appointment-form-wrap h2 {
+    margin-bottom: 14px;
   }
 
   .rh-appointment-sub {
@@ -525,7 +529,7 @@
   }
 
   .rh-appointment-form {
-    gap: 10px;
+    gap: 12px;
   }
 
   .rh-field {

@@ -51,6 +51,14 @@
   background: #7b9c70;
 }
 
+.about-renew-eyebrow::after {
+  content: '';
+  display: none;
+  width: 30px;
+  height: 1px;
+  background: #7b9c70;
+}
+
 .about-renew h2 {
   max-width: 560px;
   margin-bottom: 30px;
@@ -251,7 +259,19 @@
   }
 
   .about-renew-eyebrow {
+    width: 100%;
+    justify-content: center;
     margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .about-renew-eyebrow::after {
+    display: block;
+  }
+
+  .about-renew-eyebrow-mark,
+  .about-renew-eyebrow::after {
+    flex: 0 0 30px;
   }
 
   .about-renew-copy p {
@@ -279,6 +299,25 @@
     gap: 12px;
     margin-top: 20px;
     padding-top: 16px;
+  }
+
+  .about-renew-trust-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    text-align: left;
+  }
+
+  .about-renew-trust-line1,
+  .about-renew-trust-line2 {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+
+  .about-renew-trust-line2 {
+    margin-top: 2px;
   }
 
   .about-renew-trust strong {

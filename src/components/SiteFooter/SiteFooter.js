@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
 import './SiteFooter.css'
 
-const aboutShort = 'Renew Healthcare is dedicated to helping individuals and couples achieve their dream of starting a family through our advanced treatments, gynecology services, and women&rsquo;s aesthetic health services. Our'
 const aboutFull = 'Renew Healthcare is dedicated to helping individuals and couples achieve their dream of starting a family through our advanced treatments, gynecology services, and women&rsquo;s aesthetic health services. Our team of experts is committed to providing compassionate care and personalized treatment plans to help you achieve your goals.'
 
 const communityLinks = [
@@ -35,12 +33,12 @@ const locations = [
     phone: '+91 6292 269 060',
   },
   {
-    name: 'Saltlake:',
+    name: 'Salt Lake',
     address: 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
     phone: '+91 8336 968 661',
   },
   {
-    name: 'Jamshedpur:',
+    name: 'Jamshedpur',
     address: 'Michael John Tower, 1st Floor, Southern Area 06, K-Road Bistupur 831001',
     phone: '+91 9153 994 100',
   },
@@ -70,7 +68,6 @@ function InlineIcon({ type }) {
 }
 
 export default function SiteFooter({ onCallback }) {
-  const [expanded, setExpanded] = useState(false)
   const { status, error, submit } = useLeadSubmit()
 
   const handleSubmit = async event => {
@@ -108,16 +105,9 @@ export default function SiteFooter({ onCallback }) {
                 <div className="footer-mobile-content d-block d-lg-none">
                   <div className="about-content">
                     <div
-                      className={expanded ? 'short-content d-none' : 'short-content'}
-                      dangerouslySetInnerHTML={{ __html: `<p>${aboutShort}</p>` }}
-                    />
-                    <div
-                      className={expanded ? 'full-content' : 'full-content d-none'}
+                      className="full-content"
                       dangerouslySetInnerHTML={{ __html: `<p>${aboutFull}</p>` }}
                     />
-                    <button type="button" className="read-more" onClick={() => setExpanded(value => !value)}>
-                      {expanded ? 'Read Less' : 'Read More'}
-                    </button>
                   </div>
                 </div>
 

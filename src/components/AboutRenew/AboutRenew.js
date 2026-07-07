@@ -46,7 +46,10 @@ export default function AboutRenew({ onCallback }) {
 
           <div className="about-renew-trust">
             <strong>2,000+</strong>
-            <span>families supported with compassionate, expert care</span>
+            <span className="about-renew-trust-copy">
+              <span className="about-renew-trust-line1">families supported with compassionate,</span>
+              <span className="about-renew-trust-line2">expert care</span>
+            </span>
           </div>
         </div>
 

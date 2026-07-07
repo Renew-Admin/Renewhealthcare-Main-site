@@ -448,13 +448,17 @@
 }
 
 @media (max-width: 900px) {
+  .hero-scroll {
+    margin-top: 0;
+  }
+
   .hero-section {
     display: flex;
     flex-direction: column;
     height: auto;
     min-height: 0;
     align-items: stretch;
-    padding: 0 6% 46px;
+    padding: 0 4% 42px;
     background: #ffffff;
   }
 
@@ -465,10 +469,10 @@
   .hero-mobile-photo {
     position: relative;
     display: block;
-    aspect-ratio: 1672 / 941;
     width: 100%;
-    max-width: 500px;
-    margin: 22px 0 18px;
+    max-width: 560px;
+    height: clamp(430px, 62svh, 510px);
+    margin: 0 0 18px;
     overflow: hidden;
     border: 1px solid rgba(123, 156, 112, 0.2);
     border-radius: 24px;
@@ -476,8 +480,57 @@
   }
 
   .hero-inner {
-    padding: 40px 0 0;
+    padding: 10px 0 0;
     order: 1;
+  }
+
+  .hero-content {
+    position: relative;
+  }
+
+  .hero-content > .welcome-badge,
+  .hero-content > .hero-heading,
+  .hero-content > .hero-desc {
+    position: absolute;
+    left: clamp(16px, 5vw, 24px);
+    right: clamp(16px, 5vw, 24px);
+    z-index: 3;
+  }
+
+  .hero-content > .welcome-badge {
+    top: clamp(15px, 3.8vw, 22px);
+    width: max-content;
+    max-width: calc(100% - clamp(32px, 10vw, 48px));
+    margin: 0;
+    background: rgba(255, 255, 255, 0.84);
+    border-color: rgba(123, 156, 112, 0.2);
+    box-shadow: 0 8px 20px rgba(20, 40, 70, 0.08);
+  }
+
+  .hero-content > .hero-heading {
+    top: clamp(82px, 21vw, 104px);
+    max-width: calc(100% - clamp(20px, 7vw, 34px));
+    margin: 0;
+    color: #15171c;
+  }
+
+  .hero-content > .hero-desc {
+    top: clamp(180px, 25svh, 240px);
+    max-width: min(30ch, calc(100% - 32px));
+    margin: 0;
+    color: #44515e;
+    text-align: left;
+  }
+
+  .hero-mobile-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.86) 48%, rgba(255, 255, 255, 0.16) 82%, transparent 100%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.22) 52%, rgba(255, 255, 255, 0.86) 100%);
   }
 
   .hero-mobile-photo-img {
@@ -487,18 +540,18 @@
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center;
+    object-position: 66% center;
   }
 
   .hero-mobile-photo-img.is-kid {
-    object-position: 58% center;
+    object-position: 72% center;
   }
 
   .hero-mobile-slider-controls {
     position: absolute;
     right: 12px;
     bottom: 12px;
-    z-index: 2;
+    z-index: 4;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -542,17 +595,13 @@
     background: var(--brand-green);
   }
 
-  .hero-content {
-    max-width: 100%;
-  }
-
   .hero-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: 500px;
+    max-width: 560px;
   }
 
   .hero-chip-marquee {
-    max-width: 500px;
+    max-width: 560px;
     border-radius: 18px;
   }
 
@@ -630,23 +679,36 @@
 
 @media (max-width: 560px) {
   .hero-inner {
-    padding: 38px 0 0;
+    padding: 8px 0 0;
   }
 
   .hero-mobile-photo {
+    height: clamp(420px, 59svh, 480px);
     margin-bottom: 16px;
     border-radius: 20px;
   }
 
   .hero-heading {
-    font-size: var(--display-heading-size-mobile);
+    font-size: clamp(1.52rem, 6.7vw, 2.05rem);
     line-height: 1.04;
     letter-spacing: 0;
   }
 
+  .hero-heading span {
+    white-space: nowrap;
+  }
+
   .hero-desc {
-    font-size: 0.95rem;
-    margin-top: 4px;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .hero-content > .hero-heading {
+    top: clamp(82px, 21vw, 96px);
+  }
+
+  .hero-content > .hero-desc {
+    top: clamp(170px, 44vw, 205px);
   }
 
   .hero-stats {
@@ -701,5 +763,40 @@
 
   .journey-desc {
     display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-content > .hero-heading {
+    top: clamp(190px, 23svh, 220px);
+    left: clamp(18px, 5vw, 24px);
+    right: clamp(18px, 5vw, 24px);
+    max-width: none;
+    font-size: clamp(1.8rem, 7.7vw, 2.625rem);
+    line-height: 1.06;
+    text-align: center;
+  }
+
+  .hero-heading span {
+    white-space: nowrap;
+  }
+
+  .hero-content > .hero-desc {
+    top: clamp(292px, 35svh, 316px);
+    left: clamp(18px, 5vw, 24px);
+    right: clamp(18px, 5vw, 24px);
+    max-width: none;
+    font-size: 15px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .holistic {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .holistic span {
+    text-align: center;
   }
 }

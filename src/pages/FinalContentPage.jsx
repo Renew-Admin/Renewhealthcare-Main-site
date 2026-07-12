@@ -235,6 +235,14 @@ function QuickIcon({ name }) {
   return <svg {...c}><rect x="2" y="6" width="14" height="12" rx="2" /><path d="m16 10 6-3v10l-6-3z" /></svg>
 }
 
+const getTodayDateStr = () => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const yy = String(today.getFullYear()).slice(-2);
+  return `${dd}-${mm}-${yy}`;
+};
+
 function ContactBlock() {
   const { status, error, submit } = useLeadSubmit()
   const onSubmit = async event => {
@@ -243,10 +251,12 @@ function ContactBlock() {
     const data = new FormData(form)
     const ok = await submit({
       name: data.get('name'),
-      phone: data.get('phone'),
+      customer_number: data.get('customer_number'),
+      whatsapp_number: data.get('whatsapp_number'),
       email: data.get('email'),
-      service: data.get('service'),
+      purpose: data.get('purpose'),
       message: data.get('message'),
+      date: data.get('date'),
       source: 'contact-page',
     })
     if (ok) form.reset()
@@ -270,12 +280,31 @@ function ContactBlock() {
 
       <div className="contact-grid">
         <form className="contact-form" onSubmit={onSubmit}>
-          <input name="name" placeholder="Name" required /><input name="phone" placeholder="Phone" required /><input name="email" placeholder="Email" />
-          <select name="service" defaultValue=""><option value="" disabled>Service</option><option>IVF Consultation</option><option>Pregnancy Care</option><option>Gynaecology</option></select>
-          <textarea name="message" placeholder="Message" /><button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Submit Request'}</button>
+          <input name="name" placeholder="Name" required />
+          <input type="tel" name="customer_number" placeholder="Customer Number" required />
+          <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" required />
+          <input type="email" name="email" placeholder="Email" />
+          <select name="purpose" defaultValue="" required>
+            <option value="" disabled>Purpose</option>
+            <option value="Surrogacy">Surrogacy</option>
+            <option value="Egg Freezing">Egg Freezing</option>
+            <option value="Genetic">Genetic</option>
+            <option value="IUI">IUI</option>
+            <option value="IVF">IVF</option>
+            <option value="New Fertility">New Fertility</option>
+            <option value="New Gynae">New Gynae</option>
+            <option value="New Pregnancy">New Pregnancy</option>
+            <option value="Others">Others</option>
+            <option value="Pre-Conception">Pre-Conception</option>
+            <option value="Sperm Donation">Sperm Donation</option>
+          </select>
+          <input type="hidden" name="date" value={getTodayDateStr()} />
+          <textarea name="message" placeholder="Message" />
+          <button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Submit Request'}</button>
           {status === 'sent' && <p className="lead-form-msg ok">Thank you! Our team will reach out shortly.</p>}
           {status === 'error' && <p className="lead-form-msg err">{error}</p>}
         </form>
+
         <div className="contact-info-card">
           <img src="/images/renew/uploads/2024/07/headphone.png" alt="Contact Renew Healthcare" />
           <h3>Contact Us</h3>

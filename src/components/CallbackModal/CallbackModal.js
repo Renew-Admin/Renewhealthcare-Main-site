@@ -1,6 +1,14 @@
 import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
 import './CallbackModal.css'
 
+const getTodayDateStr = () => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const yy = String(today.getFullYear()).slice(-2);
+  return `${dd}-${mm}-${yy}`;
+};
+
 export default function CallbackModal({ open, onClose }) {
   const { status, error, submit } = useLeadSubmit()
   if (!open) return null
@@ -11,10 +19,12 @@ export default function CallbackModal({ open, onClose }) {
     const data = new FormData(form)
     const ok = await submit({
       name: data.get('name'),
-      phone: data.get('phone'),
+      customer_number: data.get('customer_number'),
+      whatsapp_number: data.get('whatsapp_number'),
       email: data.get('email'),
-      service: data.get('service'),
+      purpose: data.get('purpose'),
       message: data.get('message'),
+      date: data.get('date'),
       source: 'callback-modal',
     })
     if (ok) form.reset()
@@ -35,14 +45,24 @@ export default function CallbackModal({ open, onClose }) {
 
         <form className="callback-form" onSubmit={onSubmit}>
           <input type="text" name="name" placeholder="Name" required />
-          <input type="tel" name="phone" placeholder="Phone Number" required />
+          <input type="tel" name="customer_number" placeholder="Customer Number" required />
+          <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" required />
           <input type="email" name="email" placeholder="Email" />
-          <select name="service" defaultValue="">
-            <option value="" disabled>Consultation Type</option>
-            <option>Book Your Appointment</option>
-            <option>Online Consultation</option>
-            <option>Center Consultation</option>
+          <select name="purpose" defaultValue="" required>
+            <option value="" disabled>Purpose</option>
+            <option value="Surrogacy">Surrogacy</option>
+            <option value="Egg Freezing">Egg Freezing</option>
+            <option value="Genetic">Genetic</option>
+            <option value="IUI">IUI</option>
+            <option value="IVF">IVF</option>
+            <option value="New Fertility">New Fertility</option>
+            <option value="New Gynae">New Gynae</option>
+            <option value="New Pregnancy">New Pregnancy</option>
+            <option value="Others">Others</option>
+            <option value="Pre-Conception">Pre-Conception</option>
+            <option value="Sperm Donation">Sperm Donation</option>
           </select>
+          <input type="hidden" name="date" value={getTodayDateStr()} />
           <textarea name="message" placeholder="Your Message" />
           <button type="submit" className="callback-submit" disabled={status === 'sending'}>
             {status === 'sending' ? 'Sending…' : 'Submit Request'}
@@ -54,3 +74,4 @@ export default function CallbackModal({ open, onClose }) {
     </div>
   )
 }
+

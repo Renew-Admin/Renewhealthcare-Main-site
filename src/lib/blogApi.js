@@ -152,19 +152,61 @@ export function estimateReadMins(html) {
 
 // Submit one enquiry. `source` says which form it came from.
 export async function createLead(input) {
-  if (!isSupabaseConfigured) throw new Error('Lead form is not connected (Supabase missing).')
+  const customerNumber = input.customer_number || input.phone;
+  const whatsappNumber = input.whatsapp_number;
+  const purpose = input.purpose || input.service;
+  const formDate = input.date;
+
+  let finalMessage = input.message?.trim() || '';
+  if (whatsappNumber) {
+    finalMessage = `${finalMessage ? finalMessage + '\n\n' : ''}WhatsApp Number: ${whatsappNumber}`;
+  }
+  if (formDate) {
+    finalMessage = `${finalMessage ? finalMessage + '\n' : ''}Date: ${formDate}`;
+  }
+
   const row = {
     name: input.name?.trim() || null,
-    phone: input.phone?.trim() || null,
+    phone: customerNumber?.trim() || null,
     email: input.email?.trim() || null,
-    service: input.service?.trim() || null,
-    message: input.message?.trim() || null,
+    service: purpose?.trim() || null,
+    message: finalMessage || null,
     source: input.source || 'website',
     page_path: input.page_path || (typeof window !== 'undefined' ? window.location.pathname : null),
   }
+
+  // 1. Dispatch to Webhook (always work regardless of domain/environment)
+  const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'https://hook.us2.make.com/kfd4wrx1hohk6cy8pv8j4oe93b496lb2';
+  if (webhookUrl) {
+    try {
+      fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...row,
+          customer_number: customerNumber || null,
+          whatsapp_number: whatsappNumber || null,
+          purpose: purpose || null,
+          date: formDate || null,
+          submitted_at: new Date().toISOString(),
+        }),
+      }).catch(err => console.warn('[createLead] Webhook delivery failed:', err));
+    } catch (webhookErr) {
+      console.warn('[createLead] Webhook call error:', webhookErr);
+    }
+  }
+
+  // 2. Save to Supabase (if configured)
+  if (!isSupabaseConfigured) {
+    return;
+  }
+
   const { error } = await supabase.from('leads').insert(row)
   if (error) throw error
 }
+
 
 // Admin: read every lead, newest first.
 export async function fetchLeads() {

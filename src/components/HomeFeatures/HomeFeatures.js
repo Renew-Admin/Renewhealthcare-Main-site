@@ -107,6 +107,28 @@ function FailedIvfCta() {
   )
 }
 
+const PURPOSE_OPTIONS = [
+  'Surrogacy',
+  'Egg Freezing',
+  'Genetic',
+  'IUI',
+  'IVF',
+  'New Fertility',
+  'New Gynae',
+  'New Pregnancy',
+  'Others',
+  'Pre-Conception',
+  'Sperm Donation',
+]
+
+const getTodayDateStr = () => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const yy = String(today.getFullYear()).slice(-2);
+  return `${dd}-${mm}-${yy}`;
+};
+
 function AppointmentSection() {
   const { status, error, submit } = useLeadSubmit()
   const [tracking, setTracking] = useState({})
@@ -133,8 +155,10 @@ function AppointmentSection() {
     const ok = await submit({
       name: data.get('name'),
       email: data.get('email'),
-      phone: data.get('phone'),
-      service: data.get('consultationType'),
+      customer_number: data.get('customer_number'),
+      whatsapp_number: data.get('whatsapp_number'),
+      purpose: data.get('purpose'),
+      date: data.get('date'),
       message,
       source: 'appointment',
     })
@@ -181,33 +205,42 @@ function AppointmentSection() {
 
             <div className="rh-field-row">
               <label className="rh-field">
-                <span>Phone Number<i>*</i></span>
-                <input type="tel" name="phone" autoComplete="tel" required />
+                <span>Customer Number<i>*</i></span>
+                <input type="tel" name="customer_number" required />
               </label>
               <label className="rh-field">
-                <span>Consultation Type<i>*</i></span>
-                <select name="consultationType" defaultValue="" required>
-                  <option value="" disabled>Select consultation type</option>
-                  {consultationOptions.map((opt) => (
+                <span>WhatsApp Number<i>*</i></span>
+                <input type="tel" name="whatsapp_number" required />
+              </label>
+            </div>
+
+            <div className="rh-field-row">
+              <label className="rh-field">
+                <span>Purpose<i>*</i></span>
+                <select name="purpose" defaultValue="" required>
+                  <option value="" disabled>Select purpose</option>
+                  {PURPOSE_OPTIONS.map((opt) => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
               </label>
+              <label className="rh-field">
+                <span>Address<i>*</i></span>
+                <input type="text" name="address" autoComplete="street-address" required />
+              </label>
             </div>
-
-            <label className="rh-field">
-              <span>Address<i>*</i></span>
-              <input type="text" name="address" autoComplete="street-address" required />
-            </label>
 
             <label className="rh-field">
               <span>Your Message</span>
               <textarea name="message" rows={3} />
             </label>
 
+            <input type="hidden" name="date" value={getTodayDateStr()} />
+
             <button type="submit" className="rh-appointment-submit" disabled={status === 'sending'}>
               {status === 'sending' ? 'Sending…' : appointmentInfo.submitText}
             </button>
+
 
             {status === 'sent' && (
               <p className="lead-form-msg ok">Thank you! Our team will reach out shortly to confirm your appointment.</p>

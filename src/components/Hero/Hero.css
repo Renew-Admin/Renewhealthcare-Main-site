@@ -6,7 +6,7 @@
 .hero-scroll {
   position: relative;
   width: 100%;
-  margin-top: clamp(8px, 1.2vh, 14px);
+  margin-top: 0;
 }
 
 .hero-section {

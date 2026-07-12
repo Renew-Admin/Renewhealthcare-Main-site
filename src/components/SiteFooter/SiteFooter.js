@@ -67,6 +67,14 @@ function InlineIcon({ type }) {
   return <svg className="footer-inline-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0z" /><circle cx="12" cy="10" r="3" /></svg>
 }
 
+const getTodayDateStr = () => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const yy = String(today.getFullYear()).slice(-2);
+  return `${dd}-${mm}-${yy}`;
+};
+
 export default function SiteFooter({ onCallback }) {
   const { status, error, submit } = useLeadSubmit()
 
@@ -76,10 +84,12 @@ export default function SiteFooter({ onCallback }) {
     const data = new FormData(form)
     const ok = await submit({
       name: data.get('Name'),
-      phone: data.get('Phone'),
+      customer_number: data.get('customer_number'),
+      whatsapp_number: data.get('whatsapp_number'),
       email: data.get('Email'),
-      service: data.get('your-number'),
+      purpose: data.get('purpose'),
       message: data.get('YourMessage'),
+      date: data.get('date'),
       source: 'footer',
     })
     if (ok) form.reset()
@@ -168,14 +178,19 @@ export default function SiteFooter({ onCallback }) {
                   </div>
                   <form action="/#wpcf7-f558-o4" method="post" className="wpcf7-form init" aria-label="Contact form" noValidate data-status="init" onSubmit={handleSubmit}>
                     <div className="row">
-                      <div className="col-lg-6">
+                      <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="Name">
-                          <input size="40" maxLength="400" className="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Name" type="text" name="Name" />
+                          <input size="40" maxLength="400" className="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Name" type="text" name="Name" required />
                         </span>
                       </div>
                       <div className="col-lg-6">
-                        <span className="wpcf7-form-control-wrap" data-name="Phone">
-                          <input size="40" maxLength="400" className="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" placeholder="Phone" type="tel" name="Phone" />
+                        <span className="wpcf7-form-control-wrap" data-name="customer_number">
+                          <input size="40" maxLength="400" className="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" placeholder="Customer Number" type="tel" name="customer_number" required />
+                        </span>
+                      </div>
+                      <div className="col-lg-6">
+                        <span className="wpcf7-form-control-wrap" data-name="whatsapp_number">
+                          <input size="40" maxLength="400" className="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" placeholder="WhatsApp Number" type="tel" name="whatsapp_number" required />
                         </span>
                       </div>
                       <div className="col-lg-12">
@@ -184,11 +199,20 @@ export default function SiteFooter({ onCallback }) {
                         </span>
                       </div>
                       <div className="col-lg-12">
-                        <span className="wpcf7-form-control-wrap" data-name="your-number">
-                          <select className="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false" name="your-number" defaultValue="">
-                            <option value="">Select a service</option>
-                            <option value="Online Consultation">Online Consultation</option>
-                            <option value="Center Consultation">Center Consultation</option>
+                        <span className="wpcf7-form-control-wrap" data-name="purpose">
+                          <select className="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false" name="purpose" defaultValue="" required>
+                            <option value="" disabled>Purpose</option>
+                            <option value="Surrogacy">Surrogacy</option>
+                            <option value="Egg Freezing">Egg Freezing</option>
+                            <option value="Genetic">Genetic</option>
+                            <option value="IUI">IUI</option>
+                            <option value="IVF">IVF</option>
+                            <option value="New Fertility">New Fertility</option>
+                            <option value="New Gynae">New Gynae</option>
+                            <option value="New Pregnancy">New Pregnancy</option>
+                            <option value="Others">Others</option>
+                            <option value="Pre-Conception">Pre-Conception</option>
+                            <option value="Sperm Donation">Sperm Donation</option>
                           </select>
                         </span>
                       </div>
@@ -201,6 +225,7 @@ export default function SiteFooter({ onCallback }) {
                         {['utm_campaign', 'utm_source', 'utm_medium', 'utm_term', 'utm_content', 'gclid'].map(name => (
                           <input className="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name={name} key={name} readOnly />
                         ))}
+                        <input className="wpcf7-form-control wpcf7-hidden" value={getTodayDateStr()} type="hidden" name="date" readOnly />
                         <input className="wpcf7-form-control wpcf7-submit has-spinner custom-button" type="submit" value={status === 'sending' ? 'Sending…' : 'Get a Consultation'} disabled={status === 'sending'} />
                         <span className="wpcf7-spinner"></span>
                         {status === 'sent' && <p className="lead-form-msg ok">Thank you! We&rsquo;ll call you back shortly.</p>}

@@ -93,6 +93,10 @@ create table if not exists public.leads (
   created_at timestamptz not null default now()
 );
 alter table public.leads add column if not exists status text not null default 'new';
+alter table public.leads add column if not exists customer_number text;
+alter table public.leads add column if not exists whatsapp_number text;
+alter table public.leads add column if not exists purpose text;
+alter table public.leads add column if not exists form_date text;
 create index if not exists leads_created_idx on public.leads (created_at desc);
 
 

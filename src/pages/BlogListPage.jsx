@@ -193,6 +193,14 @@ function Pagination({ page, pageCount, onChange }) {
   )
 }
 
+const getTodayDateStr = () => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const yy = String(today.getFullYear()).slice(-2);
+  return `${dd}-${mm}-${yy}`;
+};
+
 function BlogEnquiryForm() {
   const { status, error, submit } = useLeadSubmit()
   const onSubmit = async event => {
@@ -201,10 +209,12 @@ function BlogEnquiryForm() {
     const data = new FormData(form)
     const ok = await submit({
       name: data.get('name'),
-      phone: data.get('phone'),
+      customer_number: data.get('customer_number'),
+      whatsapp_number: data.get('whatsapp_number'),
       email: data.get('email'),
-      service: data.get('service'),
+      purpose: data.get('purpose'),
       message: data.get('message'),
+      date: data.get('date'),
       source: 'blog-enquiry',
     })
     if (ok) form.reset()
@@ -219,16 +229,24 @@ function BlogEnquiryForm() {
         </div>
       </div>
       <input type="text" name="name" placeholder="Your name" required />
-      <input type="tel" name="phone" placeholder="Phone number" required />
+      <input type="tel" name="customer_number" placeholder="Customer Number" required />
+      <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" required />
       <input type="email" name="email" placeholder="Email address" />
-      <select name="service" defaultValue="">
-        <option value="" disabled>Choose a service</option>
-        <option>IVF Consultation</option>
-        <option>IUI</option>
-        <option>Pregnancy Care</option>
-        <option>Gynaecology</option>
-        <option>Genetic Counselling</option>
+      <select name="purpose" defaultValue="" required>
+        <option value="" disabled>Choose a purpose</option>
+        <option value="Surrogacy">Surrogacy</option>
+        <option value="Egg Freezing">Egg Freezing</option>
+        <option value="Genetic">Genetic</option>
+        <option value="IUI">IUI</option>
+        <option value="IVF">IVF</option>
+        <option value="New Fertility">New Fertility</option>
+        <option value="New Gynae">New Gynae</option>
+        <option value="New Pregnancy">New Pregnancy</option>
+        <option value="Others">Others</option>
+        <option value="Pre-Conception">Pre-Conception</option>
+        <option value="Sperm Donation">Sperm Donation</option>
       </select>
+      <input type="hidden" name="date" value={getTodayDateStr()} />
       <textarea name="message" placeholder="Your message (optional)" rows={3} />
       <button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Get a Free Consultation'}</button>
       {status === 'sent' && <p className="lead-form-msg ok">Thank you! We&rsquo;ll be in touch shortly.</p>}
@@ -237,6 +255,7 @@ function BlogEnquiryForm() {
     </form>
   )
 }
+
 
 export function BlogCard({ blog }) {
   return (

@@ -251,6 +251,7 @@ export default function SiteFooter({ onCallback }) {
               <ul className="d-flex gap-3 flex-end">
                 <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                 <li><Link to="/patient-rights-responsibilities">Patient Rights &amp; Responsibilities</Link></li>
+                <li><a href="/sitemap.xml">Sitemap</a></li>
               </ul>
             </div>
           </div>

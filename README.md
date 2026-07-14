@@ -44,6 +44,9 @@ public/
   blog-content/   Static blog article HTML
   images/         Site assets
   sitemap.xml     Search-engine sitemap
+scripts/
+  generate-sitemap.js
+                  Generates robots.txt and sitemap.xml from codebase routes
 backend/
   schema.sql      Supabase schema and RLS setup
   seed.sql        Initial data for doctors/testimonials/faqs/settings
@@ -121,9 +124,22 @@ The app will usually start on `http://127.0.0.1:5173/` or the next available por
 ## Scripts
 
 - `npm run dev` - start the local development server
-- `npm run build` - build the production bundle
+- `npm run generate:sitemap` - regenerate `public/sitemap.xml` and `public/robots.txt`
+- `npm run build` - regenerate SEO files and build the production bundle into `build/`
 - `npm run preview` - preview the production build locally
 - `npm run lint` - run ESLint
+
+## Cloudflare Pages Deployment
+
+Use Cloudflare Pages for this static Vite app.
+
+- Build command: `npm run build`
+- Build output directory: `build`
+- Root directory: `/`
+- Deploy command: leave empty for Git-integrated Pages
+
+`public/_redirects` is intentionally kept for React Router direct URLs on Cloudflare Pages.
+Do not use `wrangler deploy` unless this project is moved to Cloudflare Workers static assets.
 
 ## SEO Files
 
@@ -136,4 +152,3 @@ The app will usually start on `http://127.0.0.1:5173/` or the next available por
 - Keep public pages responsive across mobile, tablet, and desktop widths.
 - Preserve the static fallback content when touching blog or content loading code.
 - Keep admin-only changes scoped to `src/admin/` unless the public data shape changes.
-

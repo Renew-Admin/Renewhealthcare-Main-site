@@ -47,6 +47,8 @@ public/
 scripts/
   generate-sitemap.js
                   Generates robots.txt and sitemap.xml from codebase routes
+  prepare-cloudflare-worker-build.mjs
+                  Removes Pages-only files from Worker asset uploads
 backend/
   schema.sql      Supabase schema and RLS setup
   seed.sql        Initial data for doctors/testimonials/faqs/settings
@@ -126,20 +128,21 @@ The app will usually start on `http://127.0.0.1:5173/` or the next available por
 - `npm run dev` - start the local development server
 - `npm run generate:sitemap` - regenerate `public/sitemap.xml` and `public/robots.txt`
 - `npm run build` - regenerate SEO files and build the production bundle into `build/`
+- `npm run deploy:cloudflare` - build and deploy to Cloudflare Workers static assets
 - `npm run preview` - preview the production build locally
 - `npm run lint` - run ESLint
 
-## Cloudflare Pages Deployment
+## Cloudflare Workers Deployment
 
-Use Cloudflare Pages for this static Vite app.
+Use Cloudflare Workers static assets for this project.
 
 - Build command: `npm run build`
 - Build output directory: `build`
 - Root directory: `/`
-- Deploy command: leave empty for Git-integrated Pages
+- Deploy command: `npx wrangler deploy`
 
-`public/_redirects` is intentionally kept for React Router direct URLs on Cloudflare Pages.
-Do not use `wrangler deploy` unless this project is moved to Cloudflare Workers static assets.
+The Worker is configured in `wrangler.toml` with `not_found_handling = "single-page-application"` for React Router direct URLs.
+Do not use `wrangler pages deploy` for this project because the production URL is `renewhealthcare.lokesh-7e0.workers.dev`.
 
 ## SEO Files
 

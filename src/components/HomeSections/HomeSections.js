@@ -23,6 +23,7 @@ const doctors = [
   ['Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png'],
   ['Dr. Dorothy P Ghosh', 'Associate Consultant, Jamshedpur', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg'],
   ['Dr. Neha Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg'],
+  ['Dr. Sonam Agarwal', 'Associate Consultant', '/images/renew/uploads/2026/05/Dr-Sonam.jpg'],
 ]
 
 const mediaLogos = ['TOI.png', 'Zee-News.png', 'ABP-live.png', 'Daily-Hunt.png', 'Doctube.png', 'Hindusthan-Times.png', 'India-TV.png', 'Mid-Day.png', 'News-18.png', 'News-Nine.png']

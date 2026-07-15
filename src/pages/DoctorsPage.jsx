@@ -18,6 +18,7 @@ function ScrollSection({ category, doctors }) {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
   const [hasOverflow, setHasOverflow] = useState(false)
+  const displayCategory = category === 'Our Experts' ? 'Fertility Experts' : category
 
   const updateScrollState = useCallback(() => {
     const el = trackRef.current
@@ -47,7 +48,7 @@ function ScrollSection({ category, doctors }) {
   return (
     <motion.section className="people-scroll-section" key={category} {...reveal}>
       <div className="people-scroll-header">
-        <h3>{category}</h3>
+        <h3>{displayCategory}</h3>
         <span>{doctors.length} Members</span>
       </div>
       <div className="people-scroll-viewport">
@@ -56,13 +57,13 @@ function ScrollSection({ category, doctors }) {
         </div>
       </div>
       {hasOverflow && (
-        <div className="people-scroll-controls" aria-label={`${category} carousel controls`}>
-          <button type="button" onClick={() => scroll(-1)} disabled={!canScrollLeft} aria-label={`Previous ${category}`}>
+        <div className="people-scroll-controls" aria-label={`${displayCategory} carousel controls`}>
+          <button type="button" onClick={() => scroll(-1)} disabled={!canScrollLeft} aria-label={`Previous ${displayCategory}`}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
-          <button type="button" onClick={() => scroll(1)} disabled={!canScrollRight} aria-label={`Next ${category}`}>
+          <button type="button" onClick={() => scroll(1)} disabled={!canScrollRight} aria-label={`Next ${displayCategory}`}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polyline points="9 18 15 12 9 6" />
             </svg>
@@ -116,7 +117,7 @@ export default function DoctorsPage() {
       <section className="service-content-band">
         <div className="service-content-inner">
           <div className="service-heading-block">
-            <span>Our Experts</span>
+            <span>Fertility Experts</span>
             <h2>Meet Our Team Of Infertility Specialists</h2>
             <p>Renew Healthcare brings together fertility specialists, genetic experts, embryologists, counsellors, nursing, operations, and support teams across departments.</p>
           </div>

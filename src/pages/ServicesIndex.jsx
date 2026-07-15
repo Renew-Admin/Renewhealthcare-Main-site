@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom'
 import { serviceCategories, services } from '../data/services.js'
 import './ServicesPages.css'
 
+function getServiceExcerpt(service) {
+  const source = service.intro || service.sections[0]?.body || 'Learn more about this Renew Healthcare service.'
+  return source
+    .replace(service.title, '')
+    .replace(service.heading || '', '')
+    .replace(/\s+/g, ' ')
+    .trim() || 'Learn more about this Renew Healthcare service.'
+}
+
 export default function ServicesIndex() {
   const [activeCategory, setActiveCategory] = useState(serviceCategories[0])
   const trackRef = useRef(null)
@@ -120,7 +129,7 @@ export default function ServicesIndex() {
                         <img src={service.thumbnailImg} alt={service.title} />
                       </div>
                       <h3>{service.title}</h3>
-                      <p>{service.intro || service.sections[0]?.body || 'Learn more about this Renew Healthcare service.'}</p>
+                      <p>{getServiceExcerpt(service)}</p>
                       <span className="services-mobile-card-link">Explore Service →</span>
                     </Link>
                   ))}

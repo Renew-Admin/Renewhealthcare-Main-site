@@ -3,14 +3,40 @@ const uploadBase = '/images/renew/uploads/'
 const photo = path => `${uploadBase}${path}`
 const slug = name => name.toLowerCase().replace(/dr\.?\s*/g, 'dr-').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 
+const doctorBios = {
+  'Dr. Rajeev Agarwal': `Dr. Rajeev Agarwal is the Medical Director at Renew Healthcare, a premier one-stop fertility and women's health clinic. With more than a decade of specialized experience as a fertility specialist, he has established himself as one of the most respected names in reproductive medicine across India.
+
+Beyond his exceptional IVF expertise, Dr. Agarwal specializes in advanced laparoscopic procedures and is widely recognized for his mastery in performing fertility-preserving surgeries. His approach combines cutting-edge medical technology with deeply compassionate, patient-centered care that addresses both the physical and emotional aspects of infertility.
+
+Dr. Agarwal's journey into medicine was shaped by the profound influence of his father, a distinguished gynecologist. This early inspiration led him to complete his MBBS from Calcutta National Medical College, where he received 3 awards for excellence in Anatomy. His commitment to excellence continued through his specialized training at Kasturba Medical College, Manipal, under the mentorship of renowned fertility expert Dr. Sadhana Desai.
+
+His training extends internationally, having studied at Cardiff Assisted Reproduction Centre in Wales, where he observed cutting-edge IVF practices and stayed abreast of global standards. This blend of Indian medical rigor and international best practices enables him to deliver world-class fertility treatments.`,
+  'Dr. Neha Yadav': `Having an experience of over 11 years, Dr. Neha Yadav is a bright academician, a noteworthy obstetrician, and a gynaecologist with a healing touch.
+
+She pursued her undergraduation from Belgaum Institute of Medical Sciences, Belgaum. After completing her postgraduation from Adichunchanagiri Institute of Medical Sciences under Rajiv Gandhi University of Health Sciences, she completed her DNB from the prestigious St. Martha's Hospital, Bangalore.
+
+She has practised as a junior consultant in many hospitals, including Motherhood Hospitals, Bangalore. She has also worked at Bhagirathi Neotia Hospitals, Newtown, with an immense reputation.
+
+Her expertise in counselling and empathy towards patients have helped her grow substantially in the field of infertility and high-risk pregnancies.
+
+She is deeply interested in infertility care and works as an infertility specialist at Renew Healthcare Kolkata, with an aim to support mothers who carry the agony of not being able to bear children in their own womb and couples who cannot achieve pregnancy and childbirth naturally.`,
+  'Dr. Dorothy P Ghosh': `Dr. Dorothy leads fertility services at Renew Healthcare's Jamshedpur center with a proven track record: 800+ successful IVF births under her direct care. But numbers alone do not tell her story.
+
+What makes her practice different is personal attention. Dr. Dorothy herself manages patient assessments, develops customized IVF and IUI protocols, and provides pre- and post-treatment counseling. She does not delegate the complex cases; she seeks them out. Couples facing recurrent IVF failures, complex medical histories, or unusual diagnoses specifically request her expertise.
+
+Her commitment to clinical excellence extends beyond patient care. Dr. Dorothy actively mentors junior doctors and fertility specialists, ensuring they learn not just the technical aspects of fertility medicine, but the compassionate approach that defines modern reproductive healthcare. This dedication has shaped a generation of fertility doctors across Eastern India.
+
+The proof is in patient outcomes: 92% patient satisfaction and a practice built almost entirely on word-of-mouth referrals from satisfied patients and trusted colleagues.`,
+}
+
 const rows = [
   ['Our Experts', 'Dr. Rajeev Agarwal', '', 'Medical Director | Fertility Specialist | IVF Doctor', '2024/07/Dr-rajeev-agarwal.png'],
   ['Our Experts', 'Dr. Neha Yadav', '', 'Associate Consultant', '2024/07/Dr-Neha-Yadav-1.jpg'],
-  ['Our Experts', 'Dr. Dorothy P Ghosh', '', 'Associate Consultant, Jamshedpur', '2024/07/Dr-Dorothy-Ghosh-1.jpg'],
+  ['Our Experts', 'Dr. Dorothy P Ghosh', 'MBBS DNB', 'Infertility Specialist', '2024/07/Dr-Dorothy-Ghosh-1.jpg'],
   ['Our Experts', 'Dr. Sonam Agarwal', '', 'Associate Consultant', '2026/05/Dr-Sonam.jpg'],
   ['Our Experts', 'Dr. Arnab Kundu', '', 'Associate Consultant', '2025/06/Dr-Arnab-Side-View-rotated.jpg'],
-  ['Genetics', 'Dr. Dipanjana Dutta', '', 'Geneticist', '2024/12/Dr-Dipanjana-Datta-1.jpg'],
-  ['Visiting Consultant', 'Dr. Roohi Khanna', '', 'Obesity Medicine Specialist', '2026/05/Dr-Roohi-Khanna.png'],
+  ['Genetics', 'Dr. Dipanjana Dutta', 'Ph.D. | PDF (USA) | Former NSGC-Certified (USA) | BGCI Level II Certified Genetic Counselor (CGC)', 'Geneticist', '2024/12/Dr-Dipanjana-Datta-1.jpg'],
+  ['Visiting Consultant', 'Dr. Roohi Khanna', 'MD', 'Obesity Medicine & Family Medicine', '2026/05/Dr-Roohi-Khanna.png'],
   ['Visiting Consultant', 'Dr. Goutam Das', '', 'Consultant Homeopath', '2024/12/Dr-Goutam-Das.jpg'],
   ['Visiting Consultant', 'Dr. Santanu Ray', '', 'Child Specialist & Neonatologist', '2024/12/Dr-Santunu-Ray.jpg'],
   ['Visiting Consultant', 'Dr. Aditya Verma', '', 'Consultant Cardiologist', '2024/12/Aditya-Verma.jpg'],
@@ -71,6 +97,7 @@ export const doctors = rows.map(([category, name, qualification, role, photoPath
   role,
   category,
   photo: photo(photoPath),
+  bio: doctorBios[name] || '',
 }))
 
 export const doctorCategories = [...new Set(doctors.map(doctor => doctor.category))]

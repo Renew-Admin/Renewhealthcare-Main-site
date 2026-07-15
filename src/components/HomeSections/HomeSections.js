@@ -20,10 +20,11 @@ const services = [
 ]
 
 const doctors = [
-  ['Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png'],
-  ['Dr. Dorothy P Ghosh', 'Associate Consultant, Jamshedpur', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg'],
-  ['Dr. Neha Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg'],
-  ['Dr. Sonam Agarwal', 'Associate Consultant', '/images/renew/uploads/2026/05/Dr-Sonam.jpg'],
+  ['Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png', '/doctor/dr-rajeev-agarwal'],
+  ['Dr. Neha Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg', '/doctor/dr-neha-yadav'],
+  ['Dr. Dorothy P Ghosh', 'MBBS DNB | Infertility Specialist', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg', '/doctor/dr-dorothy-p-ghosh'],
+  ['Dr. Sonam Agarwal', 'Associate Consultant', '/images/renew/uploads/2026/05/Dr-Sonam.jpg', '/doctor/dr-sonam-agarwal'],
+  ['Dr. Arnab Kundu', 'Associate Consultant', '/images/renew/uploads/2025/06/Dr-Arnab-Side-View-rotated.jpg', '/doctor/dr-arnab-kundu'],
 ]
 
 const mediaLogos = ['TOI.png', 'Zee-News.png', 'ABP-live.png', 'Daily-Hunt.png', 'Doctube.png', 'Hindusthan-Times.png', 'India-TV.png', 'Mid-Day.png', 'News-18.png', 'News-Nine.png']
@@ -273,7 +274,7 @@ export default function HomeSections() {
         <div className="home-band-inner">
           <SectionHeading eyebrow="Doctors" title="Meet Our Team Of Infertility Specialists" />
           <CardCarousel className="doctor-grid" label="Doctor blocks">
-            {doctors.map(([name, role, image]) => (
+            {doctors.map(([name, role, image, to]) => (
               <article className="home-card doctor-card" key={name}>
                 <div className="doctor-image">
                   <img src={image} alt={name} />
@@ -281,7 +282,7 @@ export default function HomeSections() {
                 <div className="doctor-info">
                   <h3>{name}</h3>
                   <p>{role}</p>
-                  <Link to="/doctors">Know About {name.replace('Dr. ', 'Dr. ')} <span aria-hidden="true">→</span></Link>
+                  <Link to={to}>Know About {name} <span aria-hidden="true">→</span></Link>
                 </div>
               </article>
             ))}

@@ -3,6 +3,15 @@ import { Link, useParams } from 'react-router-dom'
 import { services } from '../data/services.js'
 import './ServicesPages.css'
 
+function getServiceExcerpt(service) {
+  const source = service.intro || service.sections[0]?.body || 'Learn more about this service.'
+  return source
+    .replace(service.title, '')
+    .replace(service.heading || '', '')
+    .replace(/\s+/g, ' ')
+    .trim() || 'Learn more about this service.'
+}
+
 function TextBlock({ text }) {
   const compactText = part => {
     const clean = String(part || '').replace(/\s+/g, ' ').trim()
@@ -139,13 +148,13 @@ export default function ServicePage() {
               <div className="service-related-grid">
                 {relatedServices.map(related => (
                   <Link className="service-index-card" to={`/services/${related.slug}`} key={related.slug}>
-                    <img src={related.thumbnailImg} alt={related.title} />
-                    <div>
-                      <strong>{related.title}</strong>
-                      <p>{related.intro || related.sections[0]?.body || 'Learn more about this service.'}</p>
-                      <span>View Service →</span>
-                    </div>
-                  </Link>
+                      <img src={related.thumbnailImg} alt={related.title} />
+                      <div>
+                        <strong>{related.title}</strong>
+                        <p>{getServiceExcerpt(related)}</p>
+                        <span>View Service →</span>
+                      </div>
+                    </Link>
                 ))}
               </div>
             </section>

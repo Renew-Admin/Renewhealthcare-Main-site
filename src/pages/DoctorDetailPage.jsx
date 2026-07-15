@@ -3,6 +3,10 @@ import { useDoctors } from '../hooks/useContent.js'
 import './ContentPages.css'
 import './ServicesPages.css'
 
+function getDisplayCategory(category) {
+  return category === 'Our Experts' ? 'Fertility Experts' : category
+}
+
 export default function DoctorDetailPage() {
   const { slug } = useParams()
   const { doctors, loading } = useDoctors()
@@ -30,6 +34,9 @@ export default function DoctorDetailPage() {
     )
   }
 
+  const bioParagraphs = doctor.bio?.split('\n').map(para => para.trim()).filter(Boolean)
+  const displayCategory = getDisplayCategory(doctor.category)
+
   return (
     <main className="content-page">
       <section className="service-banner doctor-detail-hero">
@@ -44,19 +51,22 @@ export default function DoctorDetailPage() {
       <section className="service-content-band">
         <div className="service-content-inner">
           <div className="doctor-detail-grid">
-            <aside className="feature-image-card doctor-detail-photo">
-              <img src={doctor.photo} alt={doctor.name} />
-            </aside>
-            <div>
-              <div className="service-heading-block is-left">
-                <span>{doctor.category}</span>
-                <h2>{doctor.name}</h2>
-                <p>{doctor.role}</p>
+            <aside className="doctor-detail-photo-card">
+              <div className="doctor-detail-photo-frame">
+                <img src={doctor.photo} alt={doctor.name} />
               </div>
-              <div className="content-panel">
+            </aside>
+            <section className="doctor-detail-main">
+              <div className="doctor-profile-head">
+                <span>{displayCategory || 'Renew Healthcare'}</span>
+                <h2>{doctor.name}</h2>
+                <p>{doctor.role || 'Renew Healthcare specialist'}</p>
+              </div>
+
+              <div className="doctor-profile-panel">
                 <h3>Profile</h3>
-                {doctor.bio
-                  ? doctor.bio.split('\n').filter(Boolean).map((para, i) => <p key={i}>{para}</p>)
+                {bioParagraphs?.length
+                  ? bioParagraphs.map((para, i) => <p key={i}>{para}</p>)
                   : <p>{doctor.name} is part of the Renew Healthcare team, supporting patients through fertility, reproductive health, and family-building care.</p>}
                 <p>For appointments, consultation details, and availability, contact Renew Healthcare directly.</p>
                 <div className="doctor-detail-actions">
@@ -64,7 +74,7 @@ export default function DoctorDetailPage() {
                   <Link to="/doctors">Back to doctors</Link>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
         </div>
       </section>

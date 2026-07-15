@@ -38,6 +38,7 @@ const testimonialsRes = createResource(() => testimonialsApi.listActive(), [])
 const faqsRes = createResource(() => faqsApi.listActive(), [])
 const settingsRes = createResource(() => fetchSettings(), {})
 const hiddenDoctorSlugs = new Set(['dr-ruby-yadav'])
+const staticDoctorsBySlug = new Map(staticDoctors.map((doctor) => [doctor.slug, doctor]))
 
 export const invalidateDoctors = doctorsRes.invalidate
 export const invalidateTestimonials = testimonialsRes.invalidate
@@ -47,16 +48,20 @@ export const invalidateSettings = settingsRes.invalidate
 // Doctors: admin-managed first, then the built-in static team list.
 export function useDoctors() {
   const { data, loading } = useResource(doctorsRes)
-  const remote = data.map((d) => ({
-    slug: slugify(d.name),
-    name: d.name,
-    qualification: d.qualification || '',
-    role: d.role || '',
-    category: d.category || 'Our Experts',
-    photo: d.photo || '',
-    bio: d.bio || '',
-    _remote: true,
-  }))
+  const remote = data.map((d) => {
+    const slug = slugify(d.name)
+    const fallback = staticDoctorsBySlug.get(slug)
+    return {
+      slug,
+      name: d.name,
+      qualification: d.qualification || fallback?.qualification || '',
+      role: d.role || fallback?.role || '',
+      category: d.category || fallback?.category || 'Our Experts',
+      photo: d.photo || fallback?.photo || '',
+      bio: d.bio || fallback?.bio || '',
+      _remote: true,
+    }
+  })
   // Once Supabase has doctors (e.g. after seeding), it is the source of truth.
   // The in-code list is only a fallback when the table is empty.
   const doctors = (remote.length ? remote : staticDoctors).filter((d) => !hiddenDoctorSlugs.has(d.slug))

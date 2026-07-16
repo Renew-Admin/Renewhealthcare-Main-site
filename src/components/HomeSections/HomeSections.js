@@ -1,4 +1,4 @@
-import { Children, useCallback, useEffect, useRef, useState } from 'react'
+import { Children, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useBlogs } from '../../hooks/useBlogs.js'
 import './HomeSections.css'
@@ -68,43 +68,146 @@ export function SectionHeading({ eyebrow, title, text }) {
   )
 }
 
-export function CardCarousel({ children, className, label, autoPlayMs = 0, autoPlayOnlyMobile = false }) {
+export function CardCarousel({ children, className, label, autoPlayMs = 0, autoPlayOnlyMobile = false, autoPlayOnMobile = true, loop = false }) {
   const viewportRef = useRef(null)
   const [canGoBack, setCanGoBack] = useState(false)
   const [canGoForward, setCanGoForward] = useState(false)
   const [hasOverflow, setHasOverflow] = useState(false)
-  const [isMobileViewport, setIsMobileViewport] = useState(false)
+  const [isMobileViewport, setIsMobileViewport] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia('(max-width: 767px)').matches
+  })
   const items = Children.toArray(children)
+  const shouldLoop = loop && items.length > 1
+  const displayItems = shouldLoop ? [...items, ...items, ...items] : items
+
+  const setScrollLeftImmediately = useCallback((viewport, left) => {
+    const previousBehavior = viewport.style.scrollBehavior
+    const previousSnapType = viewport.style.scrollSnapType
+
+    viewport.style.scrollBehavior = 'auto'
+    viewport.style.scrollSnapType = 'none'
+    viewport.scrollLeft = left
+    // Force the instant internal loop reset to apply before smooth user scrolling resumes.
+    viewport.getBoundingClientRect()
+    viewport.style.scrollBehavior = previousBehavior
+    viewport.style.scrollSnapType = previousSnapType
+  }, [])
+
+  const getSlideStep = useCallback(() => {
+    const viewport = viewportRef.current
+    if (!viewport) return 0
+
+    const slide = viewport.querySelector('.card-carousel-slide')
+    if (!slide) return 0
+
+    const track = viewport.querySelector('.card-carousel-track')
+    const gap = track ? Number.parseFloat(window.getComputedStyle(track).gap || '0') || 0 : 0
+    return slide.getBoundingClientRect().width + gap
+  }, [])
+
+  const getLoopMetrics = useCallback(() => {
+    const viewport = viewportRef.current
+    if (!viewport || !shouldLoop) return null
+
+    const slides = viewport.querySelectorAll('.card-carousel-slide')
+    const firstSlide = slides[0]
+    const middleSlide = slides[items.length]
+    const finalSlideSet = slides[items.length * 2]
+    if (!firstSlide || !middleSlide || !finalSlideSet) return null
+
+    const firstStart = firstSlide.offsetLeft
+    const middleStart = middleSlide.offsetLeft - firstStart
+    const finalStart = finalSlideSet.offsetLeft - firstStart
+    return {
+      viewport,
+      middleStart,
+      finalStart,
+      setWidth: finalStart - middleStart,
+    }
+  }, [items.length, shouldLoop])
+
+  const normalizeLoopPosition = useCallback(() => {
+    if (!shouldLoop) return
+
+    const metrics = getLoopMetrics()
+    if (!metrics || !metrics.setWidth) return
+
+    if (metrics.viewport.scrollLeft < metrics.middleStart - 1) {
+      setScrollLeftImmediately(metrics.viewport, metrics.viewport.scrollLeft + metrics.setWidth)
+    } else if (metrics.viewport.scrollLeft >= metrics.finalStart - 1) {
+      setScrollLeftImmediately(metrics.viewport, metrics.viewport.scrollLeft - metrics.setWidth)
+    }
+  }, [getLoopMetrics, setScrollLeftImmediately, shouldLoop])
 
   const updateControls = useCallback(() => {
     const viewport = viewportRef.current
     if (!viewport) return
 
     const maxScroll = viewport.scrollWidth - viewport.clientWidth
-    setHasOverflow(maxScroll > 4)
-    setCanGoBack(viewport.scrollLeft > 4)
-    setCanGoForward(viewport.scrollLeft < maxScroll - 4)
-  }, [])
+    setHasOverflow(shouldLoop || maxScroll > 4)
+    setCanGoBack(shouldLoop || viewport.scrollLeft > 4)
+    setCanGoForward(shouldLoop || viewport.scrollLeft < maxScroll - 4)
+  }, [shouldLoop])
+
+  useLayoutEffect(() => {
+    const viewport = viewportRef.current
+    if (!viewport) return
+
+    if (!shouldLoop) {
+      updateControls()
+      return
+    }
+
+    const scrollToMiddleSet = () => {
+      const metrics = getLoopMetrics()
+      if (!metrics) return
+
+      setScrollLeftImmediately(metrics.viewport, metrics.middleStart)
+      updateControls()
+    }
+
+    scrollToMiddleSet()
+    const frame = window.requestAnimationFrame(scrollToMiddleSet)
+    const lateFrame = window.setTimeout(scrollToMiddleSet, 150)
+    updateControls()
+
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.clearTimeout(lateFrame)
+    }
+  }, [getLoopMetrics, setScrollLeftImmediately, shouldLoop, updateControls])
 
   useEffect(() => {
     const viewport = viewportRef.current
     if (!viewport) return undefined
 
+    const handleScroll = () => {
+      normalizeLoopPosition()
+      updateControls()
+    }
+    const handleResize = () => {
+      if (shouldLoop) {
+        const metrics = getLoopMetrics()
+        if (metrics) setScrollLeftImmediately(viewport, metrics.middleStart)
+      }
+      updateControls()
+    }
+
     updateControls()
-    const handleResize = () => updateControls()
-    viewport.addEventListener('scroll', updateControls, { passive: true })
+    viewport.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleResize)
 
     return () => {
-      viewport.removeEventListener('scroll', updateControls)
+      viewport.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleResize)
     }
-  }, [updateControls, items.length])
+  }, [getLoopMetrics, normalizeLoopPosition, setScrollLeftImmediately, shouldLoop, updateControls])
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
 
-    const media = window.matchMedia('(max-width: 720px)')
+    const media = window.matchMedia('(max-width: 767px)')
     const handleChange = () => setIsMobileViewport(media.matches)
 
     handleChange()
@@ -126,6 +229,7 @@ export function CardCarousel({ children, className, label, autoPlayMs = 0, autoP
   useEffect(() => {
     if (!autoPlayMs) return undefined
     if (autoPlayOnlyMobile && !isMobileViewport) return undefined
+    if (!autoPlayOnMobile && isMobileViewport) return undefined
     if (typeof window === 'undefined') return undefined
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
 
@@ -136,9 +240,15 @@ export function CardCarousel({ children, className, label, autoPlayMs = 0, autoP
       const slides = viewport.querySelectorAll('.card-carousel-slide')
       if (!slides.length) return
 
-      const track = viewport.querySelector('.card-carousel-track')
-      const gap = track ? Number.parseFloat(window.getComputedStyle(track).gap || '0') || 0 : 0
-      const step = slides[0].getBoundingClientRect().width + gap
+      const step = getSlideStep()
+      if (!step) return
+
+      if (shouldLoop) {
+        normalizeLoopPosition()
+        viewport.scrollBy({ left: step, behavior: 'smooth' })
+        return
+      }
+
       const maxScroll = viewport.scrollWidth - viewport.clientWidth
       const nextLeft = viewport.scrollLeft + step
       const target = nextLeft >= maxScroll - 4 ? 0 : nextLeft
@@ -147,11 +257,23 @@ export function CardCarousel({ children, className, label, autoPlayMs = 0, autoP
     }, autoPlayMs)
 
     return () => window.clearInterval(timer)
-  }, [autoPlayMs, autoPlayOnlyMobile, isMobileViewport])
+  }, [autoPlayMs, autoPlayOnMobile, autoPlayOnlyMobile, getSlideStep, isMobileViewport, normalizeLoopPosition, shouldLoop])
 
   const moveCarousel = (direction) => {
     const viewport = viewportRef.current
     if (!viewport) return
+
+    if (shouldLoop) {
+      const step = getSlideStep()
+      if (!step) return
+
+      normalizeLoopPosition()
+      viewport.scrollBy({
+        left: direction * step,
+        behavior: 'smooth',
+      })
+      return
+    }
 
     viewport.scrollBy({
       left: direction * viewport.clientWidth,
@@ -160,7 +282,7 @@ export function CardCarousel({ children, className, label, autoPlayMs = 0, autoP
   }
 
   return (
-    <div className={`card-carousel ${className} ${hasOverflow ? 'is-scrollable' : ''}`} aria-label={label}>
+    <div className={`card-carousel ${className} ${hasOverflow ? 'is-scrollable' : ''} ${shouldLoop ? 'is-looping' : ''}`} aria-label={label}>
       {hasOverflow && (
         <div className="card-carousel-controls">
           <button type="button" onClick={() => moveCarousel(-1)} disabled={!canGoBack} aria-label={`Previous ${label}`}>
@@ -173,7 +295,7 @@ export function CardCarousel({ children, className, label, autoPlayMs = 0, autoP
       )}
       <div className="card-carousel-viewport" ref={viewportRef}>
         <div className="card-carousel-track">
-          {items.map((item, index) => (
+          {displayItems.map((item, index) => (
             <div className="card-carousel-slide" key={index}>
               {item}
             </div>
@@ -273,7 +395,7 @@ export default function HomeSections() {
       <section className="home-band doctors-section" id="doctors">
         <div className="home-band-inner">
           <SectionHeading eyebrow="Doctors" title="Meet Our Team Of Infertility Specialists" />
-          <CardCarousel className="doctor-grid" label="Doctor blocks">
+          <CardCarousel className="doctor-grid" label="Doctor blocks" loop autoPlayMs={3500} autoPlayOnMobile={false}>
             {doctors.map(([name, role, image, to]) => (
               <article className="home-card doctor-card" key={name}>
                 <div className="doctor-image">

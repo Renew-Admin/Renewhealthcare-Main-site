@@ -1,12 +1,9 @@
 import fs from 'node:fs/promises'
 
 import { blogs } from '../src/data/blogs.js'
-import { doctors } from '../src/data/doctors.js'
-import { finalPages } from '../src/data/finalPages.js'
-import { locations } from '../src/data/locations.js'
-import { services } from '../src/data/services.js'
+import { getAllSeoRoutes } from '../src/lib/seoRoutes.js'
+import { SITE, canonicalUrl, normalizePath } from '../src/lib/seoUtils.js'
 
-const SITE_URL = 'https://renewhealthcare.in'
 const formatLocalDate = date => {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -17,11 +14,7 @@ const formatLocalDate = date => {
 const LASTMOD = process.env.SITEMAP_LASTMOD || formatLocalDate(new Date())
 
 const entries = new Map()
-
-function normalizePath(path) {
-  const withSlash = path.startsWith('/') ? path : `/${path}`
-  return withSlash === '/' ? withSlash : withSlash.replace(/\/+$/, '')
-}
+const blogLastmodByPath = new Map(blogs.map(blog => [normalizePath(`/blogs/${blog.slug}`), blog.iso]))
 
 function addUrl(path, { lastmod = LASTMOD, changefreq = 'monthly', priority = '0.8' } = {}) {
   const cleanPath = normalizePath(path)
@@ -29,7 +22,7 @@ function addUrl(path, { lastmod = LASTMOD, changefreq = 'monthly', priority = '0
 }
 
 function urlFor(path) {
-  return path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`
+  return canonicalUrl(path)
 }
 
 function escapeXml(value) {
@@ -41,39 +34,24 @@ function escapeXml(value) {
     .replaceAll("'", '&apos;')
 }
 
-addUrl('/', { changefreq: 'weekly', priority: '1.0' })
-addUrl('/why-renew', { priority: '0.9' })
-addUrl('/services', { changefreq: 'weekly', priority: '0.9' })
-addUrl('/doctors')
-addUrl('/locations')
-addUrl('/about-us')
-addUrl('/ivf-success-factors-and-rates')
-addUrl('/success-stories')
-addUrl('/blogs', { changefreq: 'weekly' })
-addUrl('/news', { changefreq: 'weekly' })
-addUrl('/contact')
+getAllSeoRoutes().forEach(route => {
+  const path = route.path
+  const isBlogPost = path.startsWith('/blogs/')
+  const isService = path.startsWith('/services/')
+  const isDoctor = path.startsWith('/doctor/')
 
-Object.values(finalPages).forEach(page => {
-  if (page.path) addUrl(page.path)
-})
-
-services.forEach(service => {
-  addUrl(`/services/${service.slug}`, { priority: '0.7' })
-})
-
-locations.forEach(location => {
-  addUrl(`/locations/${location.slug}`)
-})
-
-doctors.forEach(doctor => {
-  addUrl(`/doctor/${doctor.slug}`, { priority: '0.6' })
-})
-
-blogs.forEach(blog => {
-  addUrl(`/blogs/${blog.slug}`, {
-    lastmod: blog.iso || LASTMOD,
-    changefreq: 'monthly',
-    priority: '0.6',
+  addUrl(path, {
+    lastmod: blogLastmodByPath.get(path) || LASTMOD,
+    changefreq: path === '/' || path === '/services' || path === '/blogs' || path === '/news' ? 'weekly' : 'monthly',
+    priority: path === '/'
+      ? '1.0'
+      : path === '/why-renew' || path === '/services'
+        ? '0.9'
+        : isService
+          ? '0.7'
+          : isBlogPost || isDoctor
+            ? '0.6'
+            : '0.8',
   })
 })
 
@@ -95,10 +73,10 @@ const robots = `User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: ${SITE_URL}/sitemap.xml
+Sitemap: ${SITE}/sitemap.xml
 `
 
 await fs.writeFile('public/sitemap.xml', sitemap)
 await fs.writeFile('public/robots.txt', robots)
 
-console.log(`Generated ${entries.size} sitemap URLs for ${SITE_URL}`)
+console.log(`Generated ${entries.size} sitemap URLs for ${SITE}`)

@@ -5,11 +5,16 @@ import AnnouncementBanner from './components/AnnouncementBanner/AnnouncementBann
 import CallbackModal from './components/CallbackModal/CallbackModal.js'
 import SiteFooter from './components/SiteFooter/SiteFooter.js'
 import FloatingActions from './components/FloatingActions/FloatingActions.js'
+import Seo from './components/Seo.js'
+import { getSeoForPath } from './lib/seoRoutes.js'
+import { normalizePath } from './lib/seoUtils.js'
 import './App.css'
 
 export default function App() {
   const [callbackOpen, setCallbackOpen] = useState(false)
   const { pathname, hash } = useLocation()
+  const routeSeo = getSeoForPath(pathname)
+  const fallbackPath = normalizePath(pathname)
 
   useEffect(() => {
     if (!hash) {
@@ -29,6 +34,23 @@ export default function App() {
 
   return (
     <div className="rh-root">
+      {routeSeo ? (
+        <Seo
+          title={routeSeo.title}
+          description={routeSeo.description}
+          path={routeSeo.path}
+          image={routeSeo.image}
+          type={routeSeo.type}
+          robots={routeSeo.robots}
+        />
+      ) : (
+        <Seo
+          title="Page not found"
+          description="The page you are looking for could not be found on Renew Healthcare."
+          path={fallbackPath}
+          robots="noindex, follow"
+        />
+      )}
       <AnnouncementBanner />
       <GlobalHeader onCallback={() => setCallbackOpen(true)} />
       <Outlet context={{ onCallback: () => setCallbackOpen(true) }} />

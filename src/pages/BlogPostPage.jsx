@@ -44,7 +44,7 @@ export default function BlogPostPage() {
     }
     return (
       <main className="content-page">
-        <Seo title="Blog not found" path={`/blogs/${slug}`} />
+        <Seo title="Blog not found" path={`/blogs/${slug}`} robots="noindex, follow" />
         <section className="service-content-band">
           <div className="service-content-inner service-not-found">
             <span>Blogs</span><h1>Blog not found</h1>

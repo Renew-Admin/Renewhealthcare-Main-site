@@ -8,6 +8,7 @@ import {
 } from './lib/seoUtils.js'
 
 const FILE_EXTENSION_PATTERN = /\.[a-z0-9]{1,12}$/i
+const RETIRED_URL_PATTERN = /^\/(?:comment|content)\.php$|^\/products\/[0-9]+\/?$/i
 
 function escapeHtml(value) {
   return String(value || '')
@@ -81,6 +82,17 @@ function redirectToPath(url, pathname) {
   return Response.redirect(destination.toString(), 301)
 }
 
+function goneResponse() {
+  return new Response('Gone', {
+    status: 410,
+    headers: {
+      'content-type': 'text/plain; charset=UTF-8',
+      'x-robots-tag': 'noindex, nofollow',
+      'cache-control': 'public, max-age=3600',
+    },
+  })
+}
+
 function noindexMeta(path, robots = 'noindex, follow') {
   const cleanPath = normalizePath(path)
   return {
@@ -101,6 +113,10 @@ export default {
 
     if (url.pathname === '/api/health') {
       return Response.json({ ok: true })
+    }
+
+    if (RETIRED_URL_PATTERN.test(url.pathname)) {
+      return goneResponse()
     }
 
     const pageRequest = isPageRequest(request, url)

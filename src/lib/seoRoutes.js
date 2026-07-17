@@ -35,6 +35,10 @@ function addRoute(path, meta = {}) {
   })
 }
 
+function addLegacyRedirect(fromPath, toPath) {
+  legacyRedirects.set(normalizePath(fromPath), normalizePath(toPath))
+}
+
 addRoute('/', {
   title: 'Best IVF & Fertility Centre in Kolkata',
   fullTitle: DEFAULT_TITLE,
@@ -135,9 +139,11 @@ blogs.forEach(blog => {
 blogs.forEach(blog => {
   const legacyPath = normalizePath(`/${blog.slug}`)
   if (!routes.has(legacyPath)) {
-    legacyRedirects.set(legacyPath, normalizePath(`/blogs/${blog.slug}`))
+    addLegacyRedirect(legacyPath, `/blogs/${blog.slug}`)
   }
 })
+
+addLegacyRedirect('/stories', '/success-stories')
 
 export function getSeoForPath(path) {
   return routes.get(normalizePath(path)) || null

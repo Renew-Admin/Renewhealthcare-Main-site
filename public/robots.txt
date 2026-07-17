@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://renewhealthcare.in/sitemap.xml
+Sitemap: https://renewhealthcare.in/sitemap_index.xml

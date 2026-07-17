@@ -1,0 +1,21 @@
+Options -MultiViews
+RewriteEngine On
+
+# Retired WordPress/WooCommerce endpoints should not be served by the SPA.
+RewriteRule ^(comment|content)\.php$ - [G,L]
+RewriteRule ^products/[0-9]+/?$ - [G,L]
+
+# Preserve the old stories URL as a permanent redirect.
+RewriteRule ^stories/?$ /success-stories [R=301,L]
+
+# Existing static files and directories should be served directly.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Missing file-like URLs are real 404s, not React routes.
+RewriteCond %{REQUEST_URI} \.[A-Za-z0-9]{1,12}$
+RewriteRule ^ - [R=404,L]
+
+# Extensionless app routes are handled by React.
+RewriteRule ^ index.html [L]

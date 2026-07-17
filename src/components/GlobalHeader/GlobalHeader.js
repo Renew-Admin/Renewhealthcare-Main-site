@@ -185,7 +185,7 @@ export default function GlobalHeader({ onCallback }) {
                 </div>
               </div>
             </SimpleDropdown>
-            <Link to="/success-stories" className="global-nav-link">Stories</Link>
+            <Link to="/success-stories" className="global-nav-link">Success Stories</Link>
             <SimpleDropdown label="More" className="is-more">
               <div className="global-nav-panel more-panel">
                 {moreGroups.map(([group, items]) => (
@@ -236,7 +236,7 @@ export default function GlobalHeader({ onCallback }) {
                 {featuredDoctors.map(doctor => <Link key={doctor.slug} to={`/doctor/${doctor.slug}`} onClick={() => setOpen(false)}>{doctor.name}</Link>)}
               </div>
             )}
-            <Link to="/success-stories" onClick={() => setOpen(false)}>Stories</Link>
+            <Link to="/success-stories" onClick={() => setOpen(false)}>Success Stories</Link>
             <button type="button" onClick={() => setPanel(panel === 'More' ? '' : 'More')}>More <span>{panel === 'More' ? '−' : '+'}</span></button>
             {panel === 'More' && (
               <div className="mobile-panel">

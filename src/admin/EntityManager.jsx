@@ -8,11 +8,32 @@ import { EmptyState, Modal, Spinner, useToast } from './ui.jsx'
 
 function emptyForm(fields, defaults) {
   const base = {}
-  fields.forEach((f) => { base[f.key] = f.type === 'toggle' ? false : f.type === 'number' ? 0 : '' })
+  fields.forEach((f) => { base[f.key] = emptyFieldValue(f) })
   return { ...base, ...defaults }
 }
 
-export default function EntityManager({ title, subtitle, addLabel = '+ Add', api, columns, fields, defaults = {}, onMutate }) {
+function emptyFieldValue(field) {
+  if (Object.prototype.hasOwnProperty.call(field, 'emptyValue')) return cloneValue(field.emptyValue)
+  if (field.type === 'toggle') return false
+  if (field.type === 'number') return 0
+  if (field.type === 'pairList') return []
+  return ''
+}
+
+function cloneValue(value) {
+  if (Array.isArray(value)) return value.map((item) => cloneValue(item))
+  if (value && typeof value === 'object') return { ...value }
+  return value
+}
+
+function fieldHasValue(field, value) {
+  if (field.isEmpty) return !field.isEmpty(value)
+  if (field.type === 'toggle') return !!value
+  if (field.type === 'pairList') return Array.isArray(value) && value.length > 0
+  return String(value ?? '').trim().length > 0
+}
+
+export default function EntityManager({ title, subtitle, addLabel = '+ Add', api, columns, fields, defaults = {}, onMutate, modalWide = false }) {
   const toast = useToast()
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading')
@@ -33,14 +54,25 @@ export default function EntityManager({ title, subtitle, addLabel = '+ Add', api
   const set = (patch) => setForm((f) => ({ ...f, ...patch }))
 
   const openCreate = () => { setEditing(null); setForm(emptyForm(fields, defaults)); setOpen(true) }
-  const openEdit = (row) => { setEditing(row); setForm({ ...emptyForm(fields, defaults), ...row }); setOpen(true) }
+  const openEdit = (row) => {
+    const next = { ...emptyForm(fields, defaults) }
+    fields.forEach((f) => {
+      const rawValue = Object.prototype.hasOwnProperty.call(row, f.key) ? row[f.key] : next[f.key]
+      next[f.key] = f.fromStorage ? f.fromStorage(rawValue, row) : cloneValue(rawValue)
+    })
+    setEditing(row)
+    setForm(next)
+    setOpen(true)
+  }
 
   const save = async (e) => {
     e.preventDefault()
-    const required = fields.find((f) => f.required && !String(form[f.key] ?? '').trim())
+    const required = fields.find((f) => f.required && !fieldHasValue(f, form[f.key]))
     if (required) return toast(`${required.label} is required`, 'error')
     const payload = {}
-    fields.forEach((f) => { payload[f.key] = form[f.key] })
+    fields.forEach((f) => {
+      payload[f.key] = f.toStorage ? f.toStorage(form[f.key], form) : form[f.key]
+    })
     try {
       setSaving(true)
       if (editing) await api.update(editing.id, payload)
@@ -118,6 +150,7 @@ export default function EntityManager({ title, subtitle, addLabel = '+ Add', api
         open={open}
         title={editing ? `Edit ${title.replace(/s$/, '')}` : `New ${title.replace(/s$/, '')}`}
         onClose={() => setOpen(false)}
+        wide={modalWide}
         footer={
           <>
             <button type="button" className="admin-btn ghost" onClick={() => setOpen(false)}>Cancel</button>
@@ -140,13 +173,14 @@ function gridCols(columns) {
 }
 
 function Field({ field, value, onChange }) {
-  const { type, label, options, placeholder, full, kind } = field
-  const cls = `admin-field ${full || type === 'textarea' || type === 'image' ? 'full' : ''}`
+  const { type, label, options, placeholder, full, kind, help } = field
+  const cls = `admin-field ${full || type === 'textarea' || type === 'list' || type === 'image' || type === 'pairList' ? 'full' : ''}`
 
   if (type === 'image') {
     return (
       <label className={cls}>{label}
         <MediaPicker value={value || ''} onChange={onChange} kind={kind || 'general'} />
+        <FieldHelp text={help} />
       </label>
     )
   }
@@ -162,14 +196,25 @@ function Field({ field, value, onChange }) {
     return (
       <label className={cls}>{label}
         <textarea rows={4} value={value || ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+        <FieldHelp text={help} />
       </label>
     )
   }
+  if (type === 'list') {
+    return (
+      <label className={cls}>{label}
+        <textarea rows={field.rows || 5} value={value || ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+        <FieldHelp text={help || 'Write one item per line.'} />
+      </label>
+    )
+  }
+  if (type === 'pairList') return <PairListField className={cls} field={field} value={value} onChange={onChange} />
   if (type === 'select') {
     return (
       <label className={cls}>{label}
         <input list={`opt-${field.key}`} value={value || ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
         <datalist id={`opt-${field.key}`}>{(options || []).map((o) => <option key={o} value={o} />)}</datalist>
+        <FieldHelp text={help} />
       </label>
     )
   }
@@ -177,12 +222,74 @@ function Field({ field, value, onChange }) {
     return (
       <label className={cls}>{label}
         <input type="number" value={value ?? 0} onChange={(e) => onChange(Number(e.target.value))} />
+        <FieldHelp text={help} />
       </label>
     )
   }
   return (
     <label className={cls}>{label}
       <input type="text" value={value || ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+      <FieldHelp text={help} />
     </label>
+  )
+}
+
+function FieldHelp({ text }) {
+  return text ? <small className="admin-field-help">{text}</small> : null
+}
+
+function PairListField({ className, field, value, onChange }) {
+  const rows = Array.isArray(value) ? value : []
+  const subfields = field.fields || []
+
+  const addRow = () => {
+    const next = {}
+    subfields.forEach((subfield) => { next[subfield.key] = '' })
+    onChange([...rows, next])
+  }
+
+  const updateRow = (index, key, nextValue) => {
+    onChange(rows.map((row, i) => (i === index ? { ...row, [key]: nextValue } : row)))
+  }
+
+  const removeRow = (index) => {
+    onChange(rows.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className={`${className} admin-pair-list`}>
+      <span className="admin-field-label">{field.label}</span>
+      <FieldHelp text={field.help} />
+      {rows.length > 0 && (
+        <div className="admin-pair-list-rows">
+          {rows.map((row, index) => (
+            <div className="admin-pair-row" key={index}>
+              {subfields.map((subfield) => (
+                <label key={subfield.key}>
+                  <span>{subfield.label}</span>
+                  {subfield.type === 'textarea' ? (
+                    <textarea
+                      rows={subfield.rows || 3}
+                      value={row?.[subfield.key] || ''}
+                      placeholder={subfield.placeholder}
+                      onChange={(e) => updateRow(index, subfield.key, e.target.value)}
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      value={row?.[subfield.key] || ''}
+                      placeholder={subfield.placeholder}
+                      onChange={(e) => updateRow(index, subfield.key, e.target.value)}
+                    />
+                  )}
+                </label>
+              ))}
+              <button type="button" className="admin-btn danger sm" onClick={() => removeRow(index)}>Remove</button>
+            </div>
+          ))}
+        </div>
+      )}
+      <button type="button" className="admin-btn ghost sm admin-pair-add" onClick={addRow}>{field.addLabel || '+ Add row'}</button>
+    </div>
   )
 }

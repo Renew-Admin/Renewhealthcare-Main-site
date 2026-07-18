@@ -107,11 +107,60 @@ create table if not exists public.doctors (
   category      text default 'Our Experts',
   photo         text default '',
   bio           text default '',
+  experience_years text default '',
+  milestone_stat text default '',
+  qualifications jsonb not null default '[]'::jsonb,
+  specializations jsonb not null default '[]'::jsonb,
+  languages jsonb not null default '[]'::jsonb,
+  past_attachments jsonb not null default '[]'::jsonb,
+  clinic_address text default '',
+  service_areas jsonb not null default '[]'::jsonb,
+  faqs jsonb not null default '[]'::jsonb,
   display_order integer not null default 0,
   active        boolean not null default true,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
+alter table public.doctors add column if not exists experience_years text default '';
+alter table public.doctors add column if not exists milestone_stat text default '';
+alter table public.doctors add column if not exists qualifications jsonb not null default '[]'::jsonb;
+alter table public.doctors add column if not exists specializations jsonb not null default '[]'::jsonb;
+alter table public.doctors add column if not exists languages jsonb not null default '[]'::jsonb;
+alter table public.doctors add column if not exists past_attachments jsonb not null default '[]'::jsonb;
+alter table public.doctors add column if not exists clinic_address text default '';
+alter table public.doctors add column if not exists service_areas jsonb not null default '[]'::jsonb;
+alter table public.doctors add column if not exists faqs jsonb not null default '[]'::jsonb;
+update public.doctors
+set experience_years = coalesce(experience_years, ''),
+    milestone_stat = coalesce(milestone_stat, ''),
+    qualifications = coalesce(qualifications, '[]'::jsonb),
+    specializations = coalesce(specializations, '[]'::jsonb),
+    languages = coalesce(languages, '[]'::jsonb),
+    past_attachments = coalesce(past_attachments, '[]'::jsonb),
+    clinic_address = coalesce(clinic_address, ''),
+    service_areas = coalesce(service_areas, '[]'::jsonb),
+    faqs = coalesce(faqs, '[]'::jsonb);
+update public.doctors
+set qualifications = jsonb_build_array(qualification)
+where qualification is not null
+  and qualification <> ''
+  and qualifications = '[]'::jsonb;
+alter table public.doctors
+  alter column experience_years set default '',
+  alter column milestone_stat set default '',
+  alter column qualifications set default '[]'::jsonb,
+  alter column qualifications set not null,
+  alter column specializations set default '[]'::jsonb,
+  alter column specializations set not null,
+  alter column languages set default '[]'::jsonb,
+  alter column languages set not null,
+  alter column past_attachments set default '[]'::jsonb,
+  alter column past_attachments set not null,
+  alter column clinic_address set default '',
+  alter column service_areas set default '[]'::jsonb,
+  alter column service_areas set not null,
+  alter column faqs set default '[]'::jsonb,
+  alter column faqs set not null;
 drop trigger if exists doctors_set_updated_at on public.doctors;
 create trigger doctors_set_updated_at before update on public.doctors
   for each row execute function public.set_updated_at();

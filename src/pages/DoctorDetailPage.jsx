@@ -7,6 +7,54 @@ function getDisplayCategory(category) {
   return category === 'Our Experts' ? 'Fertility Experts' : category
 }
 
+function asList(value) {
+  return Array.isArray(value) ? value.map((item) => String(item || '').trim()).filter(Boolean) : []
+}
+
+function hasText(value) {
+  return String(value || '').trim().length > 0
+}
+
+function ProfileList({ title, items }) {
+  if (!items.length) return null
+  return (
+    <div className="doctor-profile-subsection">
+      <h4>{title}</h4>
+      <ul className="doctor-profile-list">
+        {items.map((item, index) => <li key={`${item}-${index}`}>{item}</li>)}
+      </ul>
+    </div>
+  )
+}
+
+function AttachmentList({ items }) {
+  if (!items.length) return null
+  return (
+    <div className="doctor-profile-pairs">
+      {items.map((item, index) => (
+        <article key={`${item.institution}-${index}`}>
+          {item.institution && <h4>{item.institution}</h4>}
+          {item.description && <p>{item.description}</p>}
+        </article>
+      ))}
+    </div>
+  )
+}
+
+function DoctorFaqs({ items }) {
+  if (!items.length) return null
+  return (
+    <div className="doctor-faq-list">
+      {items.map((item, index) => (
+        <details key={`${item.question}-${index}`}>
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  )
+}
+
 export default function DoctorDetailPage() {
   const { slug } = useParams()
   const { doctors, loading } = useDoctors()
@@ -36,6 +84,16 @@ export default function DoctorDetailPage() {
 
   const bioParagraphs = doctor.bio?.split('\n').map(para => para.trim()).filter(Boolean)
   const displayCategory = getDisplayCategory(doctor.category)
+  const qualifications = asList(doctor.qualifications).length ? asList(doctor.qualifications) : asList([doctor.qualification])
+  const specializations = asList(doctor.specializations)
+  const languages = asList(doctor.languages)
+  const serviceAreas = asList(doctor.service_areas)
+  const attachments = Array.isArray(doctor.past_attachments) ? doctor.past_attachments.filter((item) => hasText(item?.institution) || hasText(item?.description)) : []
+  const faqs = Array.isArray(doctor.faqs) ? doctor.faqs.filter((item) => hasText(item?.question) && hasText(item?.answer)) : []
+  const hasClinicalDetails = hasText(doctor.experience_years) || hasText(doctor.milestone_stat) || qualifications.length || specializations.length || languages.length
+  const hasLocationDetails = hasText(doctor.clinic_address) || serviceAreas.length
+  const hasAttachments = attachments.length > 0
+  const hasFaqs = faqs.length > 0
 
   return (
     <main className="content-page">
@@ -74,6 +132,57 @@ export default function DoctorDetailPage() {
                   <Link to="/doctors">Back to doctors</Link>
                 </div>
               </div>
+
+              {hasClinicalDetails && (
+                <div className="doctor-profile-panel">
+                  <h3>Clinical Details</h3>
+                  {(hasText(doctor.experience_years) || hasText(doctor.milestone_stat)) && (
+                    <div className="doctor-stat-grid">
+                      {hasText(doctor.experience_years) && (
+                        <div>
+                          <span>Experience</span>
+                          <strong>{doctor.experience_years}</strong>
+                        </div>
+                      )}
+                      {hasText(doctor.milestone_stat) && (
+                        <div>
+                          <span>Milestone</span>
+                          <strong>{doctor.milestone_stat}</strong>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <ProfileList title="Academic Background" items={qualifications} />
+                  <ProfileList title="Core Specializations" items={specializations} />
+                  <ProfileList title="Languages" items={languages} />
+                </div>
+              )}
+
+              {(hasAttachments || hasLocationDetails) && (
+                <div className="doctor-profile-panel">
+                  <h3>Practice Details</h3>
+                  {hasAttachments && (
+                    <div className="doctor-profile-subsection">
+                      <h4>Past Attachments</h4>
+                      <AttachmentList items={attachments} />
+                    </div>
+                  )}
+                  {hasText(doctor.clinic_address) && (
+                    <div className="doctor-profile-subsection">
+                      <h4>Clinic Address</h4>
+                      <p>{doctor.clinic_address}</p>
+                    </div>
+                  )}
+                  <ProfileList title="Service Areas" items={serviceAreas} />
+                </div>
+              )}
+
+              {hasFaqs && (
+                <div className="doctor-profile-panel">
+                  <h3>FAQs</h3>
+                  <DoctorFaqs items={faqs} />
+                </div>
+              )}
             </section>
           </div>
         </div>

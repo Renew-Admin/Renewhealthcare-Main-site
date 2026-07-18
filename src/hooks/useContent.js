@@ -40,6 +40,28 @@ const settingsRes = createResource(() => fetchSettings(), {})
 const hiddenDoctorSlugs = new Set(['dr-ruby-yadav'])
 const staticDoctorsBySlug = new Map(staticDoctors.map((doctor) => [doctor.slug, doctor]))
 
+function parseJsonArray(value) {
+  if (typeof value !== 'string') return null
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+function toStringList(value) {
+  const source = Array.isArray(value) ? value : parseJsonArray(value) || []
+  return source.map((item) => String(item || '').trim()).filter(Boolean)
+}
+
+function toPairList(value, keys) {
+  const source = Array.isArray(value) ? value : parseJsonArray(value) || []
+  return source
+    .map((item) => Object.fromEntries(keys.map((key) => [key, String(item?.[key] || '').trim()])))
+    .filter((item) => keys.some((key) => item[key]))
+}
+
 export const invalidateDoctors = doctorsRes.invalidate
 export const invalidateTestimonials = testimonialsRes.invalidate
 export const invalidateFaqs = faqsRes.invalidate
@@ -51,14 +73,25 @@ export function useDoctors() {
   const remote = data.map((d) => {
     const slug = slugify(d.name)
     const fallback = staticDoctorsBySlug.get(slug)
+    const qualificationList = toStringList(d.qualifications)
+    const qualification = d.qualification || fallback?.qualification || qualificationList[0] || ''
     return {
       slug,
       name: d.name,
-      qualification: d.qualification || fallback?.qualification || '',
+      qualification,
+      qualifications: qualificationList.length ? qualificationList : qualification ? [qualification] : toStringList(fallback?.qualifications),
       role: d.role || fallback?.role || '',
       category: d.category || fallback?.category || 'Our Experts',
       photo: d.photo || fallback?.photo || '',
       bio: d.bio || fallback?.bio || '',
+      experience_years: d.experience_years || fallback?.experience_years || '',
+      milestone_stat: d.milestone_stat || fallback?.milestone_stat || '',
+      specializations: toStringList(d.specializations),
+      languages: toStringList(d.languages),
+      past_attachments: toPairList(d.past_attachments, ['institution', 'description']),
+      clinic_address: d.clinic_address || fallback?.clinic_address || '',
+      service_areas: toStringList(d.service_areas),
+      faqs: toPairList(d.faqs, ['question', 'answer']),
       _remote: true,
     }
   })

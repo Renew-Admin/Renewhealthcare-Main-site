@@ -204,6 +204,23 @@
 .admin-field textarea { resize: vertical; }
 .admin-field input:focus, .admin-field textarea:focus, .admin-field select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(7, 103, 165, .12); }
 .admin-field small { font-weight: 500; word-break: break-word; }
+.admin-field-help { color: var(--muted); line-height: 1.45; }
+.admin-field-label { font-size: 13px; font-weight: 700; color: var(--ink); }
+.admin-pair-list { align-items: stretch; }
+.admin-pair-list-rows { display: flex; flex-direction: column; gap: 12px; }
+.admin-pair-row {
+  display: grid;
+  grid-template-columns: minmax(180px, .8fr) minmax(260px, 1.2fr) auto;
+  gap: 10px;
+  align-items: end;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+.admin-pair-row label { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.admin-pair-row label span { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.admin-pair-add { align-self: flex-start; }
 /* Date / number inputs report a wide intrinsic size — let them shrink in grids. */
 .admin-form-grid { min-width: 0; }
 .admin-form-grid > * { min-width: 0; }
@@ -281,6 +298,7 @@
 @media (max-width: 560px) {
   .admin-form-grid { grid-template-columns: 1fr; }
   .admin-page-head h1 { font-size: 23px; }
+  .admin-pair-row { grid-template-columns: 1fr; }
   .admin-table.leads .admin-tr {
     min-width: 920px;
   }

@@ -262,6 +262,7 @@ insert into public.site_settings (key, value) values
   ('whatsapp',      '916292269060'),
   ('email',         'info@renewhealthcare.in'),
   ('announcement',  ''),
+  ('announcement_link', ''),
   ('announcement_active', 'false')
 on conflict (key) do nothing;
 

@@ -9,6 +9,7 @@ const FIELDS = [
   { key: 'whatsapp', label: 'WhatsApp number (with country code)', placeholder: '916292269060' },
   { key: 'email', label: 'Contact email', placeholder: 'info@renewhealthcare.in' },
   { key: 'announcement', label: 'Announcement bar text', placeholder: 'e.g. Free fertility consultation this month', full: true },
+  { key: 'announcement_link', label: 'Announcement bar link', placeholder: 'https://renewhealthcare.in/services or /services', full: true },
 ]
 
 export default function AdminSettings() {
@@ -18,7 +19,7 @@ export default function AdminSettings() {
 
   useEffect(() => {
     fetchSettings()
-      .then((s) => setForm({ announcement_active: 'false', ...s }))
+      .then((s) => setForm({ announcement_active: 'false', announcement_link: '', ...s }))
       .catch(() => setForm({}))
   }, [])
 

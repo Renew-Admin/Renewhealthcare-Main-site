@@ -90,8 +90,8 @@ export default function DoctorDetailPage() {
   const serviceAreas = asList(doctor.service_areas)
   const attachments = Array.isArray(doctor.past_attachments) ? doctor.past_attachments.filter((item) => hasText(item?.institution) || hasText(item?.description)) : []
   const faqs = Array.isArray(doctor.faqs) ? doctor.faqs.filter((item) => hasText(item?.question) && hasText(item?.answer)) : []
-  const hasClinicalDetails = hasText(doctor.experience_years) || hasText(doctor.milestone_stat) || qualifications.length || specializations.length || languages.length
-  const hasLocationDetails = hasText(doctor.clinic_address) || serviceAreas.length
+  const hasClinicalDetails = hasText(doctor.experience_years) || hasText(doctor.milestone_stat) || qualifications.length > 0 || specializations.length > 0 || languages.length > 0
+  const hasLocationDetails = hasText(doctor.clinic_address) || serviceAreas.length > 0
   const hasAttachments = attachments.length > 0
   const hasFaqs = faqs.length > 0
 

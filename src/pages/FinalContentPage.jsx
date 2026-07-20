@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { finalPages } from '../data/finalPages.js'
 import NotFound from './NotFound.jsx'
@@ -83,11 +84,11 @@ export function FinalContentByKey({ pageKey }) {
       <section className="service-content-band">
         <div className="service-content-inner">
           {page.image && !isContact ? (
-            <div className="final-intro-split">
+            <div className={`final-intro-split${page.video ? ' final-intro-split-video' : ''}`}>
               <div className="service-heading-block is-left">
                 <span>{page.eyebrow}</span><h2>{page.title}</h2>{page.intro && <p>{page.intro}</p>}
               </div>
-              <div className="final-feature-image"><img src={page.image} alt={page.title} loading="lazy" /></div>
+              <FinalFeatureMedia page={page} />
             </div>
           ) : (
             <div className="service-heading-block">
@@ -132,6 +133,86 @@ export default function FinalContentPage() {
 
 export function CoursePage({ pageKey }) {
   return <FinalContentByKey pageKey={pageKey} />
+}
+
+function FinalFeatureMedia({ page }) {
+  const videoRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [progress, setProgress] = useState(0)
+
+  const toggleVideo = () => {
+    const video = videoRef.current
+    if (!video) return
+
+    if (video.paused || video.ended) {
+      video.play().catch(() => setIsPlaying(false))
+      return
+    }
+
+    video.pause()
+  }
+
+  const updateProgress = () => {
+    const video = videoRef.current
+    if (!video || !video.duration) {
+      setProgress(0)
+      return
+    }
+
+    setProgress(Math.min((video.currentTime / video.duration) * 100, 100))
+  }
+
+  if (page.video) {
+    return (
+      <div className="final-feature-image final-feature-video-card">
+        <video
+          ref={videoRef}
+          className="final-feature-video"
+          src={page.video}
+          preload="metadata"
+          playsInline
+          onClick={toggleVideo}
+          onLoadedMetadata={updateProgress}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onTimeUpdate={updateProgress}
+          onEnded={() => {
+            setIsPlaying(false)
+            setProgress(0)
+          }}
+          aria-label={`${page.title} testimonial video`}
+        />
+        <button
+          className={`final-video-playbar${isPlaying ? ' is-playing' : ''}`}
+          type="button"
+          onClick={toggleVideo}
+          style={{ '--video-progress': `${progress}%` }}
+          aria-label={isPlaying ? 'Pause testimonial video' : 'Play testimonial video'}
+        >
+          <span className="final-video-progress-track" aria-hidden="true">
+            <span className="final-video-progress-fill" />
+          </span>
+          <span className="final-video-play-button" aria-hidden="true">
+            {isPlaying ? (
+              <svg viewBox="0 0 24 24">
+                <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </span>
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="final-feature-image">
+      <img src={page.image} alt={page.title} loading="lazy" />
+    </div>
+  )
 }
 
 const packageRows = [

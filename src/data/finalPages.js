@@ -139,6 +139,7 @@ export const finalPages = {
     "banner": "/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg",
     "eyebrow": "International Patients",
     "image": "/images/renew/uploads/2024/07/internation-img.jpg",
+    "video": "/assets/renew/testimonials/annahit-petrosen-testimonial-web.m4v",
     "intro": "Renew Healthcare makes it simple for international patients visiting India for fertility and gynaecological treatment. We offer a comprehensive range of gynaecological services in a systematic and methodical manner, collaborating with your local doctor to keep your time in India to a minimum.",
     "sections": [
       {

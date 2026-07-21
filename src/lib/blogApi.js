@@ -4,6 +4,7 @@
 // admin panel.
 import { supabase, isSupabaseConfigured } from './supabase.js'
 import { uploadImage } from './storage.js'
+import { resolveBlogImage } from './blogImages.js'
 
 // Re-export so existing imports (RichEditor, AdminEditor) keep working.
 export { uploadImage }
@@ -30,7 +31,10 @@ function toBlog(row) {
     category: row.category || 'General',
     excerpt: row.excerpt || '',
     content: row.content || '',
-    image: row.cover_image || '/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg',
+    image: resolveBlogImage({
+      slug: row.slug,
+      image: row.cover_image || '/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg',
+    }),
     readMins: row.read_mins || 5,
     published: row.published,
     isFeatured: !!row.is_featured,

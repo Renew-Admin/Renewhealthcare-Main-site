@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react'
 import { blogs as staticBlogs } from '../data/blogs.js'
 import { fetchPublishedPosts } from '../lib/blogApi.js'
+import { resolveBlogImage } from '../lib/blogImages.js'
 
 // Module-level cache so we fetch the remote posts once per page load and reuse
 // them as the user navigates between blog pages.
@@ -39,7 +40,10 @@ function merge(remote) {
   // Remote posts win on slug collisions (lets admin override a static post).
   const remoteSlugs = new Set(remote.map((b) => b.slug))
   const statics = staticBlogs.filter((b) => !remoteSlugs.has(b.slug))
-  return [...remote, ...statics]
+  return [
+    ...remote.map((blog) => ({ ...blog, image: resolveBlogImage(blog) })),
+    ...statics.map((blog) => ({ ...blog, image: resolveBlogImage(blog) })),
+  ]
 }
 
 export function useBlogs() {

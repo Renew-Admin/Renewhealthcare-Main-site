@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useBlogs } from '../hooks/useBlogs.js'
 import Seo, { SITE } from '../components/Seo.js'
+import { resolveBlogImage, rewriteBlogImageUrls } from '../lib/blogImages.js'
 import './ServicesPages.css'
 import './Blog.css'
 
@@ -17,7 +18,7 @@ export default function BlogPostPage() {
     if (!blog) return
     // Posts created in the admin panel carry their full HTML inline.
     if (blog._remote) {
-      setHtml(blog.content || '')
+      setHtml(rewriteBlogImageUrls(blog.content || ''))
       setStatus('ready')
       return
     }
@@ -27,7 +28,7 @@ export default function BlogPostPage() {
     setHtml(null)
     fetch(`/blog-content/${slug}.html`)
       .then(res => { if (!res.ok) throw new Error('not found'); return res.text() })
-      .then(text => { if (active) { setHtml(text); setStatus('ready') } })
+      .then(text => { if (active) { setHtml(rewriteBlogImageUrls(text)); setStatus('ready') } })
       .catch(() => { if (active) setStatus('error') })
     return () => { active = false }
   }, [slug, blog])
@@ -58,6 +59,7 @@ export default function BlogPostPage() {
   const related = blogs.filter(b => b.slug !== blog.slug && b.category === blog.category).slice(0, 4)
   const fill = related.length < 4 ? blogs.filter(b => b.slug !== blog.slug && !related.includes(b)).slice(0, 4 - related.length) : []
   const sidebar = [...related, ...fill]
+  const heroImage = resolveBlogImage(blog, html || '')
 
   const jsonLd = [
     {
@@ -90,7 +92,7 @@ export default function BlogPostPage() {
 
   return (
     <main className="content-page">
-      <Seo title={blog.title} description={blog.excerpt} path={`/blogs/${blog.slug}`} image={blog.image} type="article" jsonLd={jsonLd} />
+      <Seo title={blog.title} description={blog.excerpt} path={`/blogs/${blog.slug}`} image={heroImage} type="article" jsonLd={jsonLd} />
 
       <section className="blogx-post-head">
         <div className="blogx-post-head-inner">
@@ -119,7 +121,7 @@ export default function BlogPostPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           >
-            <img src={blog.image} alt={blog.title} />
+            <img src={heroImage} alt={blog.title} />
           </motion.figure>
 
           <div className="blogx-post-layout">

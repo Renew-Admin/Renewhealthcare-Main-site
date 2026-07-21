@@ -3,6 +3,7 @@ import { doctors } from '../data/doctors.js'
 import { finalPages } from '../data/finalPages.js'
 import { locations } from '../data/locations.js'
 import { services } from '../data/services.js'
+import { resolveBlogImage } from './blogImages.js'
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_SEO_IMAGE,
@@ -131,7 +132,7 @@ blogs.forEach(blog => {
   addRoute(`/blogs/${blog.slug}`, {
     title: blog.title,
     description: blog.excerpt,
-    image: blog.image,
+    image: resolveBlogImage(blog),
     type: 'article',
   })
 })

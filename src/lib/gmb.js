@@ -26,9 +26,16 @@ export function getWebhookUrlForLocation(locationId) {
   if (!loc) return null
 
   // Check Vite environment variable for location
-  // Vite exposes variables starting with VITE_ to the browser bundle
+  // Vite exposes variables starting with VITE_ to the browser bundle at build time
   const envVal = import.meta.env[loc.envKey] || import.meta.env[loc.envKey.replace('VITE_', '')]
-  return envVal || null
+  if (envVal) return envVal
+
+  // Fallback for Ballygunge if env variable wasn't bundled during build
+  if (loc.slug === 'ballygunge' || loc.id === 'Ballygunge') {
+    return 'https://hook.us2.make.com/dbl07u9itexa8qo6fo6c49gu39nbj1da'
+  }
+
+  return null
 }
 
 export function formatDateTime(rawDate) {

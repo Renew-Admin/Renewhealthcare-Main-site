@@ -15,7 +15,7 @@ export default function AboutRenew({ onCallback }) {
 
           <h2>
             Best IVF Centre
-            <span>in Kolkata</span>
+            <span className="heading-blue">in Kolkata</span>
           </h2>
 
           <p>

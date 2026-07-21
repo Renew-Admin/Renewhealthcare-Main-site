@@ -118,7 +118,7 @@ export default function DoctorsPage() {
         <div className="service-content-inner">
           <div className="service-heading-block">
             <span>Fertility Experts</span>
-            <h2>Meet Our Team Of Infertility Specialists</h2>
+            <h2>Meet Our Team Of <span className="heading-blue">Infertility Specialists</span></h2>
             <p>Renew Healthcare brings together fertility specialists, genetic experts, embryologists, counsellors, nursing, operations, and support teams across departments.</p>
           </div>
 

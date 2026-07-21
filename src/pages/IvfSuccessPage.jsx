@@ -18,7 +18,7 @@ export default function IvfSuccessPage() {
         <div className="service-content-inner">
           <div className="service-heading-block">
             <span>IVF Success</span>
-            <h2>Understanding IVF success rates</h2>
+            <h2>Understanding <span className="heading-blue">IVF success rates</span></h2>
             <p>In vitro fertilization (IVF) is a popular and highly effective method of assisted reproduction. IVF success rates have improved significantly over the years, and many couples can conceive with the help of this technology.</p>
           </div>
           {[

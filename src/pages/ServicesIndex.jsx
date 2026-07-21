@@ -70,7 +70,7 @@ export default function ServicesIndex() {
         <div className="service-content-inner">
           <div className="service-heading-block">
             <span>Renew Healthcare</span>
-            <h2>Treatments Provided By Renew Healthcare</h2>
+            <h2>Treatments Provided By <span className="heading-blue">Renew Healthcare</span></h2>
             <p>Explore fertility care, women's health, genetic counselling, wellness, and nutrition services from Renew Healthcare.</p>
           </div>
 

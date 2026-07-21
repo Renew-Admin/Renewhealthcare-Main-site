@@ -90,7 +90,7 @@ export default function AdShowcase() {
         </motion.span>
 
         <motion.h2 className="wr-title" {...reveal} transition={{ ...reveal.transition, delay: 0.05 }}>
-          Advanced IVF &amp; IUI care, <span>built around you</span>
+          Advanced IVF &amp; IUI care, <span className="heading-blue">built around you</span>
         </motion.h2>
 
         <motion.p className="wr-lead" {...reveal} transition={{ ...reveal.transition, delay: 0.1 }}>

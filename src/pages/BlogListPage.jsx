@@ -76,7 +76,7 @@ export default function BlogListPage() {
         <div className="service-content-inner">
           <div className="service-heading-block">
             <span>Renew Healthcare Blog</span>
-            <h2>Fertility &amp; pregnancy care insights</h2>
+            <h2>Fertility &amp; pregnancy <span className="heading-blue">care insights</span></h2>
             <p>{blogs.length} expert articles on IVF, IUI, fertility, pregnancy, wellness, and reproductive health.</p>
           </div>
 

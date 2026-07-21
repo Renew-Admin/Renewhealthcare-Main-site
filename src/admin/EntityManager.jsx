@@ -33,7 +33,7 @@ function fieldHasValue(field, value) {
   return String(value ?? '').trim().length > 0
 }
 
-export default function EntityManager({ title, subtitle, addLabel = '+ Add', api, columns, fields, defaults = {}, onMutate, modalWide = false }) {
+export default function EntityManager({ title, subtitle, addLabel = '+ Add', api, columns, fields, defaults = {}, onMutate, modalWide = false, customValidation, successMessage, topNote }) {
   const toast = useToast()
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading')
@@ -67,6 +67,10 @@ export default function EntityManager({ title, subtitle, addLabel = '+ Add', api
 
   const save = async (e) => {
     e.preventDefault()
+    if (customValidation) {
+      const err = customValidation(form)
+      if (err) return toast(err, 'error')
+    }
     const required = fields.find((f) => f.required && !fieldHasValue(f, form[f.key]))
     if (required) return toast(`${required.label} is required`, 'error')
     const payload = {}
@@ -77,7 +81,7 @@ export default function EntityManager({ title, subtitle, addLabel = '+ Add', api
       setSaving(true)
       if (editing) await api.update(editing.id, payload)
       else await api.create(payload)
-      toast(editing ? 'Saved' : 'Added')
+      toast(successMessage || (editing ? 'Saved' : 'Added'))
       setOpen(false)
       onMutate?.()
       load()
@@ -118,6 +122,8 @@ export default function EntityManager({ title, subtitle, addLabel = '+ Add', api
         </div>
         <button type="button" className="admin-btn primary" onClick={openCreate}>{addLabel}</button>
       </div>
+
+      {topNote && <div style={{ marginBottom: '20px' }}>{topNote}</div>}
 
       {status === 'loading' && <Spinner />}
       {status === 'error' && <div className="admin-error">{error}</div>}
@@ -160,7 +166,7 @@ export default function EntityManager({ title, subtitle, addLabel = '+ Add', api
       >
         <form id="em-form" className="admin-form-grid" onSubmit={save}>
           {fields.map((f) => (
-            <Field key={f.key} field={f} value={form[f.key]} onChange={(val) => set({ [f.key]: val })} />
+            <Field key={f.key} field={f} value={form[f.key]} form={form} onChange={(val) => set({ [f.key]: val })} />
           ))}
         </form>
       </Modal>
@@ -172,9 +178,13 @@ function gridCols(columns) {
   return columns.map((c) => (c.type === 'image' ? '64px' : c.grow ? '2fr' : '1fr')).join(' ') + ' auto'
 }
 
-function Field({ field, value, onChange }) {
-  const { type, label, options, placeholder, full, kind, help } = field
-  const cls = `admin-field ${full || type === 'textarea' || type === 'list' || type === 'image' || type === 'pairList' ? 'full' : ''}`
+function Field({ field, value, onChange, form }) {
+  const { type, label, options, placeholder, full, kind, help, customRender } = field
+  const cls = `admin-field ${full || type === 'textarea' || type === 'list' || type === 'image' || type === 'pairList' || customRender ? 'full' : ''}`
+
+  if (customRender) {
+    return customRender({ value, onChange, help, form, field })
+  }
 
   if (type === 'image') {
     return (
@@ -212,8 +222,27 @@ function Field({ field, value, onChange }) {
   if (type === 'select') {
     return (
       <label className={cls}>{label}
-        <input list={`opt-${field.key}`} value={value || ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
-        <datalist id={`opt-${field.key}`}>{(options || []).map((o) => <option key={o} value={o} />)}</datalist>
+        <select value={value || ''} onChange={(e) => onChange(e.target.value)}>
+          {(options || []).map((o) => {
+            const isObj = typeof o === 'object' && o !== null
+            const val = isObj ? o.value || o.label : o
+            const lbl = isObj ? o.label : o
+            const isDisabled = isObj ? !!o.disabled : false
+            return (
+              <option key={val} value={val} disabled={isDisabled}>
+                {lbl}{isDisabled ? ' (Coming Soon)' : ''}
+              </option>
+            )
+          })}
+        </select>
+        <FieldHelp text={help} />
+      </label>
+    )
+  }
+  if (type === 'date') {
+    return (
+      <label className={cls}>{label}
+        <input type="date" value={value || ''} onChange={(e) => onChange(e.target.value)} />
         <FieldHelp text={help} />
       </label>
     )

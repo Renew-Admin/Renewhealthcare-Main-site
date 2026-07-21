@@ -14,7 +14,7 @@ do $$
 begin
   if (select count(*) from public.doctors) = 0 then
     insert into public.doctors (name, role, qualification, category, photo, display_order, active) values
-    ('Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '', 'Our Experts', '/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png', 0, true),
+    ('Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '', 'Our Experts', '/images/renew/uploads/2026/05/Dr-Rajeev-Agarwal.webp', 0, true),
     ('Dr. Neha Yadav', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg', 1, true),
     ('Dr. Dorothy P Ghosh', 'Infertility Specialist', 'MBBS DNB', 'Our Experts', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg', 2, true),
     ('Dr. Sonam Agarwal', 'Associate Consultant', '', 'Our Experts', '/images/renew/uploads/2026/05/Dr-Sonam.jpg', 3, true),

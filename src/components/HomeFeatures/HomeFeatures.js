@@ -44,7 +44,10 @@ function NewsSection() {
   return (
     <section className="home-band rh-news-section" id="news">
       <div className="home-band-inner">
-        <SectionHeading eyebrow="Publications" title="Renew In The News" />
+        <SectionHeading
+          eyebrow="Publications"
+          title={<><span>Renew In</span> <span className="heading-blue">The News</span></>}
+        />
         <CardCarousel className="rh-news-grid" label="Renew Healthcare news cards">
           {newsItems.map((item) => (
             <NewsCard key={item.link} item={item} />
@@ -62,7 +65,10 @@ function TestimonialsSection() {
   return (
     <section className="home-band rh-testimonials-section" id="testimonials">
       <div className="home-band-inner">
-        <SectionHeading eyebrow="Testimonials" title="Patients Experience" />
+        <SectionHeading
+          eyebrow="Testimonials"
+          title={<><span>Patients</span> <span className="heading-blue">Experience</span></>}
+        />
         <CardCarousel className="rh-testimonial-grid" label="Patient testimonials">
           {testimonials.map((item) => (
             <article className="home-card rh-testimonial-card" key={item.instagramLink}>

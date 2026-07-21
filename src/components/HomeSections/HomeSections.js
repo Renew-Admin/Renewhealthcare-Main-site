@@ -20,11 +20,11 @@ const services = [
 ]
 
 const doctors = [
-  ['Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png', '/doctor/dr-rajeev-agarwal'],
-  ['Dr. Neha Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg', '/doctor/dr-neha-yadav'],
+  ['Dr. Rajeev Agarwal', 'Medical Director | Fertility Specialist | IVF Doctor', '/images/renew/uploads/2026/05/Dr-Rajeev-Agarwal.webp', '/doctor/dr-rajeev-agarwal'],
   ['Dr. Dorothy P Ghosh', 'MBBS DNB | Infertility Specialist', '/images/renew/uploads/2024/07/Dr-Dorothy-Ghosh-1.jpg', '/doctor/dr-dorothy-p-ghosh'],
-  ['Dr. Sonam Agarwal', 'Associate Consultant', '/images/renew/uploads/2026/05/Dr-Sonam.jpg', '/doctor/dr-sonam-agarwal'],
+  ['Dr. Neha Yadav', 'Associate Consultant', '/images/renew/uploads/2024/07/Dr-Neha-Yadav-1.jpg', '/doctor/dr-neha-yadav'],
   ['Dr. Arnab Kundu', 'Associate Consultant', '/images/renew/uploads/2025/06/Dr-Arnab-Side-View-rotated.jpg', '/doctor/dr-arnab-kundu'],
+  ['Dr. Sonam Agarwal', 'Associate Consultant', '/images/renew/uploads/2026/05/Dr-Sonam.jpg', '/doctor/dr-sonam-agarwal'],
 ]
 
 const mediaLogos = ['TOI.png', 'Zee-News.png', 'ABP-live.png', 'Daily-Hunt.png', 'Doctube.png', 'Hindusthan-Times.png', 'India-TV.png', 'Mid-Day.png', 'News-18.png', 'News-Nine.png']
@@ -61,7 +61,7 @@ const clinics = [
 export function SectionHeading({ eyebrow, title, text }) {
   return (
     <div className="home-section-heading">
-      <span>{eyebrow}</span>
+      {eyebrow && <span className="home-section-eyebrow">{eyebrow}</span>}
       <h2>{title}</h2>
       {text && <p>{text}</p>}
     </div>
@@ -309,6 +309,8 @@ export function CardCarousel({ children, className, label, autoPlayMs = 0, autoP
 export default function HomeSections() {
   const { blogs } = useBlogs()
   const homeBlogs = blogs.slice(0, 4)
+  const leadDoctor = doctors[0]
+  const scrollingDoctors = doctors.slice(1)
   const [whyExpanded, setWhyExpanded] = useState(false)
   return (
     <>
@@ -316,7 +318,7 @@ export default function HomeSections() {
         <div className="home-band-inner">
           <SectionHeading
             eyebrow="Why Renew Healthcare"
-            title="Advanced fertility care with transparent guidance."
+            title={<><span>Advanced fertility care</span><span className="heading-blue">with transparent guidance.</span></>}
             text="Our IVF Centre in Kolkata offers advanced and reliable solutions for couples looking to start their parenthood journey, with strict protocols, global expertise, and compassionate support."
           />
 
@@ -360,7 +362,10 @@ export default function HomeSections() {
 
       <section className="home-band journey-section" id="parenthood-journey">
         <div className="home-band-inner">
-          <SectionHeading eyebrow="Parenthood Journey" title="Where are you in your journey to parenthood?" />
+          <SectionHeading
+            eyebrow="Parenthood Journey"
+            title={<><span>Where are you in your</span> <span className="heading-blue">journey to parenthood?</span></>}
+          />
           <CardCarousel className="journey-grid" label="Parenthood journey blocks">
             {journeyCards.map(([title, image]) => (
               <button type="button" className="home-card journey-stage-card" key={title}>
@@ -376,7 +381,7 @@ export default function HomeSections() {
         <div className="home-band-inner">
           <SectionHeading
             eyebrow="Treatments"
-            title="Treatments Provided By Renew Healthcare"
+            title={<><span>Treatments Provided By</span> <span className="heading-blue">Renew Healthcare</span></>}
             text="End-to-end support through advanced fertility treatments, varied gynaecology services, and women’s aesthetic health services."
           />
           <CardCarousel className="service-showcase" label="Treatment blocks" autoPlayMs={2000} autoPlayOnlyMobile>
@@ -394,21 +399,37 @@ export default function HomeSections() {
 
       <section className="home-band doctors-section" id="doctors">
         <div className="home-band-inner">
-          <SectionHeading eyebrow="Doctors" title="Meet Our Team Of Infertility Specialists" />
-          <CardCarousel className="doctor-grid" label="Doctor blocks" loop autoPlayMs={3500} autoPlayOnMobile={false}>
-            {doctors.map(([name, role, image, to]) => (
-              <article className="home-card doctor-card" key={name}>
-                <div className="doctor-image">
-                  <img src={image} alt={name} />
-                </div>
-                <div className="doctor-info">
-                  <h3>{name}</h3>
-                  <p>{role}</p>
-                  <Link to={to}>Know About {name} <span aria-hidden="true">→</span></Link>
-                </div>
-              </article>
-            ))}
-          </CardCarousel>
+          <SectionHeading
+            eyebrow="Doctors"
+            title={<><span>Meet Our Team Of</span> <span className="heading-blue">Infertility Specialists</span></>}
+          />
+          <div className="doctor-feature-layout">
+            <article className="home-card doctor-card doctor-feature-card">
+              <div className="doctor-image">
+                <img src={leadDoctor[2]} alt={leadDoctor[0]} />
+              </div>
+              <div className="doctor-info">
+                <h3>{leadDoctor[0]}</h3>
+                <p>{leadDoctor[1]}</p>
+                <Link to={leadDoctor[3]}>Know About {leadDoctor[0]} <span aria-hidden="true">→</span></Link>
+              </div>
+            </article>
+
+            <CardCarousel className="doctor-grid" label="Doctor blocks" loop autoPlayMs={3500} autoPlayOnMobile={false}>
+              {scrollingDoctors.map(([name, role, image, to]) => (
+                <article className="home-card doctor-card" key={name}>
+                  <div className="doctor-image">
+                    <img src={image} alt={name} />
+                  </div>
+                  <div className="doctor-info">
+                    <h3>{name}</h3>
+                    <p>{role}</p>
+                    <Link to={to}>Know About {name} <span aria-hidden="true">→</span></Link>
+                  </div>
+                </article>
+              ))}
+            </CardCarousel>
+          </div>
           <div className="home-center-action">
             <Link to="/doctors" className="home-pill-link">View All</Link>
           </div>
@@ -417,7 +438,10 @@ export default function HomeSections() {
 
       <section className="home-band media-section" id="media">
         <div className="home-band-inner">
-          <SectionHeading eyebrow="As Featured In" title="Trusted by leading media houses" />
+          <SectionHeading
+            eyebrow="As Featured In"
+            title={<><span>Trusted by leading</span> <span className="heading-blue">media houses</span></>}
+          />
           <div className="media-carousel" aria-label="Media logos">
             <div className="media-track">
               {[...mediaLogos, ...mediaLogos].map((logo, index) => (
@@ -432,7 +456,10 @@ export default function HomeSections() {
 
       <section className="home-band clinics-section" id="clinics">
         <div className="home-band-inner">
-          <SectionHeading eyebrow="Our Clinics" title="Locate Renew Healthcare near you" />
+          <SectionHeading
+            eyebrow="Our Clinics"
+            title={<><span>Locate Renew Healthcare</span> <span className="heading-blue">near you</span></>}
+          />
           <div className="clinic-grid">
             {clinics.map(({ name, place, image, to }) => (
               <Link className="home-card clinic-card" to={to} key={name}>
@@ -450,7 +477,10 @@ export default function HomeSections() {
 
       <section className="home-band blogs-section" id="blogs">
         <div className="home-band-inner">
-          <SectionHeading eyebrow="Latest Blogs" title="Fertility and pregnancy care insights" />
+          <SectionHeading
+            eyebrow="Latest Blogs"
+            title={<><span>Fertility and pregnancy</span> <span className="heading-blue">care insights</span></>}
+          />
           <CardCarousel className="blog-grid" label="Blog blocks">
             {homeBlogs.map(blog => (
               <Link className="home-card blog-card" to={`/blogs/${blog.slug}`} key={blog.slug}>

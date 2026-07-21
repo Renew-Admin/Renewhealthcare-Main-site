@@ -32,7 +32,7 @@ const reveal = {
 const STATIC_FAQS = FAQS.map(([question, answer]) => ({ question, answer }))
 
 export default function HomeFaq() {
-  const [active, setActive] = useState(() => (typeof window !== 'undefined' && window.innerWidth <= 720 ? -1 : 0))
+  const [active, setActive] = useState(-1)
   const { faqs: remoteFaqs } = useFaqs()
   // Supabase FAQs replace the in-code defaults once they exist.
   const items = remoteFaqs.length ? remoteFaqs : STATIC_FAQS
@@ -42,7 +42,7 @@ export default function HomeFaq() {
       <div className="home-faq-inner">
         <motion.div className="home-faq-intro" {...reveal}>
           <span className="home-faq-eyebrow">FAQs</span>
-          <h2>Questions families<br />ask us most</h2>
+          <h2><span>Questions families</span><br /><span className="heading-blue">ask us most</span></h2>
           <p>Clear, honest answers about IVF, costs, and what to expect on your journey to parenthood. Still unsure? Our team is one message away.</p>
           <a className="home-faq-cta" href="tel:06292269060">
             Talk to a specialist <span aria-hidden="true">→</span>

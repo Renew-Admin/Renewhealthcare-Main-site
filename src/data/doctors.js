@@ -30,7 +30,7 @@ The proof is in patient outcomes: 92% patient satisfaction and a practice built 
 }
 
 const rows = [
-  ['Our Experts', 'Dr. Rajeev Agarwal', '', 'Medical Director | Fertility Specialist | IVF Doctor', '2024/07/Dr-rajeev-agarwal.png'],
+  ['Our Experts', 'Dr. Rajeev Agarwal', '', 'Medical Director | Fertility Specialist | IVF Doctor', '2026/05/Dr-Rajeev-Agarwal.webp'],
   ['Our Experts', 'Dr. Neha Yadav', '', 'Associate Consultant', '2024/07/Dr-Neha-Yadav-1.jpg'],
   ['Our Experts', 'Dr. Dorothy P Ghosh', 'MBBS DNB', 'Infertility Specialist', '2024/07/Dr-Dorothy-Ghosh-1.jpg'],
   ['Our Experts', 'Dr. Sonam Agarwal', '', 'Associate Consultant', '2026/05/Dr-Sonam.jpg'],

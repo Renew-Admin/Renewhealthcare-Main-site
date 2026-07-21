@@ -19,7 +19,7 @@ export default function LocationsPage() {
         <div className="service-content-inner">
           <div className="service-heading-block">
             <span>Locate Renew</span>
-            <h2>Locate Your Nearest IVF Center</h2>
+            <h2>Locate Your <span className="heading-blue">Nearest IVF Center</span></h2>
             <p>Find Renew Healthcare clinics in Saltlake, Jamshedpur, and Gariahat.</p>
           </div>
 

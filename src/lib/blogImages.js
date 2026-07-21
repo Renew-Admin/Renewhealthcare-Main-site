@@ -13,7 +13,7 @@ const FALLBACK_IMAGES = {
   'embryo-transfer-how-does-it-happen': '/images/renew/uploads/2022/04/istockphoto-1141479775-612x612-1.jpeg',
   'iui-how-to-best-prepare-for-it': '/images/renew/uploads/2022/04/istockphoto-1141371582-612x612-1.jpeg',
   'what-happens-during-the-embryo-transfer-cycle': '/images/renew/uploads/2022/04/istockphoto-973924624-170667a.jpeg',
-  'obesity-and-male-infertility': '/images/renew/uploads/2022/03/istockphoto-825974460-612x612-1.jpeg',
+  'obesity-and-male-infertility': '/images/renew/uploads/2022/03/istockphoto-825974460-612x612-1-300x246.jpeg',
   'role-of-vitamins-in-sperm-improvement': '/images/renew/uploads/2022/03/istockphoto-1211514984-612x612-1.jpeg',
   'what-is-dfi': '/images/renew/uploads/2022/02/dna-1.jpeg',
   'learn-about-azoospermia': '/images/renew/uploads/2022/02/Azoospermia—Male-Infertility1.png',

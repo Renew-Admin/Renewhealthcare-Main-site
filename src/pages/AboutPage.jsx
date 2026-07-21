@@ -34,12 +34,12 @@ export default function AboutPage() {
           <motion.div className="split-feature" {...reveal}>
             <div className="service-heading-block is-left">
               <span>Welcome to Renew Healthcare</span>
-              <h2>Welcome to Renew Healthcare!</h2>
+              <h2>Welcome to <span className="heading-blue">Renew Healthcare!</span></h2>
               <p>We are a team of highly experienced and dedicated healthcare professionals, under the leadership of Dr. Rajeev Agarwal, committed to providing the highest quality reproductive and gynaecological care to our patients.</p>
               <p>We offer a range of services including IVF treatment, gynaecology, aesthetic gynaecology, and pregnancy care. Our IVF clinic is equipped with state-of-the-art technology, and our highly experienced team of fertility specialists are committed to providing personalized and comprehensive care.</p>
             </div>
             <div className="feature-image-card">
-              <img src="/images/renew/uploads/2024/07/Dr-rajeev-agarwal.png" alt="Dr. Rajeev Agarwal" />
+              <img src="/images/renew/uploads/2026/05/Dr-Rajeev-Agarwal.webp" alt="Dr. Rajeev Agarwal" />
               <h3>Dr. Rajeev Agarwal</h3>
               <p>Medical Director | Fertility Specialist | IVF Doctor</p>
             </div>

@@ -12,6 +12,7 @@ import AdminLeads from './AdminLeads.jsx'
 import AdminDoctors from './AdminDoctors.jsx'
 import AdminTestimonials from './AdminTestimonials.jsx'
 import AdminFaqs from './AdminFaqs.jsx'
+import AdminGmb from './AdminGmb.jsx'
 import AdminSettings from './AdminSettings.jsx'
 import { isSupabaseConfigured } from '../lib/supabase.js'
 import './Admin.css'
@@ -23,6 +24,7 @@ const ICONS = {
   doctors: 'M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21a8 8 0 0 1 16 0',
   testimonials: 'M12 2l2.9 6.3 6.8.7-5.1 4.6 1.4 6.7L12 17.8 6 20.6l1.4-6.7L2.3 9l6.8-.7z',
   faqs: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .8-1 1.7 M12 17h.01',
+  gmb: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z',
   settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6 M19.4 13a7.9 7.9 0 0 0 0-2l2-1.5-2-3.5-2.4 1a7.6 7.6 0 0 0-1.7-1L14.5 2h-4l-.3 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.5L4.6 11a7.9 7.9 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7.6 7.6 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.5z',
 }
 
@@ -41,6 +43,7 @@ const NAV = [
   { to: '/admin/doctors', label: 'Doctors', icon: 'doctors' },
   { to: '/admin/testimonials', label: 'Testimonials', icon: 'testimonials' },
   { to: '/admin/faqs', label: 'FAQs', icon: 'faqs' },
+  { to: '/admin/gmb', label: 'Google Business Profile', icon: 'gmb' },
   { to: '/admin/settings', label: 'Settings', icon: 'settings' },
 ]
 
@@ -118,6 +121,7 @@ export default function AdminApp() {
           <Route path="doctors" element={guard(<AdminDoctors />)} />
           <Route path="testimonials" element={guard(<AdminTestimonials />)} />
           <Route path="faqs" element={guard(<AdminFaqs />)} />
+          <Route path="gmb" element={guard(<AdminGmb />)} />
           <Route path="settings" element={guard(<AdminSettings />)} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>

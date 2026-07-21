@@ -53,7 +53,7 @@ export default function SuccessStoriesPage() {
           <motion.div className="split-feature" {...reveal}>
             <div className="service-heading-block is-left">
               <span>Patient Stories</span>
-              <h2>Real journeys, real joy</h2>
+              <h2>Real journeys, <span className="heading-blue">real joy</span></h2>
               <p>We are delighted to help our patients fulfill their dreams of growing their families and to be part of their journey towards improved health and happier lives. Some of our patients have been kind enough to share their experiences with Renew Healthcare.</p>
             </div>
             <div className="feature-image-card">

@@ -62,6 +62,16 @@ function toPairList(value, keys) {
     .filter((item) => keys.some((key) => item[key]))
 }
 
+function formatPhoto(path, name) {
+  if (name === 'Dr. Rajeev Agarwal' || (path && (path.includes('Dr-rajeev-agarwal') || path.includes('Dr-Rajeev-Agarwal') || path.includes('Dr. Rajeev Agarwal')))) {
+    return '/images/renew/uploads/2026/05/Dr-Rajeev-Agarwal.webp'
+  }
+  if (!path) return ''
+  const cleaned = String(path).trim()
+  if (cleaned.startsWith('http://') || cleaned.startsWith('https://') || cleaned.startsWith('/')) return cleaned
+  return `/images/renew/uploads/${cleaned}`
+}
+
 export const invalidateDoctors = doctorsRes.invalidate
 export const invalidateTestimonials = testimonialsRes.invalidate
 export const invalidateFaqs = faqsRes.invalidate
@@ -82,7 +92,7 @@ export function useDoctors() {
       qualifications: qualificationList.length ? qualificationList : qualification ? [qualification] : toStringList(fallback?.qualifications),
       role: d.role || fallback?.role || '',
       category: d.category || fallback?.category || 'Our Experts',
-      photo: d.photo || fallback?.photo || '',
+      photo: formatPhoto(d.photo, d.name) || fallback?.photo || '',
       bio: d.bio || fallback?.bio || '',
       experience_years: d.experience_years || fallback?.experience_years || '',
       milestone_stat: d.milestone_stat || fallback?.milestone_stat || '',

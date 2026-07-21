@@ -27,7 +27,7 @@ export default function NewsPage() {
         <div className="service-content-inner">
           <div className="rh-news-page-intro">
             <span>Publications</span>
-            <h2>As featured across leading publications</h2>
+            <h2>As featured across <span className="heading-blue">leading publications</span></h2>
             <p>
               Dr. Rajeev Agarwal and the Renew Healthcare team are regularly invited by national
               media to share expert perspectives on IVF, fertility and reproductive health. Explore

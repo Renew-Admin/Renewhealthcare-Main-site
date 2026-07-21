@@ -1,0 +1,21 @@
+-- ============================================================================
+-- Renew Healthcare - static blog import generator notes.
+--
+-- The full blog import is split into smaller files because Supabase SQL Editor
+-- rejects one large query when all article HTML is included.
+--
+-- This manifest is committed for documentation only. The generated chunk folder
+-- is local-only and ignored by git.
+--
+-- Run in this order:
+--   1. backend/schema.sql
+--   2. node scripts/generate-blog-import-sql.mjs
+--   3. Every generated file in backend/blog_import_chunks/ in filename order
+--
+-- Generated chunks: 22
+-- Total blogs: 133
+--
+-- Verification after all chunks:
+--   select count(*) from public.blogs;
+--   select slug, title, published from public.blogs order by published_at desc limit 10;
+-- ============================================================================

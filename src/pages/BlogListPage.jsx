@@ -24,7 +24,7 @@ export default function BlogListPage() {
   const isDefault = category === 'All' && !query.trim()
   const featured = isDefault ? (filtered.find(blog => blog.isFeatured) || filtered[0]) : null
   const rest = isDefault && featured ? filtered.filter(blog => blog.slug !== featured.slug) : filtered
-  const firstPageRestCount = featured ? PAGE - 1 : PAGE
+  const firstPageRestCount = PAGE
   const remainingAfterFirstPage = Math.max(0, rest.length - firstPageRestCount)
   const pageCount = isDefault
     ? 1 + Math.ceil(remainingAfterFirstPage / PAGE)

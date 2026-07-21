@@ -258,17 +258,17 @@ function PackageContent() {
             <tbody>
               {packageRows.map(([sl, inclusion, price]) => (
                 <tr key={sl}>
-                  <td>{sl}</td>
-                  <td>{inclusion}</td>
-                  <td>{price}</td>
-                  <td><span className="package-check" aria-label="Included">Yes</span></td>
+                  <td data-label="SL">{sl}</td>
+                  <td data-label="IVF Package Inclusions">{inclusion}</td>
+                  <td data-label="Standard Clinic Price">{price}</td>
+                  <td data-label="Renew Package"><span className="package-check" aria-label="Included">Yes</span></td>
                 </tr>
               ))}
               <tr className="packages-total-row">
-                <td />
-                <td>Total</td>
-                <td>150000</td>
-                <td>100000</td>
+                <td data-label="SL" />
+                <td data-label="IVF Package Inclusions">Total</td>
+                <td data-label="Standard Clinic Price">150000</td>
+                <td data-label="Renew Package">100000</td>
               </tr>
             </tbody>
           </table>

@@ -10,3 +10,6 @@ build/
 
 # WordPress migration exports (large binaries — keep out of git)
 *.wpress
+
+# Generated SQL import chunks (large, local-only)
+backend/blog_import_chunks/

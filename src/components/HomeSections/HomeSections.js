@@ -68,7 +68,7 @@ export function SectionHeading({ eyebrow, title, text }) {
   )
 }
 
-export function CardCarousel({ children, className, label, autoPlayMs = 0, autoPlayOnlyMobile = false, autoPlayOnMobile = true, loop = false }) {
+export function CardCarousel({ children, className, label, autoPlayMs = 0, autoPlayOnlyMobile = false, autoPlayOnMobile = true, autoPlayDirection = 1, loop = false }) {
   const viewportRef = useRef(null)
   const [canGoBack, setCanGoBack] = useState(false)
   const [canGoForward, setCanGoForward] = useState(false)
@@ -245,19 +245,21 @@ export function CardCarousel({ children, className, label, autoPlayMs = 0, autoP
 
       if (shouldLoop) {
         normalizeLoopPosition()
-        viewport.scrollBy({ left: step, behavior: 'smooth' })
+        viewport.scrollBy({ left: autoPlayDirection * step, behavior: 'smooth' })
         return
       }
 
       const maxScroll = viewport.scrollWidth - viewport.clientWidth
-      const nextLeft = viewport.scrollLeft + step
-      const target = nextLeft >= maxScroll - 4 ? 0 : nextLeft
+      const nextLeft = viewport.scrollLeft + (autoPlayDirection * step)
+      const target = autoPlayDirection < 0
+        ? (nextLeft <= 4 ? maxScroll : nextLeft)
+        : (nextLeft >= maxScroll - 4 ? 0 : nextLeft)
 
       viewport.scrollTo({ left: target, behavior: 'smooth' })
     }, autoPlayMs)
 
     return () => window.clearInterval(timer)
-  }, [autoPlayMs, autoPlayOnMobile, autoPlayOnlyMobile, getSlideStep, isMobileViewport, normalizeLoopPosition, shouldLoop])
+  }, [autoPlayDirection, autoPlayMs, autoPlayOnMobile, autoPlayOnlyMobile, getSlideStep, isMobileViewport, normalizeLoopPosition, shouldLoop])
 
   const moveCarousel = (direction) => {
     const viewport = viewportRef.current
@@ -403,7 +405,7 @@ export default function HomeSections() {
             eyebrow="Doctors"
             title={<><span>Meet Our Team Of</span> <span className="heading-blue">Infertility Specialists</span></>}
           />
-          <div className="doctor-feature-layout">
+          <div className="doctor-desktop-layout">
             <article className="home-card doctor-card doctor-feature-card">
               <div className="doctor-image">
                 <img src={leadDoctor[2]} alt={leadDoctor[0]} />
@@ -415,7 +417,7 @@ export default function HomeSections() {
               </div>
             </article>
 
-            <CardCarousel className="doctor-grid" label="Doctor blocks" loop autoPlayMs={3500} autoPlayOnMobile={false}>
+            <CardCarousel className="doctor-grid doctor-scroll-grid" label="Doctor blocks" loop autoPlayMs={3500} autoPlayOnMobile={false} autoPlayDirection={-1}>
               {scrollingDoctors.map(([name, role, image, to]) => (
                 <article className="home-card doctor-card" key={name}>
                   <div className="doctor-image">
@@ -430,6 +432,21 @@ export default function HomeSections() {
               ))}
             </CardCarousel>
           </div>
+
+          <CardCarousel className="doctor-grid doctor-mobile-grid" label="Doctor blocks" loop autoPlayMs={3500} autoPlayOnMobile={false}>
+            {doctors.map(([name, role, image, to]) => (
+              <article className="home-card doctor-card" key={name}>
+                <div className="doctor-image">
+                  <img src={image} alt={name} />
+                </div>
+                <div className="doctor-info">
+                  <h3>{name}</h3>
+                  <p>{role}</p>
+                  <Link to={to}>Know About {name} <span aria-hidden="true">→</span></Link>
+                </div>
+              </article>
+            ))}
+          </CardCarousel>
           <div className="home-center-action">
             <Link to="/doctors" className="home-pill-link">View All</Link>
           </div>

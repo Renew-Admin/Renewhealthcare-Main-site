@@ -1,4 +1,14 @@
 import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faFacebookF,
+  faInstagram,
+  faLinkedinIn,
+  faPinterestP,
+  faTumblr,
+  faXTwitter,
+  faYoutube,
+} from '@fortawesome/free-brands-svg-icons'
 import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
 import './SiteFooter.css'
 
@@ -26,6 +36,16 @@ const socialLinks = [
   ['https://www.tumblr.com/renewhealthcare', 'tumblr', 'Tumblr'],
 ]
 
+const socialIcons = {
+  facebook: faFacebookF,
+  instagram: faInstagram,
+  x: faXTwitter,
+  linkedin: faLinkedinIn,
+  youtube: faYoutube,
+  pinterest: faPinterestP,
+  tumblr: faTumblr,
+}
+
 const locations = [
   {
     name: 'Gariahat',
@@ -43,21 +63,6 @@ const locations = [
     phone: '+91 9153 994 100',
   },
 ]
-
-function SocialIcon({ name }) {
-  const common = { width: 17, height: 17, viewBox: '0 0 24 24', 'aria-hidden': 'true' }
-  const icons = {
-    facebook: <svg {...common} fill="currentColor"><path d="M14.2 8.1V6.6c0-.7.2-1.1 1.2-1.1h1.7V2.2c-.8-.1-1.7-.2-2.5-.2-2.7 0-4.5 1.6-4.5 4.6v1.5H7.1v3.7h3v9.9h4.1v-9.9h3l.5-3.7h-3.5z" /></svg>,
-    instagram: <svg {...common} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="3.7" /><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none" /></svg>,
-    x: <svg {...common} fill="currentColor"><path d="M14.4 10.2 22.8 0h-2l-7.3 8.8L7.7 0H1l8.8 13.1L1 23.8h2l7.7-9.4 6.2 9.4h6.7l-9.2-13.6zm-2.7 3.3-.9-1.3L3.7 1.6h3l5.7 8.5.9 1.3 7.4 10.9h-3l-6-8.8z" /></svg>,
-    linkedin: <svg {...common} fill="currentColor"><path d="M4.9 7.5H1.2V23h3.7V7.5zM3 5.4A2.2 2.2 0 1 0 3 .9a2.2 2.2 0 0 0 0 4.5zM23 14.1c0-4.2-2.2-6.1-5.2-6.1-2.4 0-3.5 1.3-4.1 2.2V8.3H10V23h3.7v-7.3c0-1.9.4-3.8 2.8-3.8 2.3 0 2.4 2.2 2.4 3.9V23h3.7v-8.9H23z" /></svg>,
-    youtube: <svg {...common} fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z" /></svg>,
-    pinterest: <svg {...common} fill="currentColor"><path d="M12 0C5.4 0 1 4.7 1 10.2c0 3.6 2 5.7 3.2 5.7.5 0 .8-1.4.8-1.8 0-.5-1.2-1.5-1.2-3.5 0-4.1 3.1-7 7.2-7 3.5 0 6.1 2 6.1 5.7 0 2.8-1.1 8-4.8 8-1.3 0-2.5-1-2.1-2.4.4-1.7 1.3-3.5 1.3-5.3 0-3.4-4.8-2.8-4.8 1.3 0 1 .1 1.7.5 2.2-.7 3-2 7.5-2 10.6 0 .2 0 .3.1.4h.1c2.4-3.2 2.3-3.8 3.4-7.9.6 1.2 2.1 1.8 3.3 1.8 5.1 0 7.4-5 7.4-9.5C19.5 3.4 15.1 0 12 0z" /></svg>,
-    tumblr: <svg {...common} fill="currentColor"><path d="M14.1 24c-4 0-6.9-2.1-6.9-6.8v-7.7H4.8V6.2c3.5-1.3 4.4-4.3 4.6-6.2h3.4v5.7h4.1v3.8h-4.1v6.7c0 2 .9 2.7 2.4 2.7.7 0 1.4-.2 1.9-.4v4.2c-.8.7-1.8 1.3-3 1.3z" /></svg>,
-  }
-
-  return icons[name] || null
-}
 
 function InlineIcon({ type }) {
   if (type === 'phone') {
@@ -130,7 +135,7 @@ export default function SiteFooter({ onCallback }) {
                   {socialLinks.map(([href, icon, label]) => (
                     <li key={href}>
                       <a href={href} target="_blank" rel="noreferrer" title="Follow Us" aria-label={`Follow Renew Healthcare on ${label}`}>
-                        <SocialIcon name={icon} />
+                        <FontAwesomeIcon icon={socialIcons[icon]} className="footer-social-icon" fixedWidth aria-hidden="true" />
                       </a>
                     </li>
                   ))}

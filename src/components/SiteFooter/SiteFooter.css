@@ -107,7 +107,7 @@
   margin-top: 20px;
 }
 
-.footer-left .sosal-icon a {
+#contact .footer-left .sosal-icon a {
   width: 32px;
   height: 32px;
   display: flex;
@@ -117,16 +117,26 @@
   background: #fff;
   color: var(--footer-accent);
   line-height: 1;
+  transition: background-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
 }
 
-.footer-left .sosal-icon a:hover {
+#contact .footer-left .sosal-icon a:hover {
   color: #fff;
   background: #15ccee;
+  transform: scale(1.08);
 }
 
-.footer-left .sosal-icon svg {
+#contact .footer-left .sosal-icon a:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 3px;
+}
+
+.footer-social-icon {
+  width: 16px;
+  height: 16px;
   display: block;
   flex: 0 0 auto;
+  color: currentColor;
 }
 
 .footer_sec h4 {
@@ -359,28 +369,6 @@
 .sidebar_btn .custom-button span {
   display: none;
 }
-
-.fa-brands,
-.fa-solid {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.fa-facebook-f::before { content: "f"; font-family: Arial, Helvetica, sans-serif; font-size: 18px; }
-.fa-instagram::before { content: "◎"; font-size: 19px; }
-.fa-twitter::before { content: "X"; font-size: 13px; }
-.fa-linkedin-in::before { content: "in"; font-size: 12px; }
-.fa-youtube::before { content: "▶"; font-size: 13px; }
-.fa-pinterest::before { content: "P"; font-size: 15px; }
-.fa-tumblr::before { content: "t"; font-size: 17px; }
-.fa-location-dot::before { content: "●"; font-size: 10px; }
-.fa-phone-volume::before,
-.fa-phone::before { content: "☎"; }
-.fa-calendar-check::before { content: "□"; }
 
 @media (min-width: 576px) {
   .footer_sec .col-sm-6 {

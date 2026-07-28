@@ -91,7 +91,7 @@ export default function BlogPostPage() {
   ]
 
   return (
-    <main className="content-page">
+    <main className="content-page blogx-post-page">
       <Seo title={blog.title} description={blog.excerpt} path={`/blogs/${blog.slug}`} image={heroImage} type="article" jsonLd={jsonLd} />
 
       <section className="blogx-post-head">

@@ -803,6 +803,18 @@
   .blogx-pager-num {
     height: 40px;
     min-width: 40px;
+    box-shadow: none;
+    transform: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .blogx-pager-arrow:hover:not(:disabled),
+  .blogx-pager-num:hover,
+  .blogx-pager-num.is-active,
+  .blogx-pager-arrow:active,
+  .blogx-pager-num:active {
+    box-shadow: none;
+    transform: none;
   }
 
   .blogx-pager-arrow {
@@ -815,12 +827,17 @@
 }
 
 /* ═══════════ Blog post header (title on light bg — NOT on the image) ═══════════ */
+.rh-root:has(.blogx-post-page) .global-header {
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+
 .blogx-post-head {
   text-align: center;
   padding: clamp(26px, 4vw, 46px) 5% clamp(50px, 6vw, 82px);
   background:
     radial-gradient(circle at 80% 0%, rgba(7, 103, 165, 0.09), transparent 46%),
-    linear-gradient(180deg, #f2f8fc 0%, #ffffff 100%);
+    linear-gradient(180deg, #fff 0%, #f2f8fc 18%, #ffffff 100%);
 }
 .blogx-post-head-inner { width: min(900px, 100%); margin: 0 auto; }
 .blogx-crumb {
@@ -870,18 +887,33 @@
 }
 .blogx-post-meta-dot { width: 4px; height: 4px; border-radius: 50%; background: #c3cdd6; }
 
-.blogx-band { padding-top: 0; }
+.blogx-band {
+  padding-top: 0;
+  background:
+    linear-gradient(
+      180deg,
+      #fff 0,
+      #fff clamp(260px, 46vw, 680px),
+      #fbfaf7 clamp(340px, 54vw, 760px),
+      #f1f7f5 100%
+    );
+}
 
 .blogx-hero-figure {
   width: min(1000px, 100%);
-  margin: clamp(-96px, -8vw, -72px) auto clamp(40px, 5vw, 64px);
-  aspect-ratio: 16 / 9;
+  margin: 0 auto clamp(40px, 5vw, 64px);
   overflow: hidden;
   border-radius: clamp(16px, 2vw, 26px);
-  background: #0a2740;
-  box-shadow: 0 34px 80px rgba(8, 40, 70, 0.22);
+  border: 0;
+  background: #fff;
+  box-shadow: 0 30px 70px -36px rgba(8, 40, 70, 0.28);
 }
-.blogx-hero-figure img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+.blogx-hero-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
 
 @media (max-width: 768px) {
   .blogx-post-head {

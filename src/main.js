@@ -20,6 +20,7 @@ import NewsPage from './pages/NewsPage.jsx'
 import FinalContentPage, { CoursePage, FinalContentByKey } from './pages/FinalContentPage.jsx'
 import NotFound from './pages/NotFound.jsx'
 import AdminApp from './admin/AdminApp.jsx'
+import { PageTracking } from './hooks/usePageTracking.js'
 import './index.css'
 
 const routes = [
@@ -28,6 +29,7 @@ const routes = [
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
+      <PageTracking />
       <Routes>
         <Route path="/admin/*" element={<AdminApp />} />
         <Route element={<App />}>

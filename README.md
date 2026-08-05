@@ -46,7 +46,9 @@ public/
   sitemap.xml     Search-engine sitemap
 scripts/
   generate-sitemap.js
-                  Generates robots.txt and sitemap.xml from codebase routes
+                  Generates robots.txt and the sitemaps from the blog directory
+  fix-internal-links.mjs
+                  Rewrites legacy internal links in public/blog-content/
   prepare-cloudflare-worker-build.mjs
                   Removes Pages-only files from Worker asset uploads
 backend/
@@ -127,6 +129,10 @@ The app will usually start on `http://127.0.0.1:5173/` or the next available por
 
 - `npm run dev` - start the local development server
 - `npm run generate:sitemap` - regenerate `public/sitemap.xml` and `public/robots.txt`
+- `npm run fix:links` - rewrite internal links in `public/blog-content/` to their
+  current paths so none of them costs a redirect hop
+- `npm run check:links` - report-only version of the above; exits non-zero if any
+  article still links through a redirect (run this in CI after a content import)
 - `npm run build` - regenerate SEO files and build the production bundle into `build/`
 - `npm run deploy:cloudflare` - build and deploy to Cloudflare Workers static assets
 - `npm run preview` - preview the production build locally
@@ -144,10 +150,44 @@ Use Cloudflare Workers static assets for this project.
 The Worker is configured in `wrangler.toml` with `not_found_handling = "single-page-application"` for React Router direct URLs.
 Do not use `wrangler pages deploy` for this project because the production URL is `renewhealthcare.lokesh-7e0.workers.dev`.
 
+### Required Worker secrets
+
+The Worker resolves blog routes and sitemaps against Supabase at request time,
+so it needs the same two values the browser bundle uses. Set them once per
+environment before deploying:
+
+```bash
+npx wrangler secret put SUPABASE_URL
+npx wrangler secret put SUPABASE_ANON_KEY
+```
+
+For local `wrangler dev`, copy `.dev.vars.example` to `.dev.vars` and fill it in.
+
+Without these the site still serves every page, but blog routes and sitemaps
+fall back to the built-in list in `src/data/blogs.js`, and posts published from
+the admin panel since the last deploy will return 404 again.
+
+## How Blog URLs Resolve
+
+A post published from `/admin` exists only in Supabase. The Worker looks up
+`/blogs/:slug` against the live blog directory (`src/lib/blogDirectory.js`,
+60-second cache) rather than a build-time list, so a new post answers 200 and
+appears in `post-sitemap.xml` with no rebuild or cache purge.
+
+`src/data/blogs.js` is the offline fallback, not the source of truth. The route
+manifest, the sitemaps and the `/blogs` listing all read the same directory, so
+a post cannot be listed in one place and missing from another.
+
+Duplicate URLs are retired in `src/lib/seoDuplicates.js` — one entry per pair,
+retired path on the left and surviving path on the right. Adding a pair there
+gives you the 301, drops the URL from the sitemap, and hides it from the blog
+listing in one edit.
+
 ## SEO Files
 
 - `public/robots.txt`
-- `public/sitemap.xml`
+- `public/sitemap.xml` — build-time baseline; the Worker serves this and
+  `post-sitemap.xml` live from the blog directory
 - `public/sitemap.xsl`
 
 ## Notes For Contributors

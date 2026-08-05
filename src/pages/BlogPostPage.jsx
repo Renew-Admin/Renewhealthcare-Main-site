@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useBlogs } from '../hooks/useBlogs.js'
-import Seo, { SITE } from '../components/Seo.js'
+import Seo from '../components/Seo.js'
 import { resolveBlogImage, rewriteBlogImageUrls } from '../lib/blogImages.js'
+import { buildArticleSchemas, detectArticleLang, getHreflangAlternates } from '../lib/blogSeo.js'
+import { rewriteInternalLinks } from '../lib/internalLinks.js'
+import { getAllSeoRoutes } from '../lib/seoRoutes.js'
 import './ServicesPages.css'
 import './Blog.css'
 
@@ -14,11 +17,24 @@ export default function BlogPostPage() {
   const [html, setHtml] = useState(null)
   const [status, setStatus] = useState('loading')
 
+  // The exported article HTML is rewritten at rest by scripts/fix-internal-links.mjs,
+  // but posts written in the admin panel are not, so links are normalised here
+  // too — no internal link should cost a redirect hop (RH-03).
+  const linkContext = useMemo(() => ({
+    blogSlugs: new Set(blogs.map(item => item.slug)),
+    routePaths: new Set([
+      ...getAllSeoRoutes().map(route => route.path),
+      ...blogs.map(item => `/blogs/${item.slug}`),
+    ]),
+  }), [blogs])
+
   useEffect(() => {
     if (!blog) return
+    const prepare = raw => rewriteInternalLinks(rewriteBlogImageUrls(raw), linkContext).html
+
     // Posts created in the admin panel carry their full HTML inline.
     if (blog._remote) {
-      setHtml(rewriteBlogImageUrls(blog.content || ''))
+      setHtml(prepare(blog.content || ''))
       setStatus('ready')
       return
     }
@@ -28,10 +44,10 @@ export default function BlogPostPage() {
     setHtml(null)
     fetch(`/blog-content/${slug}.html`)
       .then(res => { if (!res.ok) throw new Error('not found'); return res.text() })
-      .then(text => { if (active) { setHtml(rewriteBlogImageUrls(text)); setStatus('ready') } })
+      .then(text => { if (active) { setHtml(prepare(text)); setStatus('ready') } })
       .catch(() => { if (active) setStatus('error') })
     return () => { active = false }
-  }, [slug, blog])
+  }, [slug, blog, linkContext])
 
   if (!blog) {
     if (blogsLoading) {
@@ -61,38 +77,28 @@ export default function BlogPostPage() {
   const sidebar = [...related, ...fill]
   const heroImage = resolveBlogImage(blog, html || '')
 
-  const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      headline: blog.title,
-      description: blog.excerpt,
-      image: [SITE + blog.image],
-      datePublished: blog.iso,
-      dateModified: blog.iso,
-      author: { '@type': 'Organization', name: 'Renew Healthcare' },
-      publisher: {
-        '@type': 'Organization',
-        name: 'Renew Healthcare',
-        logo: { '@type': 'ImageObject', url: `${SITE}/images/renew/uploads/2024/07/renew-healthcare-logo.jpg.webp` },
-      },
-      mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE}/blogs/${blog.slug}` },
-      articleSection: blog.category,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
-        { '@type': 'ListItem', position: 2, name: 'Blogs', item: `${SITE}/blogs` },
-        { '@type': 'ListItem', position: 3, name: blog.title, item: `${SITE}/blogs/${blog.slug}` },
-      ],
-    },
-  ]
+  const lang = detectArticleLang(blog)
+  const alternates = getHreflangAlternates(blog.slug, {
+    isLive: slug => blogs.some(item => item.slug === slug),
+  })
+
+  // Built from the same helpers the Worker uses, so the client-rendered copy
+  // (dev, or after a client-side navigation) matches what ships in the HTML.
+  // Seo skips injection when the Worker already served these (RH-05).
+  const jsonLd = buildArticleSchemas(blog, html || '', { lang, image: heroImage })
 
   return (
     <main className="content-page blogx-post-page">
-      <Seo title={blog.title} description={blog.excerpt} path={`/blogs/${blog.slug}`} image={heroImage} type="article" jsonLd={jsonLd} />
+      <Seo
+        title={blog.title}
+        description={blog.excerpt}
+        path={`/blogs/${blog.slug}`}
+        image={heroImage}
+        type="article"
+        lang={lang}
+        alternates={alternates}
+        jsonLd={jsonLd}
+      />
 
       <section className="blogx-post-head">
         <div className="blogx-post-head-inner">

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { blogs as staticBlogs } from '../data/blogs.js'
 import { fetchPublishedPosts } from '../lib/blogApi.js'
 import { resolveBlogImage } from '../lib/blogImages.js'
+import { RETIRED_BLOG_SLUGS } from '../lib/seoDuplicates.js'
 
 // Module-level cache so we fetch the remote posts once per page load and reuse
 // them as the user navigates between blog pages.
@@ -43,7 +44,9 @@ function merge(remote) {
   return [
     ...remote.map((blog) => ({ ...blog, image: resolveBlogImage(blog) })),
     ...statics.map((blog) => ({ ...blog, image: resolveBlogImage(blog) })),
-  ]
+    // Retired duplicates (RH-02) redirect to their surviving URL, so the
+    // listing must not link to them or the sitemap and the listing disagree.
+  ].filter((blog) => !RETIRED_BLOG_SLUGS.has(blog.slug))
 }
 
 export function useBlogs() {

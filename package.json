@@ -9,6 +9,8 @@
     "build": "vite build && node scripts/prepare-cloudflare-worker-build.mjs",
     "deploy:cloudflare": "npm run build && npx wrangler deploy",
     "generate:sitemap": "node scripts/generate-sitemap.js",
+    "fix:links": "node scripts/fix-internal-links.mjs",
+    "check:links": "node scripts/fix-internal-links.mjs --check",
     "lint": "eslint .",
     "preview": "vite preview"
   },

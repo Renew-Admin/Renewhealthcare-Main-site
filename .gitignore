@@ -8,6 +8,10 @@ build/
 .env.*
 !.env.example
 
+# Wrangler local dev cache and Worker local vars
+.wrangler/
+.dev.vars
+
 # WordPress migration exports (large binaries — keep out of git)
 *.wpress
 

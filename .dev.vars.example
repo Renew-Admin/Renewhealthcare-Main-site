@@ -1,0 +1,5 @@
+# Copy to .dev.vars (git-ignored) for `wrangler dev`.
+# Same values as VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY in .env.
+# In production these are Worker secrets — see wrangler.toml.
+SUPABASE_URL=
+SUPABASE_ANON_KEY=

@@ -1,3 +1,10 @@
+import { fetchBlogContent, getBlogDirectory } from './lib/blogDirectory.js'
+import {
+  buildArticleSchemas,
+  detectArticleLang,
+  getHreflangAlternates,
+} from './lib/blogSeo.js'
+import { getDuplicateRedirect } from './lib/seoDuplicates.js'
 import { getCanonicalRedirectPath, getSeoForPath } from './lib/seoRoutes.js'
 import {
   absoluteImageUrl,
@@ -6,9 +13,11 @@ import {
   pageTitle,
   truncateDescription,
 } from './lib/seoUtils.js'
+import { renderSitemap, SITEMAP_ROUTES } from './lib/sitemap.js'
 
 const FILE_EXTENSION_PATTERN = /\.[a-z0-9]{1,12}$/i
 const RETIRED_URL_PATTERN = /^\/(?:comment|content)\.php$|^\/products\/[0-9]+\/?$/i
+const BLOG_PATH_PATTERN = /^\/blogs\/([^/]+)$/
 
 function escapeHtml(value) {
   return String(value || '')
@@ -35,6 +44,7 @@ function stripSeoTags(html) {
     .replace(/<meta\b(?=[^>]*name=["']twitter:description["'])[^>]*>\s*/gi, '')
     .replace(/<meta\b(?=[^>]*name=["']twitter:image["'])[^>]*>\s*/gi, '')
     .replace(/<link\b(?=[^>]*rel=["']canonical["'])[^>]*>\s*/gi, '')
+    .replace(/<link\b(?=[^>]*rel=["']alternate["'])(?=[^>]*hreflang=)[^>]*>\s*/gi, '')
 }
 
 function seoBlock(meta) {
@@ -45,26 +55,45 @@ function seoBlock(meta) {
   const url = escapeHtml(meta.url || canonicalUrl(meta.path))
   const image = escapeHtml(absoluteImageUrl(meta.image))
 
+  const alternates = (meta.alternates || [])
+    .map(alt => `    <link rel="alternate" hreflang="${escapeHtml(alt.hreflang)}" href="${escapeHtml(alt.href)}" />\n`)
+    .join('')
+
+  // JSON-LD is emitted here, in the served HTML, rather than injected by React
+  // after load — crawlers that do not execute JavaScript could not see it
+  // before (RH-05). data-seo="server" tells the client not to duplicate it.
+  // data-seo-path lets the client tell "this is my page's schema, leave it" from
+  // "this is the schema of the page the visitor navigated away from, replace it".
+  const seoPath = escapeHtml(meta.path)
+  const structuredData = (meta.jsonLd || [])
+    .map(schema => `    <script type="application/ld+json" data-seo="server" data-seo-path="${seoPath}">${JSON.stringify(schema).replaceAll('<', '\\u003c')}</script>\n`)
+    .join('')
+
   return `    <title>${title}</title>
     <meta name="description" content="${description}" />
     <meta name="robots" content="${robots}" />
     <link rel="canonical" href="${url}" />
-    <meta property="og:site_name" content="Renew Healthcare" />
+${alternates}    <meta property="og:site_name" content="Renew Healthcare" />
     <meta property="og:type" content="${type}" />
     <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${image}" />
     <meta property="og:url" content="${url}" />
+    <meta property="og:locale" content="${escapeHtml(meta.lang === 'bn' ? 'bn_IN' : 'en_IN')}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${title}" />
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${image}" />
-`
+${structuredData}`
 }
 
 function rewriteHtml(html, meta) {
   const cleanHtml = stripSeoTags(html)
-  return cleanHtml.replace(/<\/head>/i, `${seoBlock(meta)}  </head>`)
+  const withHead = cleanHtml.replace(/<\/head>/i, `${seoBlock(meta)}  </head>`)
+  // index.html hardcodes lang="en". Bengali articles need lang="bn" (RH-04).
+  return withHead.replace(/<html\b[^>]*\blang=["'][^"']*["']/i, match =>
+    match.replace(/lang=["'][^"']*["']/i, `lang="${escapeHtml(meta.lang || 'en')}"`),
+  )
 }
 
 function isPageRequest(request, url) {
@@ -104,7 +133,66 @@ function noindexMeta(path, robots = 'noindex, follow') {
     image: absoluteImageUrl(),
     type: 'website',
     robots,
+    lang: 'en',
   }
+}
+
+// ---------------------------------------------------------------------------
+// Blog articles
+//
+// The static SEO manifest is a build-time snapshot, so it cannot know about
+// posts published from the admin panel since the last deploy. Those are
+// resolved here against the live blog directory, which is what RH-01 was
+// about: a post visible on /blogs must return 200 on its own URL.
+// ---------------------------------------------------------------------------
+
+// The article body, needed to build FAQPage schema. Admin posts carry it in
+// Supabase; WordPress-imported posts have it as a static asset.
+async function loadArticleHtml(article, request, env) {
+  if (article.remote) {
+    const content = await fetchBlogContent(article.slug, env)
+    if (content) return content
+  }
+  try {
+    const assetUrl = new URL(`/blog-content/${article.slug}.html`, request.url)
+    const response = await env.ASSETS.fetch(new Request(assetUrl, { method: 'GET' }))
+    return response.ok ? await response.text() : ''
+  } catch {
+    return ''
+  }
+}
+
+async function buildArticleMeta(article, request, env, directory) {
+  const path = normalizePath(`/blogs/${article.slug}`)
+  const lang = detectArticleLang(article)
+  const liveSlugs = new Set(directory.map(item => item.slug))
+  const articleHtml = await loadArticleHtml(article, request, env)
+  const image = absoluteImageUrl(article.image)
+
+  return {
+    path,
+    url: canonicalUrl(path),
+    title: article.title,
+    fullTitle: pageTitle(article.title),
+    description: article.excerpt,
+    image,
+    type: 'article',
+    robots: 'index, follow',
+    lang,
+    alternates: getHreflangAlternates(article.slug, { isLive: slug => liveSlugs.has(slug) }),
+    jsonLd: buildArticleSchemas(article, articleHtml, { lang, image }),
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+function sitemapResponse(xml) {
+  return new Response(xml, {
+    headers: {
+      'content-type': 'application/xml; charset=UTF-8',
+      'cache-control': 'public, max-age=300',
+    },
+  })
 }
 
 export default {
@@ -115,6 +203,14 @@ export default {
       return Response.json({ ok: true })
     }
 
+    // Sitemaps are generated from the same live directory as the routes, so a
+    // published post cannot be missing from one and present in the other.
+    const sitemapName = SITEMAP_ROUTES.get(normalizePath(url.pathname))
+    if (sitemapName) {
+      const directory = await getBlogDirectory(env)
+      return sitemapResponse(renderSitemap(sitemapName, directory))
+    }
+
     if (RETIRED_URL_PATTERN.test(url.pathname)) {
       return goneResponse()
     }
@@ -122,6 +218,13 @@ export default {
     const pageRequest = isPageRequest(request, url)
 
     if (pageRequest) {
+      // Retired duplicate URLs (RH-02) go first: they must win over their own
+      // route entry, and over the trailing-slash normalisation below.
+      const duplicatePath = getDuplicateRedirect(url.pathname)
+      if (duplicatePath && duplicatePath !== url.pathname) {
+        return redirectToPath(url, duplicatePath)
+      }
+
       const redirectPath = getCanonicalRedirectPath(url.pathname)
       if (redirectPath && redirectPath !== url.pathname) {
         return redirectToPath(url, redirectPath)
@@ -138,15 +241,40 @@ export default {
       return assetResponse
     }
 
-    const routeSeo = getSeoForPath(url.pathname)
-    const meta = url.pathname.startsWith('/admin')
-      ? {
+    let meta = null
+    let found = false
+
+    if (url.pathname.startsWith('/admin')) {
+      meta = {
         ...noindexMeta(url.pathname, 'noindex, nofollow'),
         title: 'Renew Healthcare Admin',
         fullTitle: 'Renew Healthcare Admin',
         description: 'Renew Healthcare admin area.',
       }
-      : routeSeo || noindexMeta(url.pathname)
+      found = true
+    } else {
+      const blogMatch = BLOG_PATH_PATTERN.exec(normalizePath(url.pathname))
+      if (blogMatch) {
+        const directory = await getBlogDirectory(env)
+        const article = directory.find(item => item.slug === decodeURIComponent(blogMatch[1]))
+        if (article) {
+          meta = await buildArticleMeta(article, request, env, directory)
+          found = true
+        }
+      }
+
+      if (!found) {
+        const routeSeo = getSeoForPath(url.pathname)
+        if (routeSeo) {
+          meta = { ...routeSeo, lang: 'en' }
+          found = true
+        }
+      }
+    }
+
+    if (!found) {
+      meta = noindexMeta(url.pathname)
+    }
 
     const contentType = assetResponse.headers.get('content-type') || ''
     if (!contentType.includes('text/html')) {
@@ -156,12 +284,13 @@ export default {
     const html = request.method === 'HEAD' ? '' : rewriteHtml(await assetResponse.text(), meta)
     const headers = new Headers(assetResponse.headers)
     headers.set('content-type', 'text/html; charset=UTF-8')
+    headers.set('content-language', meta.lang || 'en')
     headers.set('x-robots-tag', meta.robots)
     headers.set('cache-control', 'public, max-age=0, must-revalidate')
     headers.delete('content-length')
 
     return new Response(request.method === 'HEAD' ? null : html, {
-      status: routeSeo || url.pathname.startsWith('/admin') ? 200 : 404,
+      status: found ? 200 : 404,
       headers,
     })
   },

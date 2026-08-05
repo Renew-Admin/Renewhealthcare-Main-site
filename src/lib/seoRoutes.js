@@ -4,6 +4,7 @@ import { finalPages } from '../data/finalPages.js'
 import { locations } from '../data/locations.js'
 import { services } from '../data/services.js'
 import { resolveBlogImage } from './blogImages.js'
+import { getDuplicateRedirect, RETIRED_BLOG_SLUGS } from './seoDuplicates.js'
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_SEO_IMAGE,
@@ -128,7 +129,10 @@ doctors.forEach(doctor => {
   })
 })
 
-blogs.forEach(blog => {
+// Retired duplicates (RH-02) never become routes — the Worker redirects them.
+const livingBlogs = blogs.filter(blog => !RETIRED_BLOG_SLUGS.has(blog.slug))
+
+livingBlogs.forEach(blog => {
   addRoute(`/blogs/${blog.slug}`, {
     title: blog.title,
     description: blog.excerpt,
@@ -139,9 +143,11 @@ blogs.forEach(blog => {
 
 blogs.forEach(blog => {
   const legacyPath = normalizePath(`/${blog.slug}`)
-  if (!routes.has(legacyPath)) {
-    addLegacyRedirect(legacyPath, `/blogs/${blog.slug}`)
-  }
+  if (routes.has(legacyPath)) return
+  // Send the legacy URL straight to the surviving destination so a retired
+  // duplicate never produces a 301 -> 301 chain.
+  const blogPath = `/blogs/${blog.slug}`
+  addLegacyRedirect(legacyPath, getDuplicateRedirect(blogPath) || blogPath)
 })
 
 addLegacyRedirect('/stories', '/success-stories')

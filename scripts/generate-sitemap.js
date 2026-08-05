@@ -1,8 +1,14 @@
+// Writes the static sitemap files and robots.txt at build time.
+//
+// The Worker serves post-sitemap.xml and sitemap.xml from the live blog
+// directory, so these files are the offline baseline rather than the single
+// source of truth (RH-01). They are still generated from the same code path,
+// so build output and live output cannot drift apart.
 import fs from 'node:fs/promises'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { blogs } from '../src/data/blogs.js'
-import { getAllSeoRoutes } from '../src/lib/seoRoutes.js'
-import { SITE, canonicalUrl, normalizePath } from '../src/lib/seoUtils.js'
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 const formatLocalDate = date => {
   const year = date.getFullYear()
@@ -13,104 +19,48 @@ const formatLocalDate = date => {
 
 const LASTMOD = process.env.SITEMAP_LASTMOD || formatLocalDate(new Date())
 
-const entries = new Map()
-const blogLastmodByPath = new Map(blogs.map(blog => [normalizePath(`/blogs/${blog.slug}`), blog.iso]))
+// Stamp the build date before importing anything that reads it.
+const stampPath = path.join(projectRoot, 'src/lib/buildStamp.js')
+await fs.writeFile(
+  stampPath,
+  `// Overwritten by scripts/generate-sitemap.js on every build. Committed with a
+// fallback so \`wrangler dev\` and a fresh clone work before the first build.
+export const BUILD_DATE = '${LASTMOD}'
+`,
+)
 
-function addUrl(path, { lastmod = LASTMOD, changefreq = 'monthly', priority = '0.8' } = {}) {
-  const cleanPath = normalizePath(path)
-  entries.set(cleanPath, { path: cleanPath, lastmod, changefreq, priority })
+const { getBlogDirectory, getStaticDirectory } = await import('../src/lib/blogDirectory.js')
+const { SITE } = await import('../src/lib/seoUtils.js')
+const { SITEMAP_FILES, buildSitemapEntries, renderSitemap, renderSitemapIndex } =
+  await import('../src/lib/sitemap.js')
+
+// Read .env so the build can reach Supabase the same way the app does.
+async function loadEnvFile() {
+  try {
+    const raw = await fs.readFile(path.join(projectRoot, '.env'), 'utf8')
+    const parsed = {}
+    raw.split('\n').forEach(line => {
+      const match = /^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/i.exec(line)
+      if (match) parsed[match[1]] = match[2].replace(/^["']|["']$/g, '')
+    })
+    return parsed
+  } catch {
+    return {}
+  }
 }
 
-function urlFor(path) {
-  return canonicalUrl(path)
+const env = { ...(await loadEnvFile()), ...process.env }
+
+let directory = await getBlogDirectory(env)
+if (!directory.length) {
+  console.warn('[sitemap] blog directory came back empty — falling back to the built-in list')
+  directory = getStaticDirectory()
 }
 
-function sitemapUrlFor(filename) {
-  return `${SITE}/${filename}`
-}
-
-function escapeXml(value) {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&apos;')
-}
-
-function isBlogPostPath(path) {
-  return path.startsWith('/blogs/')
-}
-
-function isServicePath(path) {
-  return path === '/services' || path.startsWith('/services/')
-}
-
-function isCoursePath(path) {
-  return path.startsWith('/course/')
-}
-
-function isPagePath(path) {
-  return !isBlogPostPath(path) && !isServicePath(path) && !isCoursePath(path)
-}
-
-function renderUrlset(urls) {
-  const body = urls.map(entry => `  <url>
-    <loc>${escapeXml(urlFor(entry.path))}</loc>
-    <lastmod>${escapeXml(entry.lastmod)}</lastmod>
-    <changefreq>${escapeXml(entry.changefreq)}</changefreq>
-    <priority>${escapeXml(entry.priority)}</priority>
-  </url>`).join('\n')
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${body}
-</urlset>
-`
-}
-
-function renderSitemapIndex(sitemaps) {
-  const body = sitemaps.map(sitemap => `  <sitemap>
-    <loc>${escapeXml(sitemapUrlFor(sitemap.filename))}</loc>
-    <lastmod>${escapeXml(LASTMOD)}</lastmod>
-  </sitemap>`).join('\n')
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${body}
-</sitemapindex>
-`
-}
-
-getAllSeoRoutes().forEach(route => {
-  const path = route.path
-  const isBlogPost = isBlogPostPath(path)
-  const isService = path.startsWith('/services/')
-  const isDoctor = path.startsWith('/doctor/')
-
-  addUrl(path, {
-    lastmod: blogLastmodByPath.get(path) || LASTMOD,
-    changefreq: path === '/' || path === '/services' || path === '/blogs' || path === '/news' ? 'weekly' : 'monthly',
-    priority: path === '/'
-      ? '1.0'
-      : path === '/why-renew' || path === '/services'
-        ? '0.9'
-        : isService
-          ? '0.7'
-          : isBlogPost || isDoctor
-            ? '0.6'
-            : '0.8',
-  })
-})
-
-const allEntries = [...entries.values()]
-const sitemapGroups = [
-  { filename: 'page-sitemap.xml', entries: allEntries.filter(entry => isPagePath(entry.path)) },
-  { filename: 'services-sitemap.xml', entries: allEntries.filter(entry => isServicePath(entry.path)) },
-  { filename: 'course-sitemap.xml', entries: allEntries.filter(entry => isCoursePath(entry.path)) },
-  { filename: 'post-sitemap.xml', entries: allEntries.filter(entry => isBlogPostPath(entry.path)) },
-].filter(group => group.entries.length)
+const allEntries = buildSitemapEntries(directory)
+const groups = SITEMAP_FILES
+  .map(file => ({ ...file, xml: renderSitemap(file.name, directory) }))
+  .filter(group => group.xml.includes('<loc>'))
 
 const robots = `User-agent: *
 Allow: /
@@ -119,11 +69,18 @@ Disallow: /admin
 Sitemap: ${SITE}/sitemap_index.xml
 `
 
+const publicDir = path.join(projectRoot, 'public')
 await Promise.all([
-  fs.writeFile('public/sitemap.xml', renderUrlset(allEntries)),
-  fs.writeFile('public/sitemap_index.xml', renderSitemapIndex(sitemapGroups)),
-  fs.writeFile('public/robots.txt', robots),
-  ...sitemapGroups.map(group => fs.writeFile(`public/${group.filename}`, renderUrlset(group.entries))),
+  fs.writeFile(path.join(publicDir, 'sitemap.xml'), renderSitemap('all', directory)),
+  fs.writeFile(
+    path.join(publicDir, 'sitemap_index.xml'),
+    renderSitemapIndex(groups.map(group => group.filename), LASTMOD),
+  ),
+  fs.writeFile(path.join(publicDir, 'robots.txt'), robots),
+  ...groups.map(group => fs.writeFile(path.join(publicDir, group.filename), group.xml)),
 ])
 
-console.log(`Generated ${entries.size} sitemap URLs across ${sitemapGroups.length} indexed sitemaps for ${SITE}`)
+const blogCount = allEntries.filter(entry => entry.path.startsWith('/blogs/')).length
+console.log(
+  `Generated ${allEntries.length} sitemap URLs (${blogCount} articles) across ${groups.length} indexed sitemaps for ${SITE}`,
+)

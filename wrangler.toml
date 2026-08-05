@@ -2,6 +2,22 @@ name = "renewhealthcare"
 compatibility_date = "2026-07-14"
 main = "./src/worker.js"
 
+# The Worker resolves blog routes and sitemaps against Supabase at request time
+# (ticket RH-01), so it needs the same two values the browser bundle uses:
+#
+#   SUPABASE_URL
+#   SUPABASE_ANON_KEY
+#
+# They are not committed. Set them once per environment:
+#
+#   npx wrangler secret put SUPABASE_URL
+#   npx wrangler secret put SUPABASE_ANON_KEY
+#
+# For local `wrangler dev`, put them in .dev.vars (git-ignored — see
+# .dev.vars.example). Without them the Worker still serves every page, but
+# blog routes and sitemaps fall back to the built-in list in src/data/blogs.js
+# and newly published posts will 404 again.
+
 [assets]
 directory = "./build"
 binding = "ASSETS"

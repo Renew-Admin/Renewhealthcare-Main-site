@@ -32,9 +32,15 @@ export default function App() {
     return () => cancelAnimationFrame(frame)
   }, [pathname, hash])
 
+  // Blog articles manage their own head tags: BlogPostPage knows the post's
+  // language, hreflang pair and schema, and the static manifest here cannot
+  // see posts published since the last build. Rendering both would make this
+  // one briefly stamp "Page not found" over a live article.
+  const isBlogArticle = /^\/blogs\/[^/]+$/.test(fallbackPath)
+
   return (
     <div className="rh-root">
-      {routeSeo ? (
+      {isBlogArticle ? null : routeSeo ? (
         <Seo
           title={routeSeo.title}
           description={routeSeo.description}

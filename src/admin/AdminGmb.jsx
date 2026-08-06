@@ -2,32 +2,38 @@
 import { useState, useRef } from 'react'
 import EntityManager from './EntityManager.jsx'
 import { gmbPostsApi, GMB_LOCATIONS, GMB_TIME_SCHEDULES } from '../lib/gmb.js'
-import { uploadGmbImage, validateGmbImageFile } from '../lib/gmbStorage.js'
+import { uploadGmbImage, importGmbImageFromUrl, formatBytes } from '../lib/gmbStorage.js'
 
 function GmbImagePicker({ value, onChange, locationSlug }) {
   const fileRef = useRef(null)
   const [uploading, setUploading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [linkUrl, setLinkUrl] = useState('')
+  const [note, setNote] = useState('')
 
-  const handleUpload = async (file) => {
-    if (!file) return
+  // Both paths end the same way: a JPEG in our bucket and a .jpg URL on the form.
+  const store = async (job) => {
     setErrorMsg('')
-    try {
-      validateGmbImageFile(file)
-    } catch (err) {
-      setErrorMsg(err.message)
-      return
-    }
-
+    setNote('')
     try {
       setUploading(true)
-      const { url } = await uploadGmbImage(file, locationSlug)
+      const { url, size } = await job()
       onChange(url)
+      setLinkUrl('')
+      setNote(`Saved as JPG — ${formatBytes(size)}`)
     } catch (err) {
       setErrorMsg(err?.message || 'Please upload an image.')
     } finally {
       setUploading(false)
     }
+  }
+
+  const handleUpload = (file) => {
+    if (file) store(() => uploadGmbImage(file, locationSlug))
+  }
+
+  const handleLink = () => {
+    if (linkUrl.trim()) store(() => importGmbImageFromUrl(linkUrl, locationSlug))
   }
 
   return (
@@ -42,17 +48,17 @@ function GmbImagePicker({ value, onChange, locationSlug }) {
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
         >
-          {uploading ? 'Uploading…' : value ? 'Replace Image' : 'Upload Image'}
+          {uploading ? 'Working…' : value ? 'Replace Image' : 'Upload Image'}
         </button>
         {value && (
-          <button type="button" className="admin-btn ghost sm" onClick={() => onChange('')}>
+          <button type="button" className="admin-btn ghost sm" onClick={() => onChange('')} disabled={uploading}>
             Remove Image
           </button>
         )}
         <input
           ref={fileRef}
           type="file"
-          accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+          accept="image/*"
           hidden
           onChange={(e) => {
             const f = e.target.files?.[0]
@@ -61,6 +67,34 @@ function GmbImagePicker({ value, onChange, locationSlug }) {
           }}
         />
       </div>
+      <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+        <input
+          type="url"
+          value={linkUrl}
+          placeholder="…or paste an image link (https://example.com/photo.webp)"
+          disabled={uploading}
+          onChange={(e) => setLinkUrl(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              handleLink()
+            }
+          }}
+          style={{ flex: 1, minWidth: 0 }}
+        />
+        <button
+          type="button"
+          className="admin-btn ghost sm"
+          onClick={handleLink}
+          disabled={uploading || !linkUrl.trim()}
+        >
+          Use Link
+        </button>
+      </div>
+      <small className="admin-muted" style={{ display: 'block', marginTop: '6px' }}>
+        Any picture works. It is converted to JPG automatically — a .webp link is re-saved as .jpg.
+      </small>
+      {note && <div style={{ marginTop: '8px', fontSize: '13px', color: '#0f7b4f', fontWeight: 600 }}>{note}</div>}
       {errorMsg && <div className="admin-error" style={{ marginTop: '8px', fontSize: '13px' }}>{errorMsg}</div>}
     </div>
   )
@@ -155,7 +189,7 @@ export default function AdminGmb() {
           label: 'Image',
           type: 'custom',
           required: true,
-          help: 'Upload the image that will appear in the Google Business Profile post.',
+          help: 'Upload a picture or paste an image link. It is stored as JPG for the Google Business Profile post.',
           customRender: ({ value, onChange, form }) => {
             const locObj = GMB_LOCATIONS.find((l) => l.label === form?.Location)
             const slug = locObj ? locObj.slug : 'general'

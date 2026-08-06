@@ -1,6 +1,6 @@
 // RichEditor — a lightweight contentEditable HTML editor for blog bodies.
 // Toolbar: headings, bold/italic, lists, quote, link, and image upload.
-// Blog images must be WebP files under 200 KB before upload.
+// Any picture can be inserted — it is converted to WebP under 100 KB on upload.
 import { useEffect, useRef, useState } from 'react'
 import { uploadImage } from '../lib/blogApi.js'
 
@@ -102,7 +102,7 @@ export default function RichEditor({ value, onChange }) {
         <button type="button" onClick={pickImage} disabled={uploading} title="Insert image">
           {uploading ? 'Uploading…' : '🖼 Image'}
         </button>
-        <input ref={fileRef} type="file" accept="image/webp,.webp" hidden onChange={onFile} />
+        <input ref={fileRef} type="file" accept="image/*" hidden onChange={onFile} />
       </div>
       <div
         ref={ref}

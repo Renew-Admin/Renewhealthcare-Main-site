@@ -83,12 +83,44 @@ The admin panel supports:
 
 ## Blog Image Rules
 
-Blog images are restricted to:
+The blog cover image and any in-body image accept **any picture** — JPG, PNG,
+WebP, GIF, AVIF — at any size. Nothing needs converting by hand.
 
-- WebP format only
-- Under 200 KB
+Every blog upload is stored as **WebP under 100 KB**. The conversion happens in
+the browser in [`src/lib/storage.js`](./src/lib/storage.js) before the file
+reaches Supabase: the image is decoded, resized down from 1600px as needed, and
+re-encoded at the highest WebP quality that still fits the 100 KB budget. A file
+that is already a small enough WebP is passed through untouched rather than
+re-encoded.
 
-This is enforced in the admin upload flow before the file is accepted.
+Two limits come from the browser, not from us. **HEIC** (the iPhone default)
+only decodes in Safari — Chrome and Firefox reject it, and the upload fails with
+a message asking for a JPG or PNG instead. Set iPhone cameras to "Most
+Compatible" to get JPGs, or upload from Safari. **Animated GIFs** upload fine but
+keep only their first frame, since the conversion draws to a canvas.
+
+The ceiling lives in one place — `BLOG_IMAGE_MAX_BYTES` in `src/lib/storage.js`.
+
+## GMB Image Rules
+
+Google Business Profile posts are served as JPG, so the GMB section stores
+**JPG only** — the opposite of the blog. Both inputs end at the same place:
+
+- **Upload a file** — any picture is converted to JPEG and saved as `.jpg`.
+- **Paste an image link** — the picture is downloaded, converted, and re-hosted
+  in the `gmb-posts` bucket. A `xyz.webp` link comes back out as `xyz.jpg`.
+
+The link is re-hosted rather than renamed on purpose: rewriting `.webp` to
+`.jpg` in the text would point at a file that does not exist. Pasted links only
+work if the remote host allows cross-origin reads — if it doesn't, the panel
+says so and asks for a file upload instead.
+
+Transparency is flattened onto white, since JPEG has no alpha channel.
+
+Run [`scripts/gmb-jpeg-only.sql`](./scripts/gmb-jpeg-only.sql) to enforce the
+same rule in Supabase. Read step 2's warning before running step 3.
+
+Both formats share one converter — [`src/lib/imageConvert.js`](./src/lib/imageConvert.js).
 
 ## Local Setup
 

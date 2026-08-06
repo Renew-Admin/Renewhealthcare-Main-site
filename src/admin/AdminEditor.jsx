@@ -126,7 +126,7 @@ export default function AdminEditor() {
           <div className="admin-card">
             <label className="admin-field full">Cover image
               <MediaPicker value={form.cover_image} onChange={(url) => set({ cover_image: url })} kind="blog" />
-              <small className="admin-muted">Required format: WebP (.webp), under 200 KB.</small>
+              <small className="admin-muted">Any picture works (JPG, PNG, WebP…). It is converted to WebP under 100 KB automatically.</small>
             </label>
           </div>
 

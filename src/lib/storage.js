@@ -1,47 +1,25 @@
-// storage.js — all admin image uploads go through here, into one public
-// `media` bucket, always stored as WebP. Powers the Media Library too.
+// storage.js — all admin blog/media image uploads go through here, into one
+// public `media` bucket, always stored as WebP. Powers the Media Library too.
+//
+// Blog uploads accept any image the editor picks (JPG, PNG, AVIF, GIF…) and
+// compress it to WebP under BLOG_IMAGE_MAX_BYTES in the browser before it ever
+// reaches the bucket. Nothing has to be converted by hand first.
+//
+// The conversion itself lives in ./imageConvert.js, shared with GMB uploads.
 import { supabase, isSupabaseConfigured } from './supabase.js'
+import { convertImage, formatBytes } from './imageConvert.js'
 
 export const MEDIA_BUCKET = 'media'
-export const BLOG_IMAGE_MAX_BYTES = 200 * 1024
 
-export function validateBlogImageFile(file) {
-  if (!file) return
-  const name = (file.name || '').toLowerCase()
-  const isWebp = file.type === 'image/webp' || name.endsWith('.webp')
+// Ceiling every blog cover and in-body image is squeezed under.
+export const BLOG_IMAGE_MAX_BYTES = 100 * 1024
 
-  if (!isWebp) {
-    throw new Error('Blog images must be WebP format (.webp). Please convert the image before uploading.')
-  }
+export { formatBytes }
 
-  if (file.size > BLOG_IMAGE_MAX_BYTES) {
-    throw new Error('Blog images must be under 200 KB. Please compress this WebP image and try again.')
-  }
-}
-
-// Convert any image File/Blob to a WebP Blob using an offscreen canvas.
-// Downsizes very large images so pages stay fast.
-export async function fileToWebp(file, { maxWidth = 1600, quality = 0.82 } = {}) {
-  const dataUrl = await new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-  const img = await new Promise((resolve, reject) => {
-    const image = new Image()
-    image.onload = () => resolve(image)
-    image.onerror = reject
-    image.src = dataUrl
-  })
-  const scale = Math.min(1, maxWidth / img.width)
-  const canvas = document.createElement('canvas')
-  canvas.width = Math.round(img.width * scale)
-  canvas.height = Math.round(img.height * scale)
-  canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
-  const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', quality))
-  if (!blob) throw new Error('Could not convert image to WebP in this browser.')
-  return blob
+// Convert any image File/Blob to a WebP Blob.
+// `maxBytes` turns on the size-fitting search; 0 keeps it to a single pass.
+export async function fileToWebp(file, { maxWidth = 1600, quality = 0.82, maxBytes = 0 } = {}) {
+  return convertImage(file, { type: 'image/webp', maxWidth, quality, maxBytes })
 }
 
 function publicUrl(name) {
@@ -52,8 +30,8 @@ function publicUrl(name) {
 // `kind` is a filename prefix used to group items in the Media Library.
 export async function uploadToBucket(file, kind = 'general') {
   if (!isSupabaseConfigured) throw new Error('Supabase is not configured.')
-  if (kind === 'blog') validateBlogImageFile(file)
-  const webp = kind === 'blog' ? file : await fileToWebp(file)
+  if (!file) throw new Error('No file selected.')
+  const webp = await fileToWebp(file, { maxBytes: kind === 'blog' ? BLOG_IMAGE_MAX_BYTES : 0 })
   const base = (file.name || 'image')
     .replace(/\.[^.]+$/, '')
     .replace(/[^a-z0-9]+/gi, '-')

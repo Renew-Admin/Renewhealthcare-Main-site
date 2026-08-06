@@ -1,7 +1,8 @@
 // MediaPicker — an image field used across the admin. Upload an image and store
-// it in the `media` bucket. Blog uploads are restricted to WebP files under 200 KB.
+// it in the `media` bucket. Any picture is accepted; blog uploads are converted
+// to WebP under 100 KB in the browser before they are stored.
 import { useRef, useState } from 'react'
-import { uploadToBucket } from '../lib/storage.js'
+import { uploadToBucket, formatBytes } from '../lib/storage.js'
 import { useToast } from './ui.jsx'
 
 export default function MediaPicker({ value, onChange, kind = 'general' }) {
@@ -13,9 +14,9 @@ export default function MediaPicker({ value, onChange, kind = 'general' }) {
     if (!file) return
     try {
       setUploading(true)
-      const { url } = await uploadToBucket(file, kind)
+      const { url, size } = await uploadToBucket(file, kind)
       onChange(url)
-      toast('Image uploaded')
+      toast(`Image uploaded — WebP, ${formatBytes(size)}`)
     } catch (err) {
       toast(err?.message || 'Upload failed', 'error')
     } finally {
@@ -36,7 +37,7 @@ export default function MediaPicker({ value, onChange, kind = 'general' }) {
         <input
           ref={fileRef}
           type="file"
-          accept={kind === 'blog' ? 'image/webp,.webp' : 'image/*'}
+          accept="image/*"
           hidden
           onChange={(e) => {
             const f = e.target.files?.[0]

@@ -227,6 +227,29 @@ const packageRows = [
   ['9', 'Intra Cytoplasmic Sperm Injection (ICSI)', '10,000/-'],
 ]
 
+const tariffRows = [
+  ['1', 'Follow-up Consultation – Ms. Ankita Mallick', '1,000', '1,500'],
+  ['2', 'New Consultation – Ms. Ankita Mallick', '2,000', '2,500'],
+  ['3', 'ERA', '56,000', '60,000'],
+  ['4', 'IVF Charges', '85,000', '90,000'],
+  ['5', 'FFI IVF Package', '1,15,000', '1,25,000'],
+  ['6', 'Diathermy Charge', '500', '1,500'],
+  ['7', 'Endoscopic Hardware Charge', '5,000', '6,000'],
+  ['8', 'Procedure Charges on Holidays', '7,500', '10,000'],
+  ['9', 'Nebulisation Charges', '500', '1,500'],
+  ['10', 'Urine Pregnancy Test (UPT)', '100', '150'],
+  ['11', 'Semen Analysis', '750', '1,000'],
+  ['12', 'Automated Semen Analysis', '1,800', '2,000'],
+  ['13', 'Semen Culture', '1,000', '1,500'],
+  ['14', 'Semen Freezing (2 Months)', '3,000', '3,500'],
+  ['15', 'Semen Freezing (TESA/PESA)', '5,000', '7,500'],
+  ['16', 'Semen Freezing Extension (Per Month)', '200', '250'],
+  ['17', 'JMSD – Semen Culture', '750', '1,000'],
+  ['18', 'Semen Analysis with HBsAg/VDRL/HCV', '2,500', '4,500'],
+  ['19', 'Embryo Glue', '3,500', '5,000'],
+  ['20', 'IUI (AIH/HI)', '6,500', '8,000'],
+]
+
 const graphImages = [
   ['/images/renew/uploads/2024/12/grphs-img2.webp', 'Renew Healthcare success graph'],
   ['/images/renew/uploads/2024/12/grphs-img1.webp', 'Renew Healthcare treatment graph'],
@@ -270,6 +293,39 @@ function PackageContent() {
                 <td data-label="Standard Clinic Price">150000</td>
                 <td data-label="Renew Package">100000</td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="packages-pricing packages-tariff">
+        <div className="packages-section-head">
+          <span>Revised Tariff</span>
+          <h3>Revised Rates Effective 01 July 2026</h3>
+        </div>
+        <p className="packages-effective-note">
+          The revised rates are effective from <strong>01 July 2026</strong> and are applicable to all new
+          registrations, consultations, procedures, and packages booked on or after the effective date.
+        </p>
+        <div className="packages-table-wrap">
+          <table className="packages-table packages-tariff-table">
+            <thead>
+              <tr>
+                <th>Sl. No.</th>
+                <th>Service</th>
+                <th>Current Rate (₹)</th>
+                <th>Revised Rate (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tariffRows.map(([sl, service, current, revised]) => (
+                <tr key={sl}>
+                  <td data-label="Sl. No.">{sl}</td>
+                  <td data-label="Service">{service}</td>
+                  <td data-label="Current Rate"><span className="tariff-old">{current}</span></td>
+                  <td data-label="Revised Rate"><span className="tariff-new">{revised}</span></td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

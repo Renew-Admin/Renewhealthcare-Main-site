@@ -193,11 +193,11 @@ export const finalPages = {
       },
       {
         "heading": "আমার চিকিৎসা সংক্রান্ত প্রশ্নের সঠিক উত্তর দেবার জন্য Clinic এ কি কেউ আছে ?",
-        "body": "শুধুমাত্র বাংলাদেশী অতিথিদের জন্য Renew -তে একজন অতিথি বন্ধু আছে যারা Renew তে চিকিৎসা করিয়েছেন বা চিকিৎসাধীন তারা সবাই ওনাকে চেনেন। ওনার নাম গৌরীদি, উনি Dr Rajeev Agarwal -এর সাথে গত 15 বছর ধরে কাজ করছেন। ফোন নম্বর +91 62922 69053."
+        "body": "শুধুমাত্র বাংলাদেশী অতিথিদের জন্য Renew -তে একজন অতিথি বন্ধু আছে যারা Renew তে চিকিৎসা করিয়েছেন বা চিকিৎসাধীন তারা সবাই ওনাকে চেনেন। ওনার নাম গৌরীদি, উনি Dr Rajeev Agarwal -এর সাথে গত 15 বছর ধরে কাজ করছেন। ফোন নম্বর +91 62923 12076."
       },
       {
         "heading": "Visa সংক্রান্ত সমস্যার জন্য কি করবো ?",
-        "body": "আজকাল Visa পাওয়া, তার উপর Medical Visa পাওয়া এক বিরাট সমস্যা। এই সমস্যার সমাধান করতে সরাসরি Renew Kolkata’ র সাথে যোগাযোগ করুন। সৌগত মুখার্জী +91 6292269082"
+        "body": "আজকাল Visa পাওয়া, তার উপর Medical Visa পাওয়া এক বিরাট সমস্যা। এই সমস্যার সমাধান করতে সরাসরি Renew Kolkata’ র সাথে যোগাযোগ করুন। সৌগত মুখার্জী +91 6292312076"
       },
       {
         "heading": "এবার আমরা দেখবো IUI কি এবং IVF কি ?",
@@ -331,7 +331,7 @@ export const finalPages = {
       },
       {
         "heading": "Your Choices",
-        "body": "You may request access to, correction of, or deletion of your personal information at any time by contacting us at info@renewhealthcare.in or 062922 69060."
+        "body": "You may request access to, correction of, or deletion of your personal information at any time by contacting us at info@renewhealthcare.in or 062923 12076."
       }
     ]
   },

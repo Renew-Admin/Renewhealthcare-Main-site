@@ -83,7 +83,7 @@ export default function AboutPage() {
             </div>
             <div className="service-cta-actions">
               <Link to="/contact">Contact Us</Link>
-              <a href="tel:06292269060">Call 062922 69060</a>
+              <a href="tel:06292312076">Call 062923 12076</a>
             </div>
           </section>
         </div>

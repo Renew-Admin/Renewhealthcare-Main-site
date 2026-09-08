@@ -307,7 +307,7 @@ create policy "media admin delete" on storage.objects for delete to authenticate
 -- Optional starter settings (edit later in Admin -> Settings)
 -- ===========================================================================
 insert into public.site_settings (key, value) values
-  ('phone',         '062922 69060'),
+  ('phone',         '062923 12076'),
   ('whatsapp',      '916292269060'),
   ('email',         'info@renewhealthcare.in'),
   ('announcement',  ''),

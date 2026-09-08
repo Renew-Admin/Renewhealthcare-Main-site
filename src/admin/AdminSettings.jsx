@@ -5,7 +5,7 @@ import { invalidateSettings } from '../hooks/useContent.js'
 import { Spinner, useToast } from './ui.jsx'
 
 const FIELDS = [
-  { key: 'phone', label: 'Primary phone', placeholder: '062922 69060' },
+  { key: 'phone', label: 'Primary phone', placeholder: '062923 12076' },
   { key: 'whatsapp', label: 'WhatsApp number (with country code)', placeholder: '916292269060' },
   { key: 'email', label: 'Contact email', placeholder: 'info@renewhealthcare.in' },
   { key: 'announcement', label: 'Announcement bar text', placeholder: 'e.g. Free fertility consultation this month', full: true },

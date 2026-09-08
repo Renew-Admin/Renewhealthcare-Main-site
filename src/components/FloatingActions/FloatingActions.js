@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import './FloatingActions.css'
 
-const PHONE_DISPLAY = '062922 69060'
-const TEL = 'tel:06292269060'
+const PHONE_DISPLAY = '062923 12076'
+const TEL = 'tel:06292312076'
 const WHATSAPP = 'https://api.whatsapp.com/send?phone=916292269060&text=' +
   encodeURIComponent("Hi Renew Healthcare, I'd like to know more about your fertility treatments.")
 const INSTAGRAM = 'https://www.instagram.com/renewhealthcare/'

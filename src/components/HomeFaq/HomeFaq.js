@@ -44,7 +44,7 @@ export default function HomeFaq() {
           <span className="home-faq-eyebrow">FAQs</span>
           <h2><span>Questions families</span><br /><span className="heading-blue">ask us most</span></h2>
           <p>Clear, honest answers about IVF, costs, and what to expect on your journey to parenthood. Still unsure? Our team is one message away.</p>
-          <a className="home-faq-cta" href="tel:06292269060">
+          <a className="home-faq-cta" href="tel:06292312076">
             Talk to a specialist <span aria-hidden="true">→</span>
           </a>
         </motion.div>

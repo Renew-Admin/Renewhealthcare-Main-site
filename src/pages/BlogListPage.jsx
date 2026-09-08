@@ -251,7 +251,7 @@ function BlogEnquiryForm() {
       <button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Get a Free Consultation'}</button>
       {status === 'sent' && <p className="lead-form-msg ok">Thank you! We&rsquo;ll be in touch shortly.</p>}
       {status === 'error' && <p className="lead-form-msg err">{error}</p>}
-      <a className="blogx-side-call" href="tel:06292269060">or call 062922 69060</a>
+      <a className="blogx-side-call" href="tel:06292312076">or call 062923 12076</a>
     </form>
   )
 }

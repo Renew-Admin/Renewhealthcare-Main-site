@@ -12,7 +12,7 @@ const homeJsonLd = {
   name: 'Renew Healthcare',
   url: SITE,
   image: `${SITE}/images/renew/uploads/2024/07/renew-healthcare-logo.jpg.webp`,
-  telephone: '+91-6292269060',
+  telephone: '+91-6292312076',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Kolkata',

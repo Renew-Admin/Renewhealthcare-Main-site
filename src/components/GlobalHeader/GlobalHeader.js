@@ -253,7 +253,7 @@ export default function GlobalHeader({ onCallback }) {
               </div>
             )}
             <div className="mobile-contact-block">
-              <a href="tel:06292269060">Call: 062922 69060</a>
+              <a href="tel:06292312076">Call: 062923 12076</a>
               <a href="mailto:info@renewhealthcare.in">info@renewhealthcare.in</a>
             </div>
           </div>

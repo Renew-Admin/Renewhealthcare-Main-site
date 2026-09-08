@@ -15,7 +15,7 @@ export default function NotFound() {
           <div className="notfound-actions">
             <Link to="/" className="notfound-primary">Back to Home</Link>
             <Link to="/services" className="notfound-secondary">Explore Services</Link>
-            <a href="tel:06292269060" className="notfound-secondary">Call 062922 69060</a>
+            <a href="tel:06292312076" className="notfound-secondary">Call 062923 12076</a>
           </div>
           <div className="notfound-links">
             <Link to="/doctors">Our Doctors</Link>

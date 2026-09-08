@@ -11,19 +11,19 @@ const clinics = [
   {
     name: 'Gariahat (Main)',
     address: '18C, Mandeville Gardens, Ballygunge, Kolkata, West Bengal 700019',
-    phone: '+91 6292 269 060',
+    phone: '+91 6292312076',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Mandeville+Gardens+Kolkata',
   },
   {
     name: 'Saltlake',
     address: 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
-    phone: '+91 8336 968 661',
+    phone: '+91 6292312076',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Saltlake+Kolkata',
   },
   {
     name: 'Jamshedpur',
     address: 'Michael John Tower, 1st Floor, Southern Area 06, K-Road Bistupur 831001',
-    phone: '+91 9153 994 100',
+    phone: '+91 6292312076',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Bistupur+Jamshedpur',
   },
 ]
@@ -56,7 +56,7 @@ const contactPage = {
   sections: [
     {
       heading: 'Renew Healthcare Clinics',
-      body: 'Call us at 062922 69060 or email info@renewhealthcare.in for appointments and patient support.\n- Saltlake: EN-26, Sector V, Saltlake City, Kolkata, West Bengal\n- Gariahat: 46B, Rafi Ahmed Kidwai Road, Kolkata, West Bengal\n- Jamshedpur: Renew Healthcare, Jamshedpur, Jharkhand',
+      body: 'Call us at 062923 12076 or email info@renewhealthcare.in for appointments and patient support.\n- Saltlake: EN-26, Sector V, Saltlake City, Kolkata, West Bengal\n- Gariahat: 46B, Rafi Ahmed Kidwai Road, Kolkata, West Bengal\n- Jamshedpur: Renew Healthcare, Jamshedpur, Jharkhand',
     },
     {
       heading: 'Clinic Timings',
@@ -118,7 +118,7 @@ export function FinalContentByKey({ pageKey }) {
           )}
           {!isContact && <section className="service-cta-band">
             <div><span>Renew Healthcare</span><h2>Talk to our team</h2><p>For appointments, treatment planning, and patient guidance.</p></div>
-            <div className="service-cta-actions"><Link to="/contact">Book Appointment</Link><a href="tel:06292269060">Call 062922 69060</a></div>
+            <div className="service-cta-actions"><Link to="/contact">Book Appointment</Link><a href="tel:06292312076">Call 062923 12076</a></div>
           </section>}
         </div>
       </section>
@@ -359,7 +359,7 @@ function PackageContent() {
 }
 
 const quickContacts = [
-  ['Call us', '062922 69060', 'tel:06292269060', 'phone'],
+  ['Call us', '062923 12076', 'tel:06292312076', 'phone'],
   ['WhatsApp', 'Chat with our team', 'https://api.whatsapp.com/send?phone=916292269060', 'whatsapp'],
   ['Email', 'info@renewhealthcare.in', 'mailto:info@renewhealthcare.in', 'mail'],
 ]
@@ -446,7 +446,7 @@ function ContactBlock() {
           <img src="/images/renew/uploads/2024/07/headphone.png" alt="Contact Renew Healthcare" />
           <h3>Contact Us</h3>
           <p>Want to get in touch? We would love to hear from you. Here is how you can reach us.</p>
-          <a href="tel:06292269060">062922 69060</a>
+          <a href="tel:06292312076">062923 12076</a>
           <a href="mailto:info@renewhealthcare.in">info@renewhealthcare.in</a>
           <span>Clinic Timings Monday to Saturday 9:00 AM - 6:00 PM</span>
           <div className="contact-social-row">

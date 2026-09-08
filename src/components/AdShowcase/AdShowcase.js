@@ -114,7 +114,7 @@ export default function AdShowcase() {
 
         <motion.div className="wr-actions" {...reveal} transition={{ ...reveal.transition, delay: 0.16 }}>
           <Link to="/contact" className="wr-primary">Book Your Appointment <span aria-hidden="true">→</span></Link>
-          <a href="tel:06292269060" className="wr-secondary">Call 062922 69060</a>
+          <a href="tel:06292312076" className="wr-secondary">Call 062923 12076</a>
         </motion.div>
       </div>
     </section>

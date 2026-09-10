@@ -20,7 +20,7 @@ export const locations = [
     hours: 'Open daily for appointments',
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.1898182412465!2d86.17949957587665!3d22.79542932476553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3f61c108ad7%3A0x67728bfba5628131!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1721464534308!5m2!1sen!2sin',
     services: ['Preconception Counselling', 'Infertility Workup', 'IUI', 'IVF', 'ICSI', 'Surrogacy', 'Embryo Freezing', 'Oocyte Freezing', 'Semen Bank', 'Andrology Clinic', 'Genetic Counseling'],
-    doctors: ['Dr. Rajeev Agarwal', 'Dr. Dorothy P Ghosh', 'Dr. Neha Yadav'],
+    doctors: ['Dr. Dorothy P Ghosh'],
     image: '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg',
     gallery: ['/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg', '/images/renew/uploads/2025/03/renew-healthcare-jamshedpur.jpg'],
     intro: 'Renew Health Care Jamshedpur, “Renew Fertility” is for couples who are still deprived of the joy of having a child. Here you can consult our renowned infertility specialist Dr. Dorothy Ghosh.',

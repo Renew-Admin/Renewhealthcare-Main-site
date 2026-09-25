@@ -11,7 +11,7 @@ const clinics = [
   {
     name: 'Gariahat (Main)',
     address: '18C, Mandeville Gardens, Ballygunge, Kolkata, West Bengal 700019',
-    phone: '+91 6292312076',
+    phone: '+91 62922 69060',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Mandeville+Gardens+Kolkata',
   },
   {
@@ -23,7 +23,7 @@ const clinics = [
   {
     name: 'Jamshedpur',
     address: 'Michael John Tower, 1st Floor, Southern Area 06, K-Road Bistupur 831001',
-    phone: '+91 6292312076',
+    phone: '+91 62922 69061',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Bistupur+Jamshedpur',
   },
 ]

@@ -50,7 +50,7 @@ const locations = [
   {
     name: 'Gariahat',
     address: '18C, Mandeville Gardens, Ballygunge, Kolkata, West Bengal 700019',
-    phone: '+91 6292312076',
+    phone: '+91 62922 69060',
   },
   {
     name: 'Salt Lake',
@@ -60,7 +60,7 @@ const locations = [
   {
     name: 'Jamshedpur',
     address: 'Michael John Tower, 1st Floor, Southern Area 06, K-Road Bistupur 831001',
-    phone: '+91 6292312076',
+    phone: '+91 62922 69061',
   },
 ]
 
@@ -256,7 +256,6 @@ export default function SiteFooter({ onCallback }) {
               <ul className="d-flex gap-3 flex-end">
                 <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                 <li><Link to="/patient-rights-responsibilities">Patient Rights &amp; Responsibilities</Link></li>
-                <li><a href="/sitemap.xml">Sitemap</a></li>
               </ul>
             </div>
           </div>

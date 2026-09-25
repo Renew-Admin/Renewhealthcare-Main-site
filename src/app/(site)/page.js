@@ -1,12 +1,10 @@
-// / — homepage. Static HTML, regenerated every 5 minutes so FAQs and the
-// latest posts managed in the admin panel appear without a rebuild.
+// / — homepage. Static HTML built at deploy time; FAQs and the latest posts
+// are also refreshed from Supabase in the browser after load.
 import Home from '../../views/Home/Home.js'
 import JsonLd from '../../components/JsonLd.js'
 import { resolveHomeFaqs } from '../../data/homeFaqs.js'
 import { faqPageSchema, medicalClinicSchema, metadataForPath } from '../../lib/nextSeo.js'
 import { getBlogListing, getFaqRows } from '../../lib/serverData.js'
-
-export const revalidate = 300
 
 export const metadata = metadataForPath('/')
 

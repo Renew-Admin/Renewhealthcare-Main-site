@@ -1,25 +1,19 @@
+# Cloudflare Worker for the Next.js site, built by the OpenNext adapter
+# (`npm run build` -> .open-next/). Deploy with `npx wrangler deploy`.
 name = "renewhealthcare"
+main = ".open-next/worker.js"
 compatibility_date = "2026-07-14"
-main = "./src/worker.js"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 
-# The Worker resolves blog routes and sitemaps against Supabase at request time
-# (ticket RH-01), so it needs the same two values the browser bundle uses:
-#
-#   SUPABASE_URL
-#   SUPABASE_ANON_KEY
-#
-# They are not committed. Set them once per environment:
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+# Runtime values the server reads when it renders a page on demand (a blog
+# post or doctor added after the last deploy). Set once per environment:
 #
 #   npx wrangler secret put SUPABASE_URL
 #   npx wrangler secret put SUPABASE_ANON_KEY
 #
-# For local `wrangler dev`, put them in .dev.vars (git-ignored — see
-# .dev.vars.example). Without them the Worker still serves every page, but
-# blog routes and sitemaps fall back to the built-in list in src/data/blogs.js
-# and newly published posts will 404 again.
-
-[assets]
-directory = "./build"
-binding = "ASSETS"
-not_found_handling = "single-page-application"
-run_worker_first = ["/*"]
+# The build also needs VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY (and
+# optionally META_PIXEL_ID) as build variables — see docs/NEXTJS-MIGRATION.md.

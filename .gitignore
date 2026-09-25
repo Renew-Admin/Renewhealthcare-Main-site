@@ -4,6 +4,7 @@ build/
 
 # Next.js build output
 .next/
+.open-next/
 next-env.d.ts
 
 .DS_Store

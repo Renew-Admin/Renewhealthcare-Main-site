@@ -1,9 +1,9 @@
 // /blogs/<slug> — every article, with its full body in the HTML.
 //
 // Posts known at build time are prerendered. Posts published from the admin
-// panel afterwards are rendered on first request and cached (dynamicParams +
-// ISR, RH-01). Retired duplicates are redirected by src/proxy.js before they
-// get here; unknown slugs are a real 404.
+// panel afterwards are rendered on request from Supabase (dynamicParams, RH-01).
+// Retired duplicates are redirected (next.config.mjs redirects) before they get
+// here; unknown slugs are a real 404.
 import { notFound } from 'next/navigation'
 import BlogPostPage from '../../../../views/BlogPostPage.jsx'
 import JsonLd from '../../../../components/JsonLd.js'
@@ -12,7 +12,6 @@ import { buildArticleSchemas, detectArticleLang, getHreflangAlternates } from '.
 import { metadataForPath, toMetadata } from '../../../../lib/nextSeo.js'
 import { getArticle, getBlogListing, getDirectory } from '../../../../lib/serverData.js'
 
-export const revalidate = 300
 export const dynamicParams = true
 
 export async function generateStaticParams() {

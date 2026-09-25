@@ -2,11 +2,10 @@
 
 Next.js (App Router) marketing and admin site for Renew Healthcare, built for a fertility and women’s health clinic in Kolkata.
 
-Every public page is rendered on the server (static generation, with 5-minute
-incremental regeneration where content comes from the admin panel), so the HTML
-response already contains the page's headings, text, links, metadata and JSON-LD.
-See [docs/NEXTJS-MIGRATION.md](./docs/NEXTJS-MIGRATION.md) for the architecture
-and the remaining Cloudflare deployment steps.
+Every public page is prerendered on the server at deploy time, so the HTML
+response already contains the page's headings, text, links, metadata and
+JSON-LD. It runs on Cloudflare Workers via the OpenNext adapter. See
+[docs/NEXTJS-MIGRATION.md](./docs/NEXTJS-MIGRATION.md) for the architecture.
 
 ## What This Repo Contains
 
@@ -40,7 +39,6 @@ and the remaining Cloudflare deployment steps.
 ```text
 src/
   app/            Next.js routes: (site)/ public pages, admin/, sitemaps, api/
-  proxy.js        410s and 301s (retired, duplicate, legacy, trailing-slash URLs)
   views/          Page components rendered by the routes in src/app
   components/     Shared UI sections and reusable blocks
   admin/          Admin panel (client-only React Router app mounted at /admin)
@@ -55,8 +53,6 @@ scripts/
                   Prebuild: stamps the build date and writes robots.txt
   fix-internal-links.mjs
                   Rewrites legacy internal links in public/blog-content/
-  prepare-cloudflare-worker-build.mjs
-                  Obsolete (Vite/Worker build); kept until the OpenNext deploy lands
 backend/
   schema.sql      Supabase schema and RLS setup
   seed.sql        Initial data for doctors/testimonials/faqs/settings
@@ -177,7 +173,8 @@ npm run start:offline
 ## Scripts
 
 - `npm run dev` - start the local development server
-- `npm run build` / `npm run start` - production build and server
+- `npm run build` - Cloudflare build (Next.js build + OpenNext Worker in `.open-next/`)
+- `npm run build:next` / `npm run start` - plain Next.js build and Node server
 - `npm run build:offline` / `npm run start:offline` - same, with Supabase disabled
 - `npm run generate:sitemap` - stamp the build date and regenerate `public/robots.txt`
 - `npm run fix:links` - rewrite internal links in `public/blog-content/` to their
@@ -188,22 +185,22 @@ npm run start:offline
 
 ## Cloudflare Deployment
 
-Not wired up yet. The previous Workers static-assets deploy (Vite build +
-`src/worker.js`) no longer applies, and `npm run deploy:cloudflare` was removed
-so the new build cannot be deployed by accident. The Next.js app deploys to
-Cloudflare Workers through the OpenNext adapter — see
-[docs/NEXTJS-MIGRATION.md](./docs/NEXTJS-MIGRATION.md#cloudflare-deployment-not-done).
-`wrangler.toml` still describes the old Worker and must be replaced as part of
-that step.
+Workers Builds settings (unchanged): build command `npm run build`, deploy
+command `npx wrangler deploy`. `npm run build` produces the OpenNext Worker in
+`.open-next/`; `wrangler.toml` points at it. Build variables and runtime
+secrets are listed in
+[docs/NEXTJS-MIGRATION.md](./docs/NEXTJS-MIGRATION.md#cloudflare-deployment).
+
+Preview the real Worker locally: `RENEW_OFFLINE=1 npm run build` then
+`npx wrangler dev --local`.
 
 ## How Blog URLs Resolve
 
 A post published from `/admin` exists only in Supabase. `/blogs/[slug]` is
 prerendered for every post known at build time; a post published later is
-rendered on its first request (`dynamicParams`) from the live blog directory
-(`src/lib/blogDirectory.js`) and cached for 5 minutes, and it appears in
-`post-sitemap.xml` within the same window — no rebuild needed. The article body
-is always in the server HTML.
+rendered on request (`dynamicParams`) from the live blog directory
+(`src/lib/blogDirectory.js`) and appears in `post-sitemap.xml` (generated live)
+immediately — no rebuild needed. The article body is always in the server HTML.
 
 `src/data/blogs.js` is the offline fallback, not the source of truth. The route
 manifest, the sitemaps and the `/blogs` listing all read the same directory, so
@@ -219,7 +216,7 @@ listing in one edit.
 - `public/robots.txt`
 - `/sitemap_index.xml`, `/sitemap.xml`, `/page-sitemap.xml`, `/services-sitemap.xml`,
   `/course-sitemap.xml`, `/post-sitemap.xml` — route handlers in `src/app/`,
-  rendered from the live blog directory and doctor list (5-minute revalidation)
+  rendered live from the blog directory and doctor list
 - `public/sitemap.xsl`
 
 ## Notes For Contributors

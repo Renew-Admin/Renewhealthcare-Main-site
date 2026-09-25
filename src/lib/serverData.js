@@ -1,6 +1,7 @@
 import 'server-only'
 // serverData — everything the public pages need from Supabase, fetched on the
-// server while the page is rendered (at build time, or on ISR revalidation).
+// server while the page is rendered: at build time for every known page, or
+// on the first request for a blog post / doctor added after the deploy.
 // The browser never has to fetch page content, so the HTML a crawler receives
 // already contains it.
 //
@@ -17,9 +18,6 @@ import { buildDoctorList } from './doctorsModel.js'
 import { rewriteInternalLinks } from './internalLinks.js'
 import { getAllSeoRoutes } from './seoRoutes.js'
 
-/** How often (seconds) pages built from Supabase data are regenerated. */
-export const CONTENT_REVALIDATE_SECONDS = 300
-
 export function serverSupabaseEnv() {
   if (process.env.RENEW_OFFLINE === '1') return {}
   return {
@@ -35,8 +33,9 @@ async function selectRows(table, query) {
   if (!url || !key) return []
   try {
     const response = await fetch(`${url}/rest/v1/${table}?${query}`, {
+      // No fetch caching: the data is fetched when a page is built, and fresh
+      // when a new post/doctor page is rendered on demand.
       headers: { apikey: key, authorization: `Bearer ${key}`, accept: 'application/json' },
-      next: { revalidate: CONTENT_REVALIDATE_SECONDS },
     })
     if (!response.ok) throw new Error(`Supabase responded ${response.status}`)
     const rows = await response.json()
@@ -59,12 +58,25 @@ export const getDirectory = cache(() => getBlogDirectory(serverSupabaseEnv()))
 
 export const getBlogListing = cache(async () => buildBlogListing(await getDirectory()))
 
-// Article bodies of the WordPress-imported posts ship as static files. They
-// are read from disk while the page is prerendered at build time.
+// Article bodies of the WordPress-imported posts ship as static files in
+// public/blog-content. They are read from disk while pages are prerendered;
+// inside the Cloudflare Worker (no filesystem) the same file is read through
+// the Workers static-assets binding instead.
 async function readStaticArticle(slug) {
   const safeSlug = String(slug).replace(/[^a-z0-9-]/gi, '')
-  const file = path.join(process.cwd(), 'public', 'blog-content', `${safeSlug}.html`)
-  return readFile(file, 'utf8')
+  try {
+    return await readFile(path.join(process.cwd(), 'public', 'blog-content', `${safeSlug}.html`), 'utf8')
+  } catch (fsError) {
+    try {
+      const { getCloudflareContext } = await import('@opennextjs/cloudflare')
+      const assets = getCloudflareContext().env.ASSETS
+      const response = await assets.fetch(new Request(`http://assets.local/blog-content/${safeSlug}.html`))
+      if (response.ok) return await response.text()
+    } catch {
+      // Not running on Cloudflare — fall through to the original error.
+    }
+    throw fsError
+  }
 }
 
 /**
@@ -83,8 +95,7 @@ export const getArticle = cache(async (slug) => {
     try {
       raw = await readStaticArticle(slug)
     } catch (error) {
-      // Throwing keeps the previously generated page in the ISR cache instead
-      // of replacing a published article with an empty one.
+      // Never publish an article page without its body: fail loudly instead.
       throw new Error(`Article body unavailable for ${slug}: ${error.message}`)
     }
   }

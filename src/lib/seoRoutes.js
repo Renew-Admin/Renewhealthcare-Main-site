@@ -160,6 +160,11 @@ export function getAllSeoRoutes() {
   return [...routes.values()]
 }
 
+/** Every legacy path -> canonical path pair (used to build next.config redirects). */
+export function getLegacyRedirects() {
+  return [...legacyRedirects.entries()]
+}
+
 export function getCanonicalRedirectPath(path) {
   const cleanPath = normalizePath(path)
   const legacyPath = legacyRedirects.get(cleanPath)

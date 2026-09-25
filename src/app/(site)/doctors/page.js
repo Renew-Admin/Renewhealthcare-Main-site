@@ -1,11 +1,9 @@
-// /doctors — static HTML built from the live doctor list (Supabase, or the
-// built-in list), regenerated every 5 minutes.
+// /doctors — static HTML built from the doctor list (Supabase, or the
+// built-in list) at deploy time, refreshed in the browser after load.
 import DoctorsPage from '../../../views/DoctorsPage.jsx'
 import JsonLd from '../../../components/JsonLd.js'
 import { breadcrumbSchema, metadataForPath } from '../../../lib/nextSeo.js'
 import { getDoctorRows } from '../../../lib/serverData.js'
-
-export const revalidate = 300
 
 export const metadata = metadataForPath('/doctors')
 

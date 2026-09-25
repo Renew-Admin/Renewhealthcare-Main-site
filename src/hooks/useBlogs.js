@@ -52,33 +52,27 @@ function merge(remote) {
 }
 
 // `initial` is the finished listing built on the server (buildBlogListing).
-// When it is given nothing is fetched in the browser, so the server HTML and
-// the hydrated page show the same posts.
+// The first render uses it, so the server HTML and the hydrated page agree;
+// after mount the list is refreshed from Supabase so posts published since the
+// last deploy appear (an empty/failed read keeps `initial`).
 export function useBlogs(initial) {
   const hasInitial = Array.isArray(initial)
-  const [remote, setRemote] = useState(cache || [])
-  const [loading, setLoading] = useState(!hasInitial && !cache)
+  const [remote, setRemote] = useState(null)
+  const [loading, setLoading] = useState(!hasInitial)
 
   useEffect(() => {
-    if (hasInitial) return undefined
     let active = true
-    if (cache) {
-      setRemote(cache)
-      setLoading(false)
-      return undefined
-    }
     loadRemote().then((posts) => {
-      if (active) {
-        setRemote(posts)
-        setLoading(false)
-      }
+      if (!active) return
+      if (!hasInitial || posts.length) setRemote(posts)
+      setLoading(false)
     })
     return () => {
       active = false
     }
   }, [hasInitial])
 
-  const blogs = hasInitial ? initial : merge(remote)
+  const blogs = remote ? merge(remote) : hasInitial ? initial : merge([])
   const categories = ['All', ...Array.from(new Set(blogs.map((b) => b.category)))]
   return { blogs, categories, loading }
 }

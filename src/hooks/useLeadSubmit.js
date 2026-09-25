@@ -2,6 +2,7 @@
 // Returns a submit() that saves to Supabase plus a status for showing feedback.
 import { useState } from 'react'
 import { createLead } from '../lib/leads.js'
+import { trackMetaEvent } from '../lib/metaPixel.js'
 
 export function useLeadSubmit() {
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
@@ -14,6 +15,7 @@ export function useLeadSubmit() {
     setError('')
     try {
       await createLead(payload)
+      trackMetaEvent('Lead', { content_name: payload?.source || 'website' })
       setStatus('sent')
       return true
     } catch (err) {

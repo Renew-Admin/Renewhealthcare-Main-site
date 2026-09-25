@@ -1,10 +1,12 @@
 // useContent — cached hooks the public site uses to read admin-managed content
 // (doctors, testimonials, faqs, settings) and merge it with the static data.
 //
-// Pages rendered by Next.js fetch this content on the server and pass it in as
-// `initial`. When `initial` is given the hook renders it as-is and does not
-// fetch in the browser, so the server HTML and the hydrated page agree. Without
-// `initial` (e.g. the announcement bar) it falls back to a client fetch.
+// Pages are prerendered at deploy time with this content fetched on the
+// server and passed in as `initial`: the first render uses it, so the server
+// HTML and the hydrated page agree. After mount the hook refreshes from
+// Supabase and swaps in newer admin edits (an empty/failed read keeps
+// `initial`). Without `initial` (e.g. the announcement bar) it is a plain
+// client fetch.
 import { useEffect, useState } from 'react'
 import { fetchPublicSettings, listActiveRows } from '../lib/publicApi.js'
 import { buildDoctorList, doctorCategories } from '../lib/doctorsModel.js'
@@ -25,17 +27,24 @@ function createResource(loader, fallback) {
   return { state, load, invalidate: () => { state.cache = null } }
 }
 
+function hasContent(value) {
+  return Array.isArray(value) ? value.length > 0 : Boolean(value && Object.keys(value).length)
+}
+
 function useResource(res, initial) {
   const hasInitial = initial !== undefined
   const [data, setData] = useState(hasInitial ? initial : res.state.fallback)
   const [loading, setLoading] = useState(!hasInitial)
   useEffect(() => {
-    if (hasInitial) return undefined
     let active = true
-    res.load().then((d) => { if (active) { setData(d); setLoading(false) } })
+    res.load().then((d) => {
+      if (!active) return
+      if (!hasInitial || hasContent(d)) setData(d)
+      setLoading(false)
+    })
     return () => { active = false }
   }, [res, hasInitial])
-  return { data: hasInitial ? initial : data, loading: hasInitial ? false : loading }
+  return { data, loading }
 }
 
 // Browser reads go through the lightweight REST client (src/lib/publicApi.js),

@@ -1,7 +1,7 @@
 // /doctor/<slug> — one page per doctor in the live doctor list.
 //
 // Every doctor known at build time is prerendered. A doctor added in the admin
-// panel later is rendered on first request and cached (dynamicParams + ISR),
+// panel later is rendered on request from Supabase (dynamicParams),
 // so the page, its metadata, the /doctors listing and the sitemap all come
 // from the same list and cannot disagree. Unknown slugs are a real 404.
 import { notFound } from 'next/navigation'
@@ -18,7 +18,6 @@ import {
 import { getSeoForPath } from '../../../../lib/seoRoutes.js'
 import { getDoctors } from '../../../../lib/serverData.js'
 
-export const revalidate = 300
 export const dynamicParams = true
 
 export async function generateStaticParams() {

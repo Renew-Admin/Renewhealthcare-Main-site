@@ -1,7 +1,9 @@
-// /page-sitemap.xml — regenerated every 5 minutes from the live blog directory and doctor list.
+// /page-sitemap.xml — generated live from the blog directory and doctor list.
 import { sitemapResponse } from '../../lib/sitemapRoute.js'
 
-export const revalidate = 300
+// Rendered on every request (cheap: two Supabase reads, cached briefly in
+// memory) so a post published in the admin panel is listed immediately.
+export const dynamic = 'force-dynamic'
 
 export function GET() {
   return sitemapResponse('page')

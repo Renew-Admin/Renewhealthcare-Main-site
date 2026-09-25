@@ -11,6 +11,9 @@
 // browser bundle, so a local build/serve never contacts the production
 // project and renders from the static data in src/data instead.
 
+import { DUPLICATE_REDIRECTS } from './src/lib/seoDuplicates.js'
+import { getLegacyRedirects } from './src/lib/seoRoutes.js'
+
 const offline = process.env.RENEW_OFFLINE === '1'
 const pick = (...names) => {
   if (offline) return ''
@@ -22,8 +25,8 @@ const pick = (...names) => {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Trailing-slash URLs are 301-redirected by src/proxy.js, the same way the
-  // old Cloudflare Worker did it, instead of Next's default 308.
+  // Trailing-slash URLs are 301-redirected by redirects() below, the same way
+  // the old Cloudflare Worker did it, instead of Next's default 308.
   skipTrailingSlashRedirect: true,
 
   // Always emit <title>, meta and canonical tags in the initial <head>,
@@ -37,7 +40,33 @@ const nextConfig = {
     NEXT_PUBLIC_GMB_WEBHOOK_BALLYGUNGE: offline ? '' : process.env.VITE_GMB_WEBHOOK_BALLYGUNGE || '',
     NEXT_PUBLIC_GMB_WEBHOOK_SALTLAKE: offline ? '' : process.env.VITE_GMB_WEBHOOK_SALTLAKE || '',
     NEXT_PUBLIC_GMB_WEBHOOK_JAMSHEDPUR: offline ? '' : process.env.VITE_GMB_WEBHOOK_JAMSHEDPUR || '',
+    // Meta Pixel (dataset) ID from Events Manager. Offline runs never load it,
+    // unless META_PIXEL_ALLOW_OFFLINE=1 is set to test the integration locally.
+    NEXT_PUBLIC_META_PIXEL_ID:
+      offline && process.env.META_PIXEL_ALLOW_OFFLINE !== '1'
+        ? ''
+        : process.env.META_PIXEL_ID || process.env.NEXT_PUBLIC_META_PIXEL_ID || process.env.VITE_META_PIXEL_ID || '',
     RENEW_OFFLINE: offline ? '1' : '',
+  },
+
+  // Redirect rules carried over from the old Cloudflare Worker, as plain
+  // config (no middleware) so they run on any host, including Cloudflare via
+  // OpenNext. Every rule is a single 301 hop:
+  //   1. retired duplicate URLs (RH-02) -> surviving URL
+  //   2. legacy URLs (old root-level blog paths, /stories) -> canonical URL
+  //   3. any other trailing-slash URL -> the same URL without the slash
+  // Both the bare and the trailing-slash form of 1 and 2 go straight to the
+  // final URL. Retired WordPress URLs answer 410 from route handlers
+  // (src/app/comment.php, content.php, products/[id]).
+  async redirects() {
+    const pairs = [...DUPLICATE_REDIRECTS.entries(), ...getLegacyRedirects()]
+    return [
+      ...pairs.flatMap(([from, to]) => [
+        { source: from, destination: to, statusCode: 301 },
+        { source: `${from}/`, destination: to, statusCode: 301 },
+      ]),
+      { source: '/:path+/', destination: '/:path+', statusCode: 301 },
+    ]
   },
 
   async headers() {

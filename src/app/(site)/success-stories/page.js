@@ -1,11 +1,9 @@
-// /success-stories — static HTML; regenerated every 5 minutes because the
-// reviews wall shows testimonials managed in the admin panel.
+// /success-stories — static HTML built at deploy time; the reviews wall
+// refreshes admin-managed testimonials in the browser after load.
 import SuccessStoriesPage from '../../../views/SuccessStoriesPage.jsx'
 import JsonLd from '../../../components/JsonLd.js'
 import { breadcrumbSchema, metadataForPath } from '../../../lib/nextSeo.js'
 import { getTestimonialRows } from '../../../lib/serverData.js'
-
-export const revalidate = 300
 
 export const metadata = metadataForPath('/success-stories')
 

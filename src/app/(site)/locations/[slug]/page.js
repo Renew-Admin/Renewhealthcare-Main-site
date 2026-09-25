@@ -1,6 +1,5 @@
 // /locations/<slug> — one static page per clinic in src/data/locations.js.
-// Regenerated every 5 minutes because the "Doctors at this clinic" list comes
-// from the live doctor list.
+// The "Doctors at this clinic" list comes from the doctor list at deploy time.
 import { notFound } from 'next/navigation'
 import LocationPage from '../../../../views/LocationPage.jsx'
 import JsonLd from '../../../../components/JsonLd.js'
@@ -8,7 +7,6 @@ import { locations } from '../../../../data/locations.js'
 import { breadcrumbSchema, locationClinicSchema, metadataForPath } from '../../../../lib/nextSeo.js'
 import { getDoctors } from '../../../../lib/serverData.js'
 
-export const revalidate = 300
 export const dynamicParams = false
 
 export function generateStaticParams() {

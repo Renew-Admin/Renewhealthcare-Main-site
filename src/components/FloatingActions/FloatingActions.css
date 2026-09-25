@@ -256,3 +256,38 @@
     animation: none;
   }
 }
+
+/* ── Enter / exit (replaces framer-motion AnimatePresence) ─────────────
+   Hidden elements stay in the DOM but are invisible, untabbable and
+   non-interactive; visibility flips only after the fade-out finishes. */
+.fab-top {
+  transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s ease, visibility 0s linear 0.22s;
+}
+
+.fab-top:not(.is-shown) {
+  opacity: 0;
+  transform: scale(0.6);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.fab-top.is-shown {
+  transition-delay: 0s;
+}
+
+.fab-panel {
+  transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.22s;
+}
+
+.fab-panel:not(.is-open) {
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.fab-panel.is-open {
+  transition-delay: 0s;
+}

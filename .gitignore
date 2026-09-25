@@ -1,6 +1,11 @@
 node_modules/
 dist/
 build/
+
+# Next.js build output
+.next/
+next-env.d.ts
+
 .DS_Store
 .claude/
 *.log

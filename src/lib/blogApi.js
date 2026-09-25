@@ -4,7 +4,7 @@
 // admin panel.
 import { supabase, isSupabaseConfigured } from './supabase.js'
 import { uploadImage } from './storage.js'
-import { resolveBlogImage } from './blogImages.js'
+import { toBlog } from './blogRow.js'
 
 // Re-export so existing imports (RichEditor, AdminEditor) keep working.
 export { uploadImage }
@@ -15,34 +15,6 @@ export { uploadImage }
 // category, excerpt, image, readMins. We add `content` (full HTML, rendered
 // directly) and `_remote: true` so pages know not to fetch a static .html file.
 // ---------------------------------------------------------------------------
-function toBlog(row) {
-  const iso = (row.published_at || row.created_at || '').slice(0, 10)
-  const date = iso
-    ? new Date(row.published_at || row.created_at).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    : ''
-  return {
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    category: row.category || 'General',
-    excerpt: row.excerpt || '',
-    content: row.content || '',
-    image: resolveBlogImage({
-      slug: row.slug,
-      image: row.cover_image || '/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg',
-    }),
-    readMins: row.read_mins || 5,
-    published: row.published,
-    isFeatured: !!row.is_featured,
-    iso,
-    date,
-    _remote: true,
-  }
-}
 
 // ---------------------------------------------------------------------------
 // PUBLIC SITE READS
@@ -154,62 +126,9 @@ export function estimateReadMins(html) {
 // Anyone can insert (RLS), but only a logged-in admin can read them.
 // ---------------------------------------------------------------------------
 
-// Submit one enquiry. `source` says which form it came from.
-export async function createLead(input) {
-  const customerNumber = input.customer_number || input.phone;
-  const whatsappNumber = input.whatsapp_number;
-  const purpose = input.purpose || input.service;
-  const formDate = input.date;
-
-  let finalMessage = input.message?.trim() || '';
-  if (whatsappNumber) {
-    finalMessage = `${finalMessage ? finalMessage + '\n\n' : ''}WhatsApp Number: ${whatsappNumber}`;
-  }
-  if (formDate) {
-    finalMessage = `${finalMessage ? finalMessage + '\n' : ''}Date: ${formDate}`;
-  }
-
-  const row = {
-    name: input.name?.trim() || null,
-    phone: customerNumber?.trim() || null,
-    email: input.email?.trim() || null,
-    service: purpose?.trim() || null,
-    message: finalMessage || null,
-    source: input.source || 'website',
-    page_path: input.page_path || (typeof window !== 'undefined' ? window.location.pathname : null),
-  }
-
-  // 1. Dispatch to Webhook (always work regardless of domain/environment)
-  const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'https://hook.us2.make.com/kfd4wrx1hohk6cy8pv8j4oe93b496lb2';
-  if (webhookUrl) {
-    try {
-      fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...row,
-          customer_number: customerNumber || null,
-          whatsapp_number: whatsappNumber || null,
-          purpose: purpose || null,
-          date: formDate || null,
-          submitted_at: new Date().toISOString(),
-        }),
-      }).catch(err => console.warn('[createLead] Webhook delivery failed:', err));
-    } catch (webhookErr) {
-      console.warn('[createLead] Webhook call error:', webhookErr);
-    }
-  }
-
-  // 2. Save to Supabase (if configured)
-  if (!isSupabaseConfigured) {
-    return;
-  }
-
-  const { error } = await supabase.from('leads').insert(row)
-  if (error) throw error
-}
+// Lead submission lives in ./leads.js (the public site must not load this
+// module); re-exported for existing imports.
+export { createLead } from './leads.js'
 
 
 // Admin: read every lead, newest first.

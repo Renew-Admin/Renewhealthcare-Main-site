@@ -1,13 +1,7 @@
 import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
 import './CallbackModal.css'
+import TodayDateInput from '../TodayDateInput.js'
 
-const getTodayDateStr = () => {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, '0');
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const yy = String(today.getFullYear()).slice(-2);
-  return `${dd}-${mm}-${yy}`;
-};
 
 export default function CallbackModal({ open, onClose }) {
   const { status, error, submit } = useLeadSubmit()
@@ -62,7 +56,7 @@ export default function CallbackModal({ open, onClose }) {
             <option value="Pre-Conception">Pre-Conception</option>
             <option value="Sperm Donation">Sperm Donation</option>
           </select>
-          <input type="hidden" name="date" value={getTodayDateStr()} />
+          <TodayDateInput />
           <textarea name="message" placeholder="Your Message" />
           <button type="submit" className="callback-submit" disabled={status === 'sending'}>
             {status === 'sending' ? 'Sending…' : 'Submit Request'}

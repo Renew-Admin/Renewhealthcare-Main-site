@@ -105,6 +105,20 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   color: #2E4034;
+  text-transform: uppercase;
+}
+
+/* The badge is the homepage's <h1>; keep it looking exactly like the badge. */
+h1.welcome-badge {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+@media (max-width: 360px) {
+  h1.welcome-badge span {
+    letter-spacing: 0.04em;
+  }
 }
 
 /* Heading */

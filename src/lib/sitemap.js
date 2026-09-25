@@ -1,21 +1,22 @@
-// sitemap — one implementation shared by the build script and the Worker.
+// sitemap — renders every sitemap the site serves (see src/app/*.xml routes).
 //
 // Blog URLs come from the live directory rather than the build-time route
-// manifest (RH-01), so post-sitemap.xml lists every published article the
-// moment it is published, with no rebuild. The build script still writes the
-// files so the site has a sane sitemap even if Supabase is unreachable; the
-// Worker overrides the two blog-bearing sitemaps with live output.
+// manifest (RH-01), and doctor URLs from the live doctor list, so a post or
+// doctor added in the admin panel is listed as soon as its page exists.
 import { BUILD_DATE } from './buildStamp.js'
 import { getAllSeoRoutes } from './seoRoutes.js'
 import { canonicalUrl, normalizePath, SITE } from './seoUtils.js'
 
-/** URL path -> sitemap name, for the sitemaps the Worker serves dynamically. */
+/** URL path -> sitemap name, for every sitemap served by a route handler. */
 export const SITEMAP_ROUTES = new Map([
   ['/post-sitemap.xml', 'post'],
+  ['/page-sitemap.xml', 'page'],
+  ['/services-sitemap.xml', 'services'],
+  ['/course-sitemap.xml', 'course'],
   ['/sitemap.xml', 'all'],
 ])
 
-/** Files the build script writes. Blog-bearing ones are also served live. */
+/** The sitemaps listed in sitemap_index.xml. */
 export const SITEMAP_FILES = [
   { filename: 'page-sitemap.xml', name: 'page' },
   { filename: 'services-sitemap.xml', name: 'services' },
@@ -68,13 +69,24 @@ function entryFor(path, lastmod) {
  * manifest. Blog entries in the manifest are ignored so the two can never
  * disagree about which articles are live.
  */
-export function buildSitemapEntries(directory = []) {
+export function buildSitemapEntries(directory = [], { doctors } = {}) {
   const entries = new Map()
+  // With a live doctor list, doctor URLs come from it (same list the
+  // /doctor/<slug> pages are built from) instead of the static manifest.
+  const liveDoctors = Array.isArray(doctors)
 
   getAllSeoRoutes().forEach(route => {
     if (isBlogPostPath(route.path)) return
+    if (liveDoctors && route.path.startsWith('/doctor/')) return
     entries.set(route.path, entryFor(route.path))
   })
+
+  if (liveDoctors) {
+    doctors.forEach(doctor => {
+      const path = normalizePath(`/doctor/${doctor.slug}`)
+      entries.set(path, entryFor(path))
+    })
+  }
 
   directory.forEach(article => {
     const path = normalizePath(`/blogs/${article.slug}`)
@@ -123,7 +135,7 @@ ${body}
 `
 }
 
-/** One named sitemap, rendered from the live blog directory. */
-export function renderSitemap(name, directory = []) {
-  return renderUrlset(selectEntries(name, buildSitemapEntries(directory)))
+/** One named sitemap, rendered from the live blog directory (and doctor list). */
+export function renderSitemap(name, directory = [], options = {}) {
+  return renderUrlset(selectEntries(name, buildSitemapEntries(directory, options)))
 }

@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import './Hero.css'
@@ -12,7 +13,6 @@ const SLIDES = [
   {
     image: '/images/hero_woman_1.webp',
     alt: 'A woman smiling, looking toward the light',
-    badge: 'WELCOME TO RENEW HEALTHCARE',
     titleA: 'Kolkata’s Trusted IVF',
     titleB: 'and Fertility Centre',
     desc: 'Expert and compassionate care for every step of your journey. Led by Dr. Rajeev Agarwal, we offer IVF, IUI, gynaecology and pregnancy care with a patient-first approach.',
@@ -23,7 +23,6 @@ const SLIDES = [
     image: '/images/hero_kid.webp',
     alt: 'A peacefully sleeping baby',
     imgClass: 'is-kid',
-    badge: 'EVERY MIRACLE MATTERS',
     titleA: 'From hope to',
     titleB: 'a heartbeat',
     desc: 'Advanced IVF and IUI treatments with some of the highest success rates in Kolkata — bringing the joy of parenthood within reach of every family.',
@@ -33,7 +32,6 @@ const SLIDES = [
   {
     image: '/images/hero_family.webp',
     alt: 'A happy multi-generational family together',
-    badge: 'CARE FOR EVERY GENERATION',
     titleA: 'Complete care for',
     titleB: 'growing families',
     desc: 'From fertility and pregnancy to gynaecology and beyond — holistic, compassionate care that supports your whole family at every stage of life.',
@@ -41,6 +39,8 @@ const SLIDES = [
     cardDesc: ['Holistic care for a', 'healthier tomorrow.'],
   },
 ]
+
+const HERO_H1 = 'IVF & Fertility Centre in Kolkata'
 
 const HERO_STATS = [
   { label: 'Years of Experience', value: 27 },
@@ -68,8 +68,10 @@ const total = SLIDES.length
 const SLIDE_SCROLL = 600 // px of fake-scroll per slide
 const PIN_DISTANCE = SLIDE_SCROLL * total // total pinned scroll distance
 
+// Starts at the real value so the server HTML (and crawlers) read "+27", not
+// "+0"; the count-up animation replays from zero once the page is interactive.
 function useCountUp(target, duration = 1400) {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(target)
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -78,6 +80,7 @@ function useCountUp(target, duration = 1400) {
       return undefined
     }
 
+    setCount(0)
     let frame
     const started = performance.now()
     const tick = now => {
@@ -196,17 +199,20 @@ function Hero() {
         {/* Copy — staggers in from the left, re-keyed per slide */}
         <div className="hero-inner">
           <motion.div className="hero-content" key={index} {...container}>
-            <motion.div className="welcome-badge" {...item}>
+            {/* The page's one <h1>. It is stable text, identical on every slide
+                and in the server HTML; the rotating slide slogans below are
+                supporting copy, not headings. */}
+            <motion.h1 className="welcome-badge" {...item}>
               <svg viewBox="0 0 24 24" width="15" height="15" fill="#4CAF6E" aria-hidden="true">
                 <path d="M12 21.3l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.3z" />
               </svg>
-              <span>{s.badge}</span>
-            </motion.div>
+              <span>{HERO_H1}</span>
+            </motion.h1>
 
-            <motion.h1 className="hero-heading" {...item}>
+            <motion.p className="hero-heading" {...item}>
               <span>{s.titleA}</span>
               <span className="heading-blue">{s.titleB}</span>
-            </motion.h1>
+            </motion.p>
 
             <motion.div className="hero-mobile-photo" aria-label="Hero image slider" {...item}>
               {SLIDES.map((slide, i) => (

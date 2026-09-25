@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '../../lib/router.js'
 import { SectionHeading, CardCarousel } from '../HomeSections/HomeSections.js'
 import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
 import { captureTracking, getTracking, trackingNote, TRACKING_KEYS } from '../../lib/tracking.js'
@@ -11,6 +11,7 @@ import {
   testimonials,
 } from '../../data/homeFeatures.js'
 import './HomeFeatures.css'
+import TodayDateInput from '../TodayDateInput.js'
 
 // A single press / publication card. Exported so the /news page can reuse it.
 export function NewsCard({ item }) {
@@ -127,13 +128,6 @@ const PURPOSE_OPTIONS = [
   'Sperm Donation',
 ]
 
-const getTodayDateStr = () => {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, '0');
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const yy = String(today.getFullYear()).slice(-2);
-  return `${dd}-${mm}-${yy}`;
-};
 
 function AppointmentSection() {
   const { status, error, submit } = useLeadSubmit()
@@ -241,7 +235,7 @@ function AppointmentSection() {
               <textarea name="message" rows={3} />
             </label>
 
-            <input type="hidden" name="date" value={getTodayDateStr()} />
+            <TodayDateInput />
 
             <button type="submit" className="rh-appointment-submit" disabled={status === 'sending'}>
               {status === 'sending' ? 'Sending…' : appointmentInfo.submitText}

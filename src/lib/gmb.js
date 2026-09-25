@@ -7,6 +7,12 @@ export const GMB_LOCATIONS = [
   { id: 'Jamshedpur', label: 'Jamshedpur', slug: 'jamshedpur', envKey: 'VITE_GMB_WEBHOOK_JAMSHEDPUR', disabled: true },
 ]
 
+const GMB_WEBHOOK_ENV = {
+  VITE_GMB_WEBHOOK_SALTLAKE: process.env.NEXT_PUBLIC_GMB_WEBHOOK_SALTLAKE,
+  VITE_GMB_WEBHOOK_BALLYGUNGE: process.env.NEXT_PUBLIC_GMB_WEBHOOK_BALLYGUNGE,
+  VITE_GMB_WEBHOOK_JAMSHEDPUR: process.env.NEXT_PUBLIC_GMB_WEBHOOK_JAMSHEDPUR,
+}
+
 export const GMB_TIME_SCHEDULES = [
   { label: '10:00 AM (Asia/Kolkata)', value: '10:00 AM', 24: '10:00' },
   { label: '6:00 PM (Asia/Kolkata)', value: '6:00 PM', 24: '18:00' },
@@ -25,9 +31,10 @@ export function getWebhookUrlForLocation(locationId) {
   const loc = GMB_LOCATIONS.find((l) => l.id === locationId || l.slug === locationId)
   if (!loc) return null
 
-  // Check Vite environment variable for location
-  // Vite exposes variables starting with VITE_ to the browser bundle at build time
-  const envVal = import.meta.env[loc.envKey] || import.meta.env[loc.envKey.replace('VITE_', '')]
+  // Per-location webhook from the environment. next.config.mjs maps the
+  // VITE_GMB_WEBHOOK_* values in .env to these NEXT_PUBLIC_* names; they must
+  // be referenced literally so Next can inline them into the admin bundle.
+  const envVal = GMB_WEBHOOK_ENV[loc.envKey]
   if (envVal) return envVal
 
   // Fallback for Ballygunge if env variable wasn't bundled during build

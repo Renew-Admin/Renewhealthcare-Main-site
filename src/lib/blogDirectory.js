@@ -19,7 +19,7 @@ import { RETIRED_BLOG_SLUGS } from './seoDuplicates.js'
 // Columns the directory needs. Deliberately excludes `content` — pulling full
 // article HTML for 143 posts on every cold request would be wasteful. Article
 // content is fetched per-slug by fetchBlogContent().
-const LIST_COLUMNS = 'slug,title,excerpt,category,cover_image,published_at,created_at,updated_at,read_mins'
+const LIST_COLUMNS = 'slug,title,excerpt,category,cover_image,published_at,created_at,updated_at,read_mins,is_featured'
 
 // How long a resolved directory is reused within one Worker isolate.
 const MEMORY_TTL_MS = 60_000
@@ -63,6 +63,7 @@ function normalizeRemote(row) {
     iso,
     modifiedIso: String(row.updated_at || '').slice(0, 10) || iso,
     date: toDisplayDate(iso),
+    isFeatured: !!row.is_featured,
     remote: true,
   }
 }

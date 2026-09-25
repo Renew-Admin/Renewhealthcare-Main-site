@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '../lib/router.js'
 
 const GA_MEASUREMENT_ID = 'G-VL7SJC7ENL'
 

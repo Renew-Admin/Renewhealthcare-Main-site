@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '../../lib/router.js'
 import { motion } from 'framer-motion'
 import './AdShowcase.css'
 

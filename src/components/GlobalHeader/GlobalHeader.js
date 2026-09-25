@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from '../../lib/router.js'
 import { useState } from 'react'
 import { doctors } from '../../data/doctors.js'
 import './GlobalHeader.css'

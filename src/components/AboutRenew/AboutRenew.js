@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '../../lib/router.js'
 import './AboutRenew.css'
 
 export default function AboutRenew({ onCallback }) {

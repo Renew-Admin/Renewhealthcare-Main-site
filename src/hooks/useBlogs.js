@@ -3,7 +3,8 @@
 // The static posts are never modified; remote posts are simply layered on top.
 import { useEffect, useState } from 'react'
 import { blogs as staticBlogs } from '../data/blogs.js'
-import { fetchPublishedPosts } from '../lib/blogApi.js'
+import { fetchPublishedPostRows } from '../lib/publicApi.js'
+import { toBlog } from '../lib/blogRow.js'
 import { resolveBlogImage } from '../lib/blogImages.js'
 import { RETIRED_BLOG_SLUGS } from '../lib/seoDuplicates.js'
 
@@ -15,7 +16,8 @@ let inflight = null
 function loadRemote() {
   if (cache) return Promise.resolve(cache)
   if (!inflight) {
-    inflight = fetchPublishedPosts()
+    inflight = fetchPublishedPostRows()
+      .then((rows) => rows.map(toBlog))
       .then((posts) => {
         cache = posts
         return posts
@@ -49,16 +51,21 @@ function merge(remote) {
   ].filter((blog) => !RETIRED_BLOG_SLUGS.has(blog.slug))
 }
 
-export function useBlogs() {
+// `initial` is the finished listing built on the server (buildBlogListing).
+// When it is given nothing is fetched in the browser, so the server HTML and
+// the hydrated page show the same posts.
+export function useBlogs(initial) {
+  const hasInitial = Array.isArray(initial)
   const [remote, setRemote] = useState(cache || [])
-  const [loading, setLoading] = useState(!cache)
+  const [loading, setLoading] = useState(!hasInitial && !cache)
 
   useEffect(() => {
+    if (hasInitial) return undefined
     let active = true
     if (cache) {
       setRemote(cache)
       setLoading(false)
-      return
+      return undefined
     }
     loadRemote().then((posts) => {
       if (active) {
@@ -69,9 +76,9 @@ export function useBlogs() {
     return () => {
       active = false
     }
-  }, [])
+  }, [hasInitial])
 
-  const blogs = merge(remote)
+  const blogs = hasInitial ? initial : merge(remote)
   const categories = ['All', ...Array.from(new Set(blogs.map((b) => b.category)))]
   return { blogs, categories, loading }
 }

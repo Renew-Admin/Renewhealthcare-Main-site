@@ -1,3 +1,4 @@
+'use client'
 import { googleReviews, googleRating, googleReviewsUrl } from '../../data/reviews.js'
 import { useTestimonials } from '../../hooks/useContent.js'
 import './GoogleReviews.css'
@@ -25,8 +26,9 @@ function Stars({ n = 5 }) {
   )
 }
 
-export default function GoogleReviews() {
-  const { testimonials } = useTestimonials()
+// testimonialRows: admin testimonials fetched on the server.
+export default function GoogleReviews({ testimonialRows }) {
+  const { testimonials } = useTestimonials(testimonialRows)
   // Supabase testimonials replace the in-code reviews once they exist.
   const reviews = testimonials.length ? testimonials : googleReviews
   return (

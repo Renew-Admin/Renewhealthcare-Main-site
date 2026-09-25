@@ -1,9 +1,13 @@
 // useContent — cached hooks the public site uses to read admin-managed content
 // (doctors, testimonials, faqs, settings) and merge it with the static data.
+//
+// Pages rendered by Next.js fetch this content on the server and pass it in as
+// `initial`. When `initial` is given the hook renders it as-is and does not
+// fetch in the browser, so the server HTML and the hydrated page agree. Without
+// `initial` (e.g. the announcement bar) it falls back to a client fetch.
 import { useEffect, useState } from 'react'
-import { doctorsApi, testimonialsApi, faqsApi, fetchSettings } from '../lib/content.js'
-import { slugify } from '../lib/blogApi.js'
-import { doctors as staticDoctors } from '../data/doctors.js'
+import { fetchPublicSettings, listActiveRows } from '../lib/publicApi.js'
+import { buildDoctorList, doctorCategories } from '../lib/doctorsModel.js'
 
 // Module-level cache so the data is fetched once per page load.
 function createResource(loader, fallback) {
@@ -21,56 +25,25 @@ function createResource(loader, fallback) {
   return { state, load, invalidate: () => { state.cache = null } }
 }
 
-function useResource(res) {
-  const [data, setData] = useState(res.state.cache ?? res.state.fallback)
-  const [loading, setLoading] = useState(res.state.cache == null)
+function useResource(res, initial) {
+  const hasInitial = initial !== undefined
+  const [data, setData] = useState(hasInitial ? initial : res.state.fallback)
+  const [loading, setLoading] = useState(!hasInitial)
   useEffect(() => {
+    if (hasInitial) return undefined
     let active = true
-    if (res.state.cache != null) { setData(res.state.cache); setLoading(false); return }
     res.load().then((d) => { if (active) { setData(d); setLoading(false) } })
     return () => { active = false }
-  }, [res])
-  return { data, loading }
+  }, [res, hasInitial])
+  return { data: hasInitial ? initial : data, loading: hasInitial ? false : loading }
 }
 
-const doctorsRes = createResource(() => doctorsApi.listActive(), [])
-const testimonialsRes = createResource(() => testimonialsApi.listActive(), [])
-const faqsRes = createResource(() => faqsApi.listActive(), [])
-const settingsRes = createResource(() => fetchSettings(), {})
-const hiddenDoctorSlugs = new Set(['dr-ruby-yadav'])
-const staticDoctorsBySlug = new Map(staticDoctors.map((doctor) => [doctor.slug, doctor]))
-
-function parseJsonArray(value) {
-  if (typeof value !== 'string') return null
-  try {
-    const parsed = JSON.parse(value)
-    return Array.isArray(parsed) ? parsed : null
-  } catch {
-    return null
-  }
-}
-
-function toStringList(value) {
-  const source = Array.isArray(value) ? value : parseJsonArray(value) || []
-  return source.map((item) => String(item || '').trim()).filter(Boolean)
-}
-
-function toPairList(value, keys) {
-  const source = Array.isArray(value) ? value : parseJsonArray(value) || []
-  return source
-    .map((item) => Object.fromEntries(keys.map((key) => [key, String(item?.[key] || '').trim()])))
-    .filter((item) => keys.some((key) => item[key]))
-}
-
-function formatPhoto(path, name) {
-  if (name === 'Dr. Rajeev Agarwal' || (path && (path.includes('Dr-rajeev-agarwal') || path.includes('Dr-Rajeev-Agarwal') || path.includes('Dr. Rajeev Agarwal')))) {
-    return '/images/renew/uploads/2026/05/Dr-Rajeev-Agarwal.webp'
-  }
-  if (!path) return ''
-  const cleaned = String(path).trim()
-  if (cleaned.startsWith('http://') || cleaned.startsWith('https://') || cleaned.startsWith('/')) return cleaned
-  return `/images/renew/uploads/${cleaned}`
-}
+// Browser reads go through the lightweight REST client (src/lib/publicApi.js),
+// not the Supabase SDK, so the public bundle stays small.
+const doctorsRes = createResource(() => listActiveRows('doctors'), [])
+const testimonialsRes = createResource(() => listActiveRows('testimonials'), [])
+const faqsRes = createResource(() => listActiveRows('faqs'), [])
+const settingsRes = createResource(() => fetchPublicSettings(), {})
 
 export const invalidateDoctors = doctorsRes.invalidate
 export const invalidateTestimonials = testimonialsRes.invalidate
@@ -78,44 +51,15 @@ export const invalidateFaqs = faqsRes.invalidate
 export const invalidateSettings = settingsRes.invalidate
 
 // Doctors: admin-managed first, then the built-in static team list.
-export function useDoctors() {
-  const { data, loading } = useResource(doctorsRes)
-  const remote = data.map((d) => {
-    const slug = slugify(d.name)
-    const fallback = staticDoctorsBySlug.get(slug)
-    const qualificationList = toStringList(d.qualifications)
-    const qualification = d.qualification || fallback?.qualification || qualificationList[0] || ''
-    return {
-      slug,
-      name: d.name,
-      qualification,
-      qualifications: qualificationList.length ? qualificationList : qualification ? [qualification] : toStringList(fallback?.qualifications),
-      role: d.role || fallback?.role || '',
-      category: d.category || fallback?.category || 'Our Experts',
-      photo: formatPhoto(d.photo, d.name) || fallback?.photo || '',
-      bio: d.bio || fallback?.bio || '',
-      experience_years: d.experience_years || fallback?.experience_years || '',
-      milestone_stat: d.milestone_stat || fallback?.milestone_stat || '',
-      specializations: toStringList(d.specializations),
-      languages: toStringList(d.languages),
-      past_attachments: toPairList(d.past_attachments, ['institution', 'description']),
-      clinic_address: d.clinic_address || fallback?.clinic_address || '',
-      service_areas: toStringList(d.service_areas),
-      faqs: toPairList(d.faqs, ['question', 'answer']),
-      _remote: true,
-    }
-  })
-  // Once Supabase has doctors (e.g. after seeding), it is the source of truth.
-  // The in-code list is only a fallback when the table is empty.
-  const doctors = (remote.length ? remote : staticDoctors).filter((d) => !hiddenDoctorSlugs.has(d.slug))
-  const categories = [...new Set(doctors.map((d) => d.category))]
-  return { doctors, categories, loading }
+// `initialRows` are raw Supabase rows fetched on the server.
+export function useDoctors(initialRows) {
+  const { data, loading } = useResource(doctorsRes, initialRows)
+  const doctors = buildDoctorList(data)
+  return { doctors, categories: doctorCategories(doctors), loading }
 }
 
-// Testimonials mapped to the shape the reviews wall expects.
-export function useTestimonials() {
-  const { data, loading } = useResource(testimonialsRes)
-  const testimonials = data.map((t) => ({
+export function mapTestimonials(rows = []) {
+  return rows.map((t) => ({
     author: t.name,
     rating: t.rating || 5,
     text: t.quote || '',
@@ -123,12 +67,17 @@ export function useTestimonials() {
     photo: t.photo || '',
     _remote: true,
   }))
-  return { testimonials, loading }
+}
+
+// Testimonials mapped to the shape the reviews wall expects.
+export function useTestimonials(initialRows) {
+  const { data, loading } = useResource(testimonialsRes, initialRows)
+  return { testimonials: mapTestimonials(data), loading }
 }
 
 // FAQs as {question, answer}.
-export function useFaqs() {
-  const { data, loading } = useResource(faqsRes)
+export function useFaqs(initialRows) {
+  const { data, loading } = useResource(faqsRes, initialRows)
   const faqs = data.map((f) => ({ question: f.question, answer: f.answer }))
   return { faqs, loading }
 }

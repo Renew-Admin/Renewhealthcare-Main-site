@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { Link } from '../../lib/router.js'
 import './FloatingActions.css'
 
 const PHONE_DISPLAY = '062923 12076'
@@ -75,72 +74,58 @@ export default function FloatingActions({ onCallback }) {
 
   return (
     <div className="fab-root" aria-live="polite">
-      <AnimatePresence>
-        {showTop && (
-          <motion.button
-            type="button"
-            key="top"
-            className="fab fab-top"
-            aria-label="Back to top"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.6 }}
-          >
-            <Icon name="up" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {/* Enter/exit animations are CSS transitions (see .is-shown / .is-open in
+          FloatingActions.css). This component is on every page, and doing the
+          two fades in framer-motion put the whole library in every page's JS. */}
+      <button
+        type="button"
+        className={`fab fab-top ${showTop ? 'is-shown' : ''}`}
+        aria-label="Back to top"
+        aria-hidden={!showTop}
+        tabIndex={showTop ? 0 : -1}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        <Icon name="up" />
+      </button>
 
       <div className="fab-stack">
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              className="fab-panel"
-              key="panel"
-              initial={{ opacity: 0, y: 16, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 16, scale: 0.96 }}
-              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="fab-panel-head">
-                <div>
-                  <strong>Renew Healthcare</strong>
-                  <span><span className="fab-dot" /> We usually reply within minutes</span>
-                </div>
-                <button type="button" className="fab-panel-close" onClick={() => setOpen(false)} aria-label="Close chat menu">
-                  <Icon name="close" />
-                </button>
-              </div>
+        <div className={`fab-panel ${open ? 'is-open' : ''}`} aria-hidden={!open}>
+          <div className="fab-panel-head">
+            <div>
+              <strong>Renew Healthcare</strong>
+              <span><span className="fab-dot" /> We usually reply within minutes</span>
+            </div>
+            <button type="button" className="fab-panel-close" onClick={() => setOpen(false)} aria-label="Close chat menu">
+              <Icon name="close" />
+            </button>
+          </div>
 
-              <p className="fab-panel-lead">Hi! 👋 How would you like to reach us?</p>
+          <p className="fab-panel-lead">Hi! 👋 How would you like to reach us?</p>
 
-              <a className="fab-opt is-whatsapp" href={WHATSAPP} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
-                <span className="fab-opt-icon"><Icon name="whatsapp" /></span>
-                <span><strong>Chat on WhatsApp</strong><small>Fastest response</small></span>
-              </a>
-              <a className="fab-opt is-call" href={TEL} onClick={() => setOpen(false)}>
-                <span className="fab-opt-icon"><Icon name="phone" /></span>
-                <span><strong>Call us now</strong><small>{PHONE_DISPLAY}</small></span>
-              </a>
-              <button
-                type="button"
-                className="fab-opt is-book"
-                onClick={() => { setOpen(false); onCallback && onCallback() }}
-              >
-                <span className="fab-opt-icon"><Icon name="calendar" /></span>
-                <span><strong>Request a call back</strong><small>We'll call you</small></span>
-              </button>
-              <a className="fab-opt is-insta" href={INSTAGRAM} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
-                <span className="fab-opt-icon"><Icon name="instagram" /></span>
-                <span><strong>Follow on Instagram</strong><small>@renewhealthcare</small></span>
-              </a>
-              <Link className="fab-panel-foot" to="/#book-appointment" onClick={() => setOpen(false)}>
-                Book your appointment online →
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          <a className="fab-opt is-whatsapp" href={WHATSAPP} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+            <span className="fab-opt-icon"><Icon name="whatsapp" /></span>
+            <span><strong>Chat on WhatsApp</strong><small>Fastest response</small></span>
+          </a>
+          <a className="fab-opt is-call" href={TEL} onClick={() => setOpen(false)}>
+            <span className="fab-opt-icon"><Icon name="phone" /></span>
+            <span><strong>Call us now</strong><small>{PHONE_DISPLAY}</small></span>
+          </a>
+          <button
+            type="button"
+            className="fab-opt is-book"
+            onClick={() => { setOpen(false); onCallback && onCallback() }}
+          >
+            <span className="fab-opt-icon"><Icon name="calendar" /></span>
+            <span><strong>Request a call back</strong><small>We'll call you</small></span>
+          </button>
+          <a className="fab-opt is-insta" href={INSTAGRAM} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+            <span className="fab-opt-icon"><Icon name="instagram" /></span>
+            <span><strong>Follow on Instagram</strong><small>@renewhealthcare</small></span>
+          </a>
+          <Link className="fab-panel-foot" to="/#book-appointment" onClick={() => setOpen(false)}>
+            Book your appointment online →
+          </Link>
+        </div>
 
         <a
           className="fab fab-whatsapp"

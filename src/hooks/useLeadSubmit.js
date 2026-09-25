@@ -1,7 +1,7 @@
 // useLeadSubmit — shared logic so every lead form on the site behaves the same.
 // Returns a submit() that saves to Supabase plus a status for showing feedback.
 import { useState } from 'react'
-import { createLead } from '../lib/blogApi.js'
+import { createLead } from '../lib/leads.js'
 
 export function useLeadSubmit() {
   const [status, setStatus] = useState('idle') // idle | sending | sent | error

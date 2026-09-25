@@ -1,6 +1,12 @@
 # Renew Healthcare Main Site
 
-React + Vite marketing and admin site for Renew Healthcare, built for a fertility and women’s health clinic in Kolkata.
+Next.js (App Router) marketing and admin site for Renew Healthcare, built for a fertility and women’s health clinic in Kolkata.
+
+Every public page is rendered on the server (static generation, with 5-minute
+incremental regeneration where content comes from the admin panel), so the HTML
+response already contains the page's headings, text, links, metadata and JSON-LD.
+See [docs/NEXTJS-MIGRATION.md](./docs/NEXTJS-MIGRATION.md) for the architecture
+and the remaining Cloudflare deployment steps.
 
 ## What This Repo Contains
 
@@ -11,16 +17,15 @@ React + Vite marketing and admin site for Renew Healthcare, built for a fertilit
 
 ## Tech Stack
 
-- React 18
-- Vite
-- React Router
+- Next.js 16 (App Router) + React 19
 - Framer Motion
+- React Router (admin panel only)
 - Supabase Auth, Database, and Storage
 
 ## Key Features
 
 - Responsive public site with a shared header, footer, announcement banner, and floating contact actions.
-- SEO metadata handled in-app with canonical tags, Open Graph tags, Twitter cards, and JSON-LD.
+- SEO metadata rendered on the server from one route manifest (`src/lib/seoRoutes.js` → `src/lib/nextSeo.js`): title, description, canonical, robots, Open Graph, Twitter cards and JSON-LD.
 - Blog system with:
   - public blog listing and article pages
   - static blog-content HTML fallbacks
@@ -34,23 +39,24 @@ React + Vite marketing and admin site for Renew Healthcare, built for a fertilit
 
 ```text
 src/
+  app/            Next.js routes: (site)/ public pages, admin/, sitemaps, api/
+  proxy.js        410s and 301s (retired, duplicate, legacy, trailing-slash URLs)
+  views/          Page components rendered by the routes in src/app
   components/     Shared UI sections and reusable blocks
-  pages/          Public pages and page-specific layouts
-  admin/          Admin panel, editors, tables, auth, and UI helpers
-  data/           Static fallback content
-  hooks/          Data loading and lead submission hooks
-  lib/            Supabase client, storage, content, and blog APIs
+  admin/          Admin panel (client-only React Router app mounted at /admin)
+  data/           Static content and fallbacks
+  hooks/          Client data hooks and lead submission
+  lib/            SEO, server data, sitemaps, Supabase clients, blog helpers
 public/
-  blog-content/   Static blog article HTML
+  blog-content/   Static blog article HTML (rendered into /blogs/<slug> on the server)
   images/         Site assets
-  sitemap.xml     Search-engine sitemap
 scripts/
   generate-sitemap.js
-                  Generates robots.txt and the sitemaps from the blog directory
+                  Prebuild: stamps the build date and writes robots.txt
   fix-internal-links.mjs
                   Rewrites legacy internal links in public/blog-content/
   prepare-cloudflare-worker-build.mjs
-                  Removes Pages-only files from Worker asset uploads
+                  Obsolete (Vite/Worker build); kept until the OpenNext deploy lands
 backend/
   schema.sql      Supabase schema and RLS setup
   seed.sql        Initial data for doctors/testimonials/faqs/settings
@@ -135,13 +141,24 @@ npm install
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
 
+The `VITE_` names are kept for compatibility; `next.config.mjs` maps them to
+`NEXT_PUBLIC_*`. Only the public anon key may go here — never a service-role key.
+
 3. Run the dev server:
 
 ```bash
 npm run dev
 ```
 
-The app will usually start on `http://127.0.0.1:5173/` or the next available port.
+The app starts on `http://localhost:3000/`.
+
+To build and run the production server without contacting Supabase at all
+(static fallback content; lead forms become a local dry run):
+
+```bash
+npm run build:offline
+npm run start:offline
+```
 
 ## Supabase Setup
 
@@ -160,51 +177,33 @@ The app will usually start on `http://127.0.0.1:5173/` or the next available por
 ## Scripts
 
 - `npm run dev` - start the local development server
-- `npm run generate:sitemap` - regenerate `public/sitemap.xml` and `public/robots.txt`
+- `npm run build` / `npm run start` - production build and server
+- `npm run build:offline` / `npm run start:offline` - same, with Supabase disabled
+- `npm run generate:sitemap` - stamp the build date and regenerate `public/robots.txt`
 - `npm run fix:links` - rewrite internal links in `public/blog-content/` to their
   current paths so none of them costs a redirect hop
 - `npm run check:links` - report-only version of the above; exits non-zero if any
   article still links through a redirect (run this in CI after a content import)
-- `npm run build` - regenerate SEO files and build the production bundle into `build/`
-- `npm run deploy:cloudflare` - build and deploy to Cloudflare Workers static assets
-- `npm run preview` - preview the production build locally
 - `npm run lint` - run ESLint
 
-## Cloudflare Workers Deployment
+## Cloudflare Deployment
 
-Use Cloudflare Workers static assets for this project.
-
-- Build command: `npm run build`
-- Build output directory: `build`
-- Root directory: `/`
-- Deploy command: `npx wrangler deploy`
-
-The Worker is configured in `wrangler.toml` with `not_found_handling = "single-page-application"` for React Router direct URLs.
-Do not use `wrangler pages deploy` for this project because the production URL is `renewhealthcare.lokesh-7e0.workers.dev`.
-
-### Required Worker secrets
-
-The Worker resolves blog routes and sitemaps against Supabase at request time,
-so it needs the same two values the browser bundle uses. Set them once per
-environment before deploying:
-
-```bash
-npx wrangler secret put SUPABASE_URL
-npx wrangler secret put SUPABASE_ANON_KEY
-```
-
-For local `wrangler dev`, copy `.dev.vars.example` to `.dev.vars` and fill it in.
-
-Without these the site still serves every page, but blog routes and sitemaps
-fall back to the built-in list in `src/data/blogs.js`, and posts published from
-the admin panel since the last deploy will return 404 again.
+Not wired up yet. The previous Workers static-assets deploy (Vite build +
+`src/worker.js`) no longer applies, and `npm run deploy:cloudflare` was removed
+so the new build cannot be deployed by accident. The Next.js app deploys to
+Cloudflare Workers through the OpenNext adapter — see
+[docs/NEXTJS-MIGRATION.md](./docs/NEXTJS-MIGRATION.md#cloudflare-deployment-not-done).
+`wrangler.toml` still describes the old Worker and must be replaced as part of
+that step.
 
 ## How Blog URLs Resolve
 
-A post published from `/admin` exists only in Supabase. The Worker looks up
-`/blogs/:slug` against the live blog directory (`src/lib/blogDirectory.js`,
-60-second cache) rather than a build-time list, so a new post answers 200 and
-appears in `post-sitemap.xml` with no rebuild or cache purge.
+A post published from `/admin` exists only in Supabase. `/blogs/[slug]` is
+prerendered for every post known at build time; a post published later is
+rendered on its first request (`dynamicParams`) from the live blog directory
+(`src/lib/blogDirectory.js`) and cached for 5 minutes, and it appears in
+`post-sitemap.xml` within the same window — no rebuild needed. The article body
+is always in the server HTML.
 
 `src/data/blogs.js` is the offline fallback, not the source of truth. The route
 manifest, the sitemaps and the `/blogs` listing all read the same directory, so
@@ -218,8 +217,9 @@ listing in one edit.
 ## SEO Files
 
 - `public/robots.txt`
-- `public/sitemap.xml` — build-time baseline; the Worker serves this and
-  `post-sitemap.xml` live from the blog directory
+- `/sitemap_index.xml`, `/sitemap.xml`, `/page-sitemap.xml`, `/services-sitemap.xml`,
+  `/course-sitemap.xml`, `/post-sitemap.xml` — route handlers in `src/app/`,
+  rendered from the live blog directory and doctor list (5-minute revalidation)
 - `public/sitemap.xsl`
 
 ## Notes For Contributors

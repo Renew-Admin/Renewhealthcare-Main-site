@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '../../lib/router.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faFacebookF,
@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
 import './SiteFooter.css'
+import TodayDateInput from '../TodayDateInput.js'
 
 const aboutFull = 'Renew Healthcare is dedicated to helping individuals and couples achieve their dream of starting a family through our advanced treatments, gynecology services, and women&rsquo;s aesthetic health services. Our team of experts is committed to providing compassionate care and personalized treatment plans to help you achieve your goals.'
 
@@ -72,13 +73,6 @@ function InlineIcon({ type }) {
   return <svg className="footer-inline-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0z" /><circle cx="12" cy="10" r="3" /></svg>
 }
 
-const getTodayDateStr = () => {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, '0');
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const yy = String(today.getFullYear()).slice(-2);
-  return `${dd}-${mm}-${yy}`;
-};
 
 export default function SiteFooter({ onCallback }) {
   const { status, error, submit } = useLeadSubmit()
@@ -230,7 +224,7 @@ export default function SiteFooter({ onCallback }) {
                         {['utm_campaign', 'utm_source', 'utm_medium', 'utm_term', 'utm_content', 'gclid'].map(name => (
                           <input className="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name={name} key={name} readOnly />
                         ))}
-                        <input className="wpcf7-form-control wpcf7-hidden" value={getTodayDateStr()} type="hidden" name="date" readOnly />
+                        <TodayDateInput className="wpcf7-form-control wpcf7-hidden" />
                         <input className="wpcf7-form-control wpcf7-submit has-spinner custom-button" type="submit" value={status === 'sending' ? 'Sending…' : 'Get a Consultation'} disabled={status === 'sending'} />
                         <span className="wpcf7-spinner"></span>
                         {status === 'sent' && <p className="lead-form-msg ok">Thank you! We&rsquo;ll call you back shortly.</p>}

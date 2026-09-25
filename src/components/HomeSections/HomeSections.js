@@ -1,5 +1,6 @@
+'use client'
 import { Children, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '../../lib/router.js'
 import { useBlogs } from '../../hooks/useBlogs.js'
 import './HomeSections.css'
 
@@ -308,8 +309,9 @@ export function CardCarousel({ children, className, label, autoPlayMs = 0, autoP
   )
 }
 
-export default function HomeSections() {
-  const { blogs } = useBlogs()
+// initialBlogs: the latest posts, resolved on the server.
+export default function HomeSections({ initialBlogs }) {
+  const { blogs } = useBlogs(initialBlogs)
   const homeBlogs = blogs.slice(0, 4)
   const leadDoctor = doctors[0]
   const scrollingDoctors = doctors.slice(1)

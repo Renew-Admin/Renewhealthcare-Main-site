@@ -242,18 +242,35 @@
   transform: translateX(3px);
 }
 
+.global-nav-dropdown.is-mega {
+  /* Let the panel position against the whole header, not the "Services" link,
+     so it opens directly under the header bar and centred on the page. */
+  position: static;
+}
+
 .global-mega {
-  position: fixed;
-  top: 70px;
+  top: 100%;
   left: 50%;
-  width: min(860px, calc(100vw - 32px));
-  max-height: min(620px, calc(100dvh - 92px));
+  width: min(1120px, calc(100vw - 32px));
+  max-height: calc(100dvh - 130px);
   overflow-y: auto;
-  padding: 16px;
+  overscroll-behavior: contain;
+  padding: 14px;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
   transform: translate(-50%, 12px) scale(0.98);
+}
+
+/* Invisible bridge over the gap between the "Services" link and the panel,
+   so the menu stays open while the pointer travels down to it. */
+.global-mega::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 20px;
 }
 
 .global-nav-dropdown:hover .global-mega,
@@ -261,29 +278,79 @@
   transform: translate(-50%, 0) scale(1);
 }
 
-.global-mega-column h3 {
-  margin-bottom: 8px;
-  color: var(--navy);
-  font-family: var(--font-heading);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0 2px 2px;
-}
-
 .global-mega-column {
   min-width: 0;
-  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 10px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.86);
 }
 
-.global-mega .global-mega-all {
-  margin-top: 6px;
+.global-mega-column h3 {
+  margin-bottom: 6px;
+  padding: 0 10px 8px;
+  border-bottom: 1px solid rgba(7, 90, 145, 0.1);
   color: var(--navy);
-  font-weight: 800;
-  background: rgba(7, 90, 145, 0.06);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.global-mega-column a {
+  overflow-wrap: anywhere;
+}
+
+.global-mega-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px 12px 20px;
+  border-radius: 14px;
+  background: rgba(7, 90, 145, 0.05);
+}
+
+.global-mega-foot > span {
+  color: #4b5563;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.global-mega .global-mega-all {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(135deg, #086ba7, #075387);
+}
+
+.global-mega .global-mega-all:hover {
+  color: #fff;
+  background: linear-gradient(135deg, #0a7cc0, #075a91);
+  transform: none;
+}
+
+.global-mega-all svg {
+  transition: transform 0.2s ease;
+}
+
+.global-mega-all:hover svg {
+  transform: translateX(3px);
+}
+
+@media (max-width: 1180px) {
+  .global-mega-column a {
+    font-size: 0.8rem;
+  }
 }
 
 .doctor-panel {
@@ -296,6 +363,13 @@
 .global-nav-dropdown:hover .doctor-panel,
 .global-nav-dropdown:focus-within .doctor-panel {
   transform: translate(-50%, 0) scale(1);
+}
+
+/* Closed right after a menu link is clicked, until the mouse leaves. */
+.global-nav-dropdown.is-closed .global-nav-panel {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .doctor-panel-head {

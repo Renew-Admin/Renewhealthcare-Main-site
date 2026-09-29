@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from '../../lib/router.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -9,9 +10,10 @@ import {
   faXTwitter,
   faYoutube,
 } from '@fortawesome/free-brands-svg-icons'
-import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
+import { useLeadSubmit, validateLeadForm } from '../../hooks/useLeadSubmit.js'
 import './SiteFooter.css'
 import TodayDateInput from '../TodayDateInput.js'
+import PurposeOtherInput, { OTHER_PURPOSE } from '../PurposeOtherInput.js'
 
 const aboutFull = 'Renew Healthcare is dedicated to helping individuals and couples achieve their dream of starting a family through our advanced treatments, gynecology services, and women&rsquo;s aesthetic health services. Our team of experts is committed to providing compassionate care and personalized treatment plans to help you achieve your goals.'
 
@@ -76,10 +78,12 @@ function InlineIcon({ type }) {
 
 export default function SiteFooter({ onCallback }) {
   const { status, error, submit } = useLeadSubmit()
+  const [purpose, setPurpose] = useState('')
 
   const handleSubmit = async event => {
     event.preventDefault()
     const form = event.currentTarget
+    if (!validateLeadForm(form)) return
     const data = new FormData(form)
     const ok = await submit({
       name: data.get('Name'),
@@ -87,11 +91,15 @@ export default function SiteFooter({ onCallback }) {
       whatsapp_number: data.get('whatsapp_number'),
       email: data.get('Email'),
       purpose: data.get('purpose'),
+      purpose_other: data.get('purpose_other'),
       message: data.get('YourMessage'),
       date: data.get('date'),
       source: 'footer',
     })
-    if (ok) form.reset()
+    if (ok) {
+      form.reset()
+      setPurpose('')
+    }
   }
 
   return (
@@ -175,21 +183,21 @@ export default function SiteFooter({ onCallback }) {
                     <p role="status" aria-live="polite" aria-atomic="true"></p>
                     <ul></ul>
                   </div>
-                  <form action="/#wpcf7-f558-o4" method="post" className="wpcf7-form init" aria-label="Contact form" noValidate data-status="init" onSubmit={handleSubmit}>
+                  <form action="/#wpcf7-f558-o4" method="post" className="wpcf7-form init" aria-label="Contact form" data-status="init" onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="Name">
                           <input size="40" maxLength="400" className="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Name" type="text" name="Name" required />
                         </span>
                       </div>
-                      <div className="col-lg-6">
+                      <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="customer_number">
-                          <input size="40" maxLength="400" className="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" placeholder="Customer Number" type="tel" name="customer_number" required />
+                          <input size="40" maxLength="10" inputMode="numeric" className="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" placeholder="Your Phone Number" type="tel" name="customer_number" required />
                         </span>
                       </div>
-                      <div className="col-lg-6">
+                      <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="whatsapp_number">
-                          <input size="40" maxLength="400" className="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" placeholder="WhatsApp Number" type="tel" name="whatsapp_number" required />
+                          <input size="40" maxLength="10" inputMode="numeric" className="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" placeholder="WhatsApp Number" type="tel" name="whatsapp_number" required />
                         </span>
                       </div>
                       <div className="col-lg-12">
@@ -199,7 +207,7 @@ export default function SiteFooter({ onCallback }) {
                       </div>
                       <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="purpose">
-                          <select className="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false" name="purpose" defaultValue="" required>
+                          <select className="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false" name="purpose" defaultValue="" required onChange={e => setPurpose(e.target.value)}>
                             <option value="" disabled>Purpose</option>
                             <option value="Surrogacy">Surrogacy</option>
                             <option value="Egg Freezing">Egg Freezing</option>
@@ -215,9 +223,16 @@ export default function SiteFooter({ onCallback }) {
                           </select>
                         </span>
                       </div>
+                      {purpose === OTHER_PURPOSE && (
+                        <div className="col-lg-12">
+                          <span className="wpcf7-form-control-wrap" data-name="purpose_other">
+                            <PurposeOtherInput className="wpcf7-form-control wpcf7-text" />
+                          </span>
+                        </div>
+                      )}
                       <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="YourMessage">
-                          <textarea cols="40" rows="10" maxLength="2000" className="wpcf7-form-control wpcf7-textarea" aria-invalid="false" placeholder="Your Message" name="YourMessage"></textarea>
+                          <textarea cols="40" rows="10" maxLength="300" className="wpcf7-form-control wpcf7-textarea" aria-invalid="false" placeholder="Your Message (max 300 characters)" name="YourMessage"></textarea>
                         </span>
                       </div>
                       <div className="col-lg-12">
@@ -225,7 +240,15 @@ export default function SiteFooter({ onCallback }) {
                           <input className="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name={name} key={name} readOnly />
                         ))}
                         <TodayDateInput className="wpcf7-form-control wpcf7-hidden" />
-                        <input className="wpcf7-form-control wpcf7-submit has-spinner custom-button" type="submit" value={status === 'sending' ? 'Sending…' : 'Get a Consultation'} disabled={status === 'sending'} />
+                        <button className="footer-cta-btn" type="submit" disabled={status === 'sending'}>
+                          <span>{status === 'sending' ? 'Sending…' : 'Get A Consultation'}</span>
+                          {status !== 'sending' && (
+                            <svg className="footer-cta-arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                              <polyline points="13 6 19 12 13 18" />
+                            </svg>
+                          )}
+                        </button>
                         <span className="wpcf7-spinner"></span>
                         {status === 'sent' && <p className="lead-form-msg ok">Thank you! We&rsquo;ll call you back shortly.</p>}
                         {status === 'error' && <p className="lead-form-msg err">{error}</p>}

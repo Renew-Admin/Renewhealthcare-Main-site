@@ -8,6 +8,7 @@
   align-items: flex-end;
   gap: 12px;
   pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .fab-root > *,
@@ -255,6 +256,10 @@
   .fab-dot {
     animation: none;
   }
+
+  .fab-root {
+    transition: none;
+  }
 }
 
 /* ── Enter / exit (replaces framer-motion AnimatePresence) ─────────────
@@ -290,4 +295,17 @@
 
 .fab-panel.is-open {
   transition-delay: 0s;
+}
+
+/* Slid out while the footer form is on screen (phones only; on larger screens
+   the footer keeps a gutter clear of these buttons). */
+@media (max-width: 767px) {
+  .fab-root.is-tucked {
+    opacity: 0;
+    transform: translateX(calc(100% + 24px));
+  }
+
+  .fab-root.is-tucked > * {
+    pointer-events: none;
+  }
 }

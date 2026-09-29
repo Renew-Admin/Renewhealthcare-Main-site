@@ -1,8 +1,9 @@
 'use client'
 import { useRef, useState } from 'react'
 import { Link } from '../lib/router.js'
-import { useLeadSubmit } from '../hooks/useLeadSubmit.js'
+import { useLeadSubmit, validateLeadForm } from '../hooks/useLeadSubmit.js'
 import TodayDateInput from '../components/TodayDateInput.js'
+import PurposeOtherInput, { OTHER_PURPOSE } from '../components/PurposeOtherInput.js'
 import './FinalPages.css'
 import './ServicesPages.css'
 
@@ -33,6 +34,25 @@ function compactText(part) {
   const sentence = clean.match(/^(.{70,220}?[.!?])(\s|$)/)
   if (sentence) return sentence[1]
   return clean.split(' ').slice(0, 24).join(' ')
+}
+
+// A short line ending in ":" ("Part 1 – Basic Sciences:") labels the list or
+// text below it; longer lead-in sentences stay as body copy.
+function isSubhead(line) {
+  const text = line.trim()
+  return text.endsWith(':') && text.length <= 70
+}
+
+// Splits a section body into paragraphs (strings) and runs of "- " lines
+// (arrays), so each run renders as one <ul> with its bullets lined up.
+function groupLines(body) {
+  const blocks = []
+  for (const line of body.split('\n').filter(Boolean)) {
+    if (!line.startsWith('- ')) blocks.push(line)
+    else if (Array.isArray(blocks.at(-1))) blocks.at(-1).push(line.slice(2))
+    else blocks.push([line.slice(2)])
+  }
+  return blocks
 }
 
 // `page` is looked up on the server (src/data/finalPageLookup.js), so the
@@ -66,17 +86,17 @@ export default function FinalContentByKey({ pageKey, page }) {
           {isContact && <ContactBlock />}
           {isPackages && <PackageContent />}
           {!isPackages && (
-            <div className="service-section-stack">
+            <div className="service-section-stack final-section-stack">
               {page.sections.map(section => (
                 <article className="service-detail-card" key={section.heading}>
                   <h3>{section.heading}</h3>
-                  <div className="service-rich-text">
-                    {section.body.split('\n').filter(Boolean).map((line, i) => line.startsWith('- ')
-                      ? <li key={i}>{line.slice(2)}</li>
+                  <div className="service-rich-text final-rich-text">
+                    {groupLines(section.body).map((block, i) => Array.isArray(block)
+                      ? <ul key={i}>{block.map((item, j) => <li key={j}>{item}</li>)}</ul>
                       : (
-                        <p key={i}>
-                          <span className="mobile-copy-short">{compactText(line)}</span>
-                          <span className="desktop-copy-full">{line}</span>
+                        <p key={i} className={isSubhead(block) ? 'final-subhead' : undefined}>
+                          <span className="mobile-copy-short">{compactText(block)}</span>
+                          <span className="desktop-copy-full">{block}</span>
                         </p>
                       ))}
                   </div>
@@ -334,9 +354,11 @@ function QuickIcon({ name }) {
 
 function ContactBlock() {
   const { status, error, submit } = useLeadSubmit()
+  const [purpose, setPurpose] = useState('')
   const onSubmit = async event => {
     event.preventDefault()
     const form = event.currentTarget
+    if (!validateLeadForm(form)) return
     const data = new FormData(form)
     const ok = await submit({
       name: data.get('name'),
@@ -344,11 +366,15 @@ function ContactBlock() {
       whatsapp_number: data.get('whatsapp_number'),
       email: data.get('email'),
       purpose: data.get('purpose'),
+      purpose_other: data.get('purpose_other'),
       message: data.get('message'),
       date: data.get('date'),
       source: 'contact-page',
     })
-    if (ok) form.reset()
+    if (ok) {
+      form.reset()
+      setPurpose('')
+    }
   }
   return (
     <>
@@ -370,10 +396,10 @@ function ContactBlock() {
       <div className="contact-grid">
         <form className="contact-form" onSubmit={onSubmit}>
           <input name="name" placeholder="Name" required />
-          <input type="tel" name="customer_number" placeholder="Customer Number" required />
-          <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" required />
+          <input type="tel" name="customer_number" placeholder="Your Phone Number" inputMode="numeric" maxLength={10} required />
+          <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" inputMode="numeric" maxLength={10} required />
           <input type="email" name="email" placeholder="Email" />
-          <select name="purpose" defaultValue="" required>
+          <select name="purpose" defaultValue="" required onChange={e => setPurpose(e.target.value)}>
             <option value="" disabled>Purpose</option>
             <option value="Surrogacy">Surrogacy</option>
             <option value="Egg Freezing">Egg Freezing</option>
@@ -387,8 +413,9 @@ function ContactBlock() {
             <option value="Pre-Conception">Pre-Conception</option>
             <option value="Sperm Donation">Sperm Donation</option>
           </select>
+          {purpose === OTHER_PURPOSE && <PurposeOtherInput />}
           <TodayDateInput />
-          <textarea name="message" placeholder="Message" />
+          <textarea name="message" placeholder="Message (max 300 characters)" maxLength={300} />
           <button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Submit Request'}</button>
           {status === 'sent' && <p className="lead-form-msg ok">Thank you! Our team will reach out shortly.</p>}
           {status === 'error' && <p className="lead-form-msg err">{error}</p>}

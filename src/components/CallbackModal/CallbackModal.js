@@ -1,15 +1,19 @@
-import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
+import { useState } from 'react'
+import { useLeadSubmit, validateLeadForm } from '../../hooks/useLeadSubmit.js'
 import './CallbackModal.css'
 import TodayDateInput from '../TodayDateInput.js'
+import PurposeOtherInput, { OTHER_PURPOSE } from '../PurposeOtherInput.js'
 
 
 export default function CallbackModal({ open, onClose }) {
   const { status, error, submit } = useLeadSubmit()
+  const [purpose, setPurpose] = useState('')
   if (!open) return null
 
   const onSubmit = async event => {
     event.preventDefault()
     const form = event.currentTarget
+    if (!validateLeadForm(form)) return
     const data = new FormData(form)
     const ok = await submit({
       name: data.get('name'),
@@ -17,11 +21,15 @@ export default function CallbackModal({ open, onClose }) {
       whatsapp_number: data.get('whatsapp_number'),
       email: data.get('email'),
       purpose: data.get('purpose'),
+      purpose_other: data.get('purpose_other'),
       message: data.get('message'),
       date: data.get('date'),
       source: 'callback-modal',
     })
-    if (ok) form.reset()
+    if (ok) {
+      form.reset()
+      setPurpose('')
+    }
   }
 
   return (
@@ -39,10 +47,10 @@ export default function CallbackModal({ open, onClose }) {
 
         <form className="callback-form" onSubmit={onSubmit}>
           <input type="text" name="name" placeholder="Name" required />
-          <input type="tel" name="customer_number" placeholder="Customer Number" required />
-          <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" required />
+          <input type="tel" name="customer_number" placeholder="Your Phone Number" inputMode="numeric" maxLength={10} required />
+          <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" inputMode="numeric" maxLength={10} required />
           <input type="email" name="email" placeholder="Email" />
-          <select name="purpose" defaultValue="" required>
+          <select name="purpose" defaultValue="" required onChange={e => setPurpose(e.target.value)}>
             <option value="" disabled>Purpose</option>
             <option value="Surrogacy">Surrogacy</option>
             <option value="Egg Freezing">Egg Freezing</option>
@@ -56,8 +64,9 @@ export default function CallbackModal({ open, onClose }) {
             <option value="Pre-Conception">Pre-Conception</option>
             <option value="Sperm Donation">Sperm Donation</option>
           </select>
+          {purpose === OTHER_PURPOSE && <PurposeOtherInput />}
           <TodayDateInput />
-          <textarea name="message" placeholder="Your Message" />
+          <textarea name="message" placeholder="Your Message (max 300 characters)" maxLength={300} />
           <button type="submit" className="callback-submit" disabled={status === 'sending'}>
             {status === 'sending' ? 'Sending…' : 'Submit Request'}
           </button>

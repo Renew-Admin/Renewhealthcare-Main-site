@@ -261,8 +261,7 @@
   opacity: 1;
 }
 
-.custom-button,
-.footer-form .custom-button {
+.custom-button {
   width: fit-content;
   height: 60px;
   display: inline-flex;
@@ -295,21 +294,60 @@
   padding: 0 15px 0 30px;
 }
 
-.footer-form .custom-button {
-  height: 50px;
-  margin: 0 auto;
-  padding: 0 28px;
-  border-radius: 50px;
-  background: #fff !important;
-  color: #000 !important;
-  text-align: center;
+/* "Get A Consultation" submit: full width of the fields above, arrow nudges
+   right on hover. */
+.footer-form .footer-cta-btn {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 8px 0 20px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(120deg, #11a1bc 0%, #0f7fb0 55%, #0f5c94 100%);
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 12px rgba(4, 30, 55, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+  transition: all 0.3s ease;
 }
 
-.footer-form .custom-button:hover {
-  background: var(--footer-accent) !important;
-  color: #fff !important;
-  flex-direction: row;
-  padding: 0 28px;
+.footer-form .footer-cta-arrow {
+  flex: 0 0 auto;
+  transition: transform 0.3s ease;
+}
+
+.footer-form .footer-cta-btn:hover:not(:disabled),
+.footer-form .footer-cta-btn:focus-visible {
+  transform: translateY(-2px);
+  background: linear-gradient(120deg, #14b3d0 0%, #1190c4 55%, #0f67a6 100%);
+  box-shadow: 0 6px 20px rgba(17, 161, 188, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.footer-form .footer-cta-btn:hover:not(:disabled) .footer-cta-arrow,
+.footer-form .footer-cta-btn:focus-visible .footer-cta-arrow {
+  transform: translateX(4px);
+}
+
+.footer-form .footer-cta-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.footer-form .footer-cta-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.footer-form .footer-cta-btn:disabled {
+  cursor: wait;
+  opacity: 0.75;
 }
 
 .footer-bottom {
@@ -378,6 +416,12 @@
 }
 
 @media (min-width: 768px) {
+  /* Keep the columns (and the call-back form) clear of the fixed
+     WhatsApp / chat / back-to-top buttons on the right edge. */
+  .footer_sec .container {
+    width: min(1350px, calc(100% - 170px));
+  }
+
   .footer_sec .col-md-5 {
     flex: 0 0 41.666667%;
     max-width: 41.666667%;
@@ -427,12 +471,6 @@
   .footer-form .col-lg-12 {
     flex: 0 0 100%;
     max-width: 100%;
-  }
-}
-
-@media (max-width: 1199px) {
-  .footer-form .custom-button {
-    font-size: 13px !important;
   }
 }
 
@@ -691,13 +729,8 @@
     height: 70px;
   }
 
-  .footer-form .custom-button {
-    width: 100%;
-    min-height: 44px;
-    display: flex;
-    width: fit-content;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+  .footer-form .footer-cta-btn {
+    min-height: 48px;
+    font-size: 0.95rem;
   }
 }

@@ -72,8 +72,20 @@ export default function FloatingActions({ onCallback }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // On phones the footer "Get A Call Back" form spans the full width, so the
+  // buttons would sit on top of it; tuck them away while it is on screen.
+  const [nearFooterForm, setNearFooterForm] = useState(false)
+
+  useEffect(() => {
+    const form = document.querySelector('.footer-form')
+    if (!form || typeof IntersectionObserver === 'undefined') return
+    const observer = new IntersectionObserver(([entry]) => setNearFooterForm(entry.isIntersecting))
+    observer.observe(form)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className="fab-root" aria-live="polite">
+    <div className={`fab-root ${nearFooterForm && !open ? 'is-tucked' : ''}`} aria-live="polite">
       {/* Enter/exit animations are CSS transitions (see .is-shown / .is-open in
           FloatingActions.css). This component is on every page, and doing the
           two fades in framer-motion put the whole library in every page's JS. */}

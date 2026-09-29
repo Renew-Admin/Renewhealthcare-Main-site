@@ -10,8 +10,14 @@ export async function createLead(input) {
   const whatsappNumber = input.whatsapp_number;
   const purpose = input.purpose || input.service;
   const formDate = input.date;
+  // Details typed when "Others" is picked; there is no column for it, so it
+  // leads the message.
+  const purposeDetails = purpose === 'Others' ? input.purpose_other?.trim() || '' : '';
 
   let finalMessage = input.message?.trim() || '';
+  if (purposeDetails) {
+    finalMessage = `Other purpose: ${purposeDetails}${finalMessage ? '\n\n' + finalMessage : ''}`;
+  }
   if (whatsappNumber) {
     finalMessage = `${finalMessage ? finalMessage + '\n\n' : ''}WhatsApp Number: ${whatsappNumber}`;
   }
@@ -50,6 +56,7 @@ export async function createLead(input) {
           customer_number: customerNumber || null,
           whatsapp_number: whatsappNumber || null,
           purpose: purpose || null,
+          purpose_details: purposeDetails || null,
           date: formDate || null,
           submitted_at: new Date().toISOString(),
         }),

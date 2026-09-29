@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from '../../lib/router.js'
 import { SectionHeading, CardCarousel } from '../HomeSections/HomeSections.js'
-import { useLeadSubmit } from '../../hooks/useLeadSubmit.js'
+import { useLeadSubmit, validateLeadForm } from '../../hooks/useLeadSubmit.js'
 import { captureTracking, getTracking, trackingNote, TRACKING_KEYS } from '../../lib/tracking.js'
 import {
   newsItems,
@@ -12,6 +12,7 @@ import {
 } from '../../data/homeFeatures.js'
 import './HomeFeatures.css'
 import TodayDateInput from '../TodayDateInput.js'
+import PurposeOtherInput, { OTHER_PURPOSE } from '../PurposeOtherInput.js'
 
 // A single press / publication card. Exported so the /news page can reuse it.
 export function NewsCard({ item }) {
@@ -132,6 +133,7 @@ const PURPOSE_OPTIONS = [
 function AppointmentSection() {
   const { status, error, submit } = useLeadSubmit()
   const [tracking, setTracking] = useState({})
+  const [purpose, setPurpose] = useState('')
 
   // Capture UTM/gclid attribution once the section mounts on the client.
   useEffect(() => {
@@ -141,6 +143,7 @@ function AppointmentSection() {
   async function onSubmit(event) {
     event.preventDefault()
     const form = event.currentTarget
+    if (!validateLeadForm(form)) return
     const data = new FormData(form)
     const address = (data.get('address') || '').toString().trim()
     const userMessage = (data.get('message') || '').toString().trim()
@@ -158,11 +161,15 @@ function AppointmentSection() {
       customer_number: data.get('customer_number'),
       whatsapp_number: data.get('whatsapp_number'),
       purpose: data.get('purpose'),
+      purpose_other: data.get('purpose_other'),
       date: data.get('date'),
       message,
       source: 'appointment',
     })
-    if (ok) form.reset()
+    if (ok) {
+      form.reset()
+      setPurpose('')
+    }
   }
 
   return (
@@ -186,7 +193,7 @@ function AppointmentSection() {
             consultation.
           </p>
 
-          <form className="rh-appointment-form" onSubmit={onSubmit} noValidate>
+          <form className="rh-appointment-form" onSubmit={onSubmit}>
             {/* Hidden marketing attribution fields */}
             {TRACKING_KEYS.map((key) => (
               <input key={key} type="hidden" name={key} value={tracking[key] || ''} />
@@ -205,19 +212,19 @@ function AppointmentSection() {
 
             <div className="rh-field-row">
               <label className="rh-field">
-                <span>Customer Number<i>*</i></span>
-                <input type="tel" name="customer_number" required />
+                <span>Your Phone Number<i>*</i></span>
+                <input type="tel" name="customer_number" inputMode="numeric" maxLength={10} required />
               </label>
               <label className="rh-field">
                 <span>WhatsApp Number<i>*</i></span>
-                <input type="tel" name="whatsapp_number" required />
+                <input type="tel" name="whatsapp_number" inputMode="numeric" maxLength={10} required />
               </label>
             </div>
 
             <div className="rh-field-row">
               <label className="rh-field">
                 <span>Purpose<i>*</i></span>
-                <select name="purpose" defaultValue="" required>
+                <select name="purpose" defaultValue="" required onChange={(e) => setPurpose(e.target.value)}>
                   <option value="" disabled>Select purpose</option>
                   {PURPOSE_OPTIONS.map((opt) => (
                     <option key={opt} value={opt}>{opt}</option>
@@ -230,9 +237,16 @@ function AppointmentSection() {
               </label>
             </div>
 
+            {purpose === OTHER_PURPOSE && (
+              <label className="rh-field">
+                <span>Please specify<i>*</i></span>
+                <PurposeOtherInput placeholder="Tell us what you need" />
+              </label>
+            )}
+
             <label className="rh-field">
-              <span>Your Message</span>
-              <textarea name="message" rows={3} />
+              <span>Your Message (max 300 characters)</span>
+              <textarea name="message" rows={3} maxLength={300} />
             </label>
 
             <TodayDateInput />

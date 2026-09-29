@@ -228,6 +228,13 @@ strong {
   border: 1px solid #f3c2cb;
 }
 
+/* Highlight required lead-form fields the visitor left empty (only after they
+   interact or try to submit, via :user-invalid). */
+form :is(input, select, textarea):user-invalid {
+  border-color: #d64560 !important;
+  box-shadow: 0 0 0 3px rgba(214, 69, 96, 0.14);
+}
+
 /* Consistent public-site section rhythm across desktop and mobile. */
 .rh-root :where(
   .home-band,

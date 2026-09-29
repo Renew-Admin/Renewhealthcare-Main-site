@@ -115,10 +115,10 @@ function NavChevron() {
   )
 }
 
-function SimpleDropdown({ label, children, className = '' }) {
+function SimpleDropdown({ label, children, className = '', triggerProps, ...props }) {
   return (
-    <div className={`global-nav-dropdown ${className}`}>
-      <button type="button" className="global-nav-link">
+    <div className={`global-nav-dropdown ${className}`} {...props}>
+      <button type="button" className="global-nav-link" {...triggerProps}>
         {label}
         <NavChevron />
       </button>
@@ -127,11 +127,31 @@ function SimpleDropdown({ label, children, className = '' }) {
   )
 }
 
+// Rounded down to the nearest ten for the "40+ treatments" line in the menu.
+const totalServices = Math.floor(serviceColumns.reduce((sum, column) => sum + column.items.length, 0) / 10) * 10
+
 const featuredDoctors = doctors.filter(doctor => doctor.category === 'Our Experts').slice(0, 6)
 
 export default function GlobalHeader({ onCallback }) {
   const [open, setOpen] = useState(false)
   const [panel, setPanel] = useState('')
+  // Desktop dropdowns open on hover/focus, so after a link is picked the menu
+  // would stay open under the cursor. Hide it until the pointer (or keyboard
+  // focus) comes back to its trigger. Resetting on mouseleave doesn't work:
+  // hiding the panel itself fires mouseleave, which would reopen it at once.
+  const [closedMenu, setClosedMenu] = useState('')
+  const closeOnSelect = name => ({
+    onClick: event => {
+      const link = event.target.closest('a')
+      if (!link) return
+      link.blur()
+      setClosedMenu(name)
+    },
+  })
+  const reopenOnTrigger = name => {
+    const reopen = () => setClosedMenu(current => (current === name ? '' : current))
+    return { onMouseEnter: reopen, onFocus: reopen }
+  }
   const { pathname } = useLocation()
   const normalizedPath = pathname.replace(/\/+$/, '') || '/'
   const isContactPage = normalizedPath === '/contact'
@@ -148,8 +168,8 @@ export default function GlobalHeader({ onCallback }) {
           <nav className="global-nav" aria-label="Main navigation">
             <Link to="/why-renew" className="global-nav-link">Why Renew</Link>
 
-            <div className="global-nav-dropdown is-mega">
-              <Link to="/services" className="global-nav-link">
+            <div {...closeOnSelect('Services')} className={`global-nav-dropdown is-mega ${closedMenu === 'Services' ? 'is-closed' : ''}`}>
+              <Link to="/services" className="global-nav-link" {...reopenOnTrigger('Services')}>
                 Services
                 <NavChevron />
               </Link>
@@ -160,13 +180,22 @@ export default function GlobalHeader({ onCallback }) {
                     {column.items.slice(0, 5).map(([item, slug]) => (
                       <Link key={slug} to={`/services/${slug}`}>{item}</Link>
                     ))}
-                    <Link className="global-mega-all" to="/services">View all services</Link>
                   </div>
                 ))}
+                <div className="global-mega-foot">
+                  <span>{totalServices}+ treatments across fertility, women&rsquo;s health, genetics and wellness</span>
+                  <Link className="global-mega-all" to="/services">
+                    View all services
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="13 6 19 12 13 18" />
+                    </svg>
+                  </Link>
+                </div>
               </div>
             </div>
 
-            <SimpleDropdown label="Doctors" className="is-doctors">
+            <SimpleDropdown label="Doctors" {...closeOnSelect('Doctors')} triggerProps={reopenOnTrigger('Doctors')} className={`is-doctors ${closedMenu === 'Doctors' ? 'is-closed' : ''}`}>
               <div className="global-nav-panel doctor-panel">
                 <div className="doctor-panel-head">
                   <span>Fertility Experts</span>
@@ -186,7 +215,7 @@ export default function GlobalHeader({ onCallback }) {
               </div>
             </SimpleDropdown>
             <Link to="/success-stories" className="global-nav-link">Success Stories</Link>
-            <SimpleDropdown label="More" className="is-more">
+            <SimpleDropdown label="More" {...closeOnSelect('More')} triggerProps={reopenOnTrigger('More')} className={`is-more ${closedMenu === 'More' ? 'is-closed' : ''}`}>
               <div className="global-nav-panel more-panel">
                 {moreGroups.map(([group, items]) => (
                   <div className="more-panel-group" key={group}>

@@ -24,7 +24,9 @@ export default async function LocationRoute({ params }) {
   if (!location) notFound()
 
   const doctors = await getDoctors()
-  const clinicDoctors = doctors.filter((doctor) => location.doctors.includes(doctor.name))
+  const clinicDoctors = location.doctors
+    .map((name) => doctors.find((doctor) => doctor.name === name))
+    .filter(Boolean)
   const path = `/locations/${location.slug}`
 
   return (

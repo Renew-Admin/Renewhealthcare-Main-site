@@ -33,7 +33,7 @@ export const locations = [
     hours: 'Open daily for appointments',
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57830.18166452035!2d88.30285153600433!3d22.48969326997914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277589dea95db%3A0x62e182948ab063d!2sRenew%20Healthcare!5e1!3m2!1sen!2sin!4v1783329104131!5m2!1sen!2sin',
     services: ['Conception', 'Women’s Health', 'Pregnancy Care', 'Gynaecology', 'Genetic Health'],
-    doctors: ['Dr. Rajeev Agarwal', 'Dr. Neha Yadav'],
+    doctors: ['Dr. Rajeev Agarwal', 'Dr. Arnab Kundu', 'Dr. Sonam Agarwal'],
     image: '/images/renew/uploads/2026/07/renew-healthcare-mandeville-gardens.webp',
     gallery: ['/images/renew/uploads/2026/07/renew-healthcare-mandeville-gardens.webp', '/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg'],
     intro: 'Renew Ballygunge supports fertility, gynaecology, pregnancy care, and women’s health services from Mandeville Gardens, Ballygunge.',

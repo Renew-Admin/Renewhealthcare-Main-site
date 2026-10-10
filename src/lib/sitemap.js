@@ -77,6 +77,7 @@ export function buildSitemapEntries(directory = [], { doctors } = {}) {
 
   getAllSeoRoutes().forEach(route => {
     if (isBlogPostPath(route.path)) return
+    if (route.robots?.includes('noindex')) return
     if (liveDoctors && route.path.startsWith('/doctor/')) return
     entries.set(route.path, entryFor(route.path))
   })

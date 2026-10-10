@@ -120,7 +120,7 @@ export default function FloatingActions({ onCallback }) {
           </a>
           <a className="fab-opt is-call" href={TEL} onClick={() => setOpen(false)}>
             <span className="fab-opt-icon"><Icon name="phone" /></span>
-            <span><strong>Call us now</strong><small>{PHONE_DISPLAY}</small></span>
+            <span><strong>Call the clinic</strong><small>{PHONE_DISPLAY}</small></span>
           </a>
           <button
             type="button"
@@ -135,7 +135,7 @@ export default function FloatingActions({ onCallback }) {
             <span><strong>Follow on Instagram</strong><small>@renewhealthcare</small></span>
           </a>
           <Link className="fab-panel-foot" to="/#book-appointment" onClick={() => setOpen(false)}>
-            Book your appointment online →
+            Enquire about appointments online →
           </Link>
         </div>
 

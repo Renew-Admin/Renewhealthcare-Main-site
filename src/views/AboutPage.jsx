@@ -12,8 +12,8 @@ const reveal = {
 }
 
 const stats = [
-  ['27+', 'Years of expertise'],
-  ['12,000+', 'Happy clients'],
+  ['27+', 'Years of experience'],
+  ['12,000+', 'Clients'],
   ['6,000+', 'Babies delivered'],
   ['9,000+', 'IVF procedures'],
 ]
@@ -36,8 +36,8 @@ export default function AboutPage() {
             <div className="service-heading-block is-left">
               <span>Welcome to Renew Healthcare</span>
               <h2>Welcome to <span className="heading-blue">Renew Healthcare!</span></h2>
-              <p>We are a team of highly experienced and dedicated healthcare professionals, under the leadership of Dr. Rajeev Agarwal, committed to providing the highest quality reproductive and gynaecological care to our patients.</p>
-              <p>We offer a range of services including IVF treatment, gynaecology, aesthetic gynaecology, and pregnancy care. Our IVF clinic is equipped with state-of-the-art technology, and our highly experienced team of fertility specialists are committed to providing personalized and comprehensive care.</p>
+              <p>We are a team of highly experienced and dedicated healthcare professionals, under the leadership of Dr. Rajeev Agarwal, committed to providing careful, ethical reproductive and gynaecological care to our patients.</p>
+              <p>We offer a range of services including IVF treatment, gynaecology, aesthetic gynaecology, and pregnancy care. Our IVF clinic has an in-house laboratory, and our experienced team of fertility specialists are committed to providing personalized and comprehensive care.</p>
             </div>
             <div className="feature-image-card">
               <img src="/images/renew/uploads/2026/05/Dr-Rajeev-Agarwal.webp" alt="Dr. Rajeev Agarwal" />
@@ -66,7 +66,7 @@ export default function AboutPage() {
           <motion.div className="values-grid" {...reveal}>
             {[
               ['Mission', 'Our mission is to provide comprehensive, accessible, and patient-centered healthcare services that address the unique health needs of women at all stages of life.'],
-              ['Vision', 'All women of every age should achieve best possible health through Renew Healthcare.'],
+              ['Vision', 'All women of every age should have access to the care they need to support their health.'],
               ['Values', 'Respecting a woman’s autonomy in healthcare decisions, ensuring informed consent, prioritizing her well-being, and advocating for her needs.'],
             ].map(([title, text]) => (
               <article className="content-panel" key={title}>

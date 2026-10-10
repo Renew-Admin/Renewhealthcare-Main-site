@@ -19,13 +19,13 @@ export default function IvfSuccessPage() {
           <div className="service-heading-block">
             <span>IVF Success</span>
             <h2>Understanding <span className="heading-blue">IVF success rates</span></h2>
-            <p>In vitro fertilization (IVF) is a popular and highly effective method of assisted reproduction. IVF success rates have improved significantly over the years, and many couples can conceive with the help of this technology.</p>
+            <p>In vitro fertilization (IVF) is a widely used method of assisted reproduction. IVF success rates have improved over the years, and many couples are able to conceive with the help of this technology. Treatment outcomes vary depending on individual factors, including age, medical condition and genetic history.</p>
           </div>
           {[
-            ['What success means', 'There are three important things to be considered when talking about the highest IVF success rates. Success may be counted as positive beta-hcg pregnancy, clinical pregnancy when heartbeat is detected, or final delivery and take-home baby rates.'],
-            ['Treatment conditions', 'Talking of the best IVF success, it is important to consider under what conditions and what cost to the patient the IVF treatment was done. Many clinics may resort to donor eggs and donor sperm to increase success rates.'],
-            ['Renew Healthcare outcomes', 'Renew Healthcare performs more than 60% of the IVF cycles with self-eggs and 78% of the IVF cycles with husband sperms and yet achieves internationally comparable IVF success rates.'],
-            ['Factors that impact success', 'The success of IVF depends on several factors, including the woman’s age, the cause of infertility, and the quality of the eggs and sperm. Women under the age of 35 have the highest IVF success rates.'],
+            ['What success means', 'There are three important things to be considered when talking about IVF success rates. Success may be counted as positive beta-hcg pregnancy, clinical pregnancy when heartbeat is detected, or final delivery and take-home baby rates.'],
+            ['Treatment conditions', 'When comparing IVF success rates, it is important to consider under what conditions and what cost to the patient the IVF treatment was done. Many clinics may resort to donor eggs and donor sperm to increase success rates.'],
+            ['Renew Healthcare outcomes', 'Renew Healthcare performs more than 60% of the IVF cycles with self-eggs and 78% of the IVF cycles with husband sperms Success rates should always be read alongside these factors, and individual outcomes vary.'],
+            ['Factors that impact success', 'The success of IVF depends on several factors, including the woman’s age, the cause of infertility, and the quality of the eggs and sperm. In general, IVF success rates are higher in women under the age of 35.'],
           ].map(([heading, body]) => (
             <article className="service-detail-card" key={heading}>
               <h3>{heading}</h3>
@@ -36,10 +36,10 @@ export default function IvfSuccessPage() {
             <div>
               <span>Need clarity?</span>
               <h2>Speak with Renew Healthcare</h2>
-              <p>Choose an experienced fertility clinic and understand the right course of care.</p>
+              <p>Discuss your reports with a fertility specialist to understand the course of care that suits you.</p>
             </div>
             <div className="service-cta-actions">
-              <Link to="/contact">Book Your Appointment</Link>
+              <Link to="/contact">Enquire About Appointments</Link>
               <a href="tel:06292312076">Call 062923 12076</a>
             </div>
           </section>

@@ -22,7 +22,6 @@ const communityLinks = [
   ['Doctors', '/doctors'],
   ['Services', '/services'],
   ['FAQs', '/#faq'],
-  ['Success Stories', '/success-stories'],
   ['Packages', '/packages'],
   ['Fellowship', '/course/12-months-fellowship-in-reproductive-medicine'],
   ['Why Renew', '/why-renew'],

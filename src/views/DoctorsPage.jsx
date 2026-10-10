@@ -19,7 +19,7 @@ function ScrollSection({ category, doctors }) {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
   const [hasOverflow, setHasOverflow] = useState(false)
-  const displayCategory = category === 'Our Experts' ? 'Fertility Experts' : category
+  const displayCategory = category === 'Our Experts' ? 'Fertility Specialists' : category
 
   const updateScrollState = useCallback(() => {
     const el = trackRef.current
@@ -119,9 +119,9 @@ export default function DoctorsPage({ doctorRows }) {
       <section className="service-content-band">
         <div className="service-content-inner">
           <div className="service-heading-block">
-            <span>Fertility Experts</span>
+            <span>Fertility Specialists</span>
             <h2>Meet Our Team Of <span className="heading-blue">Infertility Specialists</span></h2>
-            <p>Renew Healthcare brings together fertility specialists, genetic experts, embryologists, counsellors, nursing, operations, and support teams across departments.</p>
+            <p>Renew Healthcare brings together fertility specialists, genetic counsellors, embryologists, counsellors, nursing, operations, and support teams across departments.</p>
           </div>
 
           {leadDoctor && <LeadDoctor doctor={leadDoctor} />}

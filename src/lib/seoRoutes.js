@@ -42,7 +42,7 @@ function addLegacyRedirect(fromPath, toPath) {
 }
 
 addRoute('/', {
-  title: 'Best IVF & Fertility Centre in Kolkata',
+  title: 'IVF and Fertility Care in Kolkata',
   fullTitle: DEFAULT_TITLE,
   description: DEFAULT_DESCRIPTION,
 })
@@ -73,12 +73,14 @@ addRoute('/ivf-success-factors-and-rates', {
 })
 addRoute('/why-renew', {
   title: 'Why Renew Healthcare',
-  description: 'Learn why families choose Renew Healthcare for ethical, specialist-led fertility and women\'s health care in Kolkata.',
+  description: 'Learn about Renew Healthcare\'s approach to ethical, specialist-led fertility and women\'s health care in Kolkata.',
   image: '/images/renew/uploads/2024/12/why_renew-img1.webp',
 })
 addRoute('/success-stories', {
-  title: 'Success Stories',
-  description: 'Read Renew Healthcare patient success stories and real fertility, pregnancy and parenthood journeys.',
+  title: 'Patient Stories',
+  description: 'Patient stories on the Renew Healthcare website are currently under compliance review.',
+  // Suspended pending NMC compliance review — keep out of search until restored.
+  robots: 'noindex, follow',
   image: '/images/renew/uploads/2025/01/Collage-Banner2.png',
 })
 addRoute('/blogs', {
@@ -88,7 +90,7 @@ addRoute('/blogs', {
 })
 addRoute('/news', {
   title: 'Renew In The News',
-  description: 'Renew Healthcare and Dr. Rajeev Agarwal featured across leading publications with expert insights on IVF, fertility and reproductive health.',
+  description: 'Media articles in which Renew Healthcare and Dr. Rajeev Agarwal have discussed IVF, fertility and reproductive health.',
   image: '/assets/renew/cta/failed-ivf-banner.jpg',
 })
 addRoute('/contact', {

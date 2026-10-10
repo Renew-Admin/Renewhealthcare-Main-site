@@ -44,8 +44,8 @@ export default function BlogPostPage({ blog, html, sidebar = [], heroImage, lang
             <aside className="blogx-aside">
               <div className="blogx-aside-card is-cta">
                 <h4>Talk to a fertility specialist</h4>
-                <p>Get personalised guidance from Renew Healthcare — among Kolkata’s most trusted IVF centres.</p>
-                <Link to="/contact" className="blogx-aside-cta-btn primary">Book Appointment</Link>
+                <p>Get personalised guidance from Renew Healthcare’s fertility team.</p>
+                <Link to="/contact" className="blogx-aside-cta-btn primary">Enquire About Appointments</Link>
                 <a href="tel:06292312076" className="blogx-aside-cta-btn ghost">Call 062923 12076</a>
               </div>
 
@@ -66,8 +66,8 @@ export default function BlogPostPage({ blog, html, sidebar = [], heroImage, lang
           </div>
 
           <section className="service-cta-band">
-            <div><span>Need guidance?</span><h2>Book Your Appointment</h2><p>Speak with Renew Healthcare for the right next step in your journey.</p></div>
-            <div className="service-cta-actions"><Link to="/contact">Book Appointment</Link><a href="tel:06292312076">Call 062923 12076</a></div>
+            <div><span>Need guidance?</span><h2>Contact the Clinic to Enquire About the Earliest Available Appointment Slot</h2><p>Speak with Renew Healthcare for the right next step in your journey.</p></div>
+            <div className="service-cta-actions"><Link to="/contact">Enquire About Appointments</Link><a href="tel:06292312076">Call 062923 12076</a></div>
           </section>
         </div>
       </section>

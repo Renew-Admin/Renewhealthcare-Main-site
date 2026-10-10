@@ -87,7 +87,7 @@ export default function FinalContentByKey({ pageKey, page }) {
           {isPackages && <PackageContent />}
           {!isPackages && (
             <div className="service-section-stack final-section-stack">
-              {page.sections.map(section => (
+              {page.sections.filter(section => !section.suspended).map(section => (
                 <article className="service-detail-card" key={section.heading}>
                   <h3>{section.heading}</h3>
                   <div className="service-rich-text final-rich-text">
@@ -106,7 +106,7 @@ export default function FinalContentByKey({ pageKey, page }) {
           )}
           {!isContact && <section className="service-cta-band">
             <div><span>Renew Healthcare</span><h2>Talk to our team</h2><p>For appointments, treatment planning, and patient guidance.</p></div>
-            <div className="service-cta-actions"><Link to="/contact">Book Appointment</Link><a href="tel:06292312076">Call 062923 12076</a></div>
+            <div className="service-cta-actions"><Link to="/contact">Enquire About Appointments</Link><a href="tel:06292312076">Call 062923 12076</a></div>
           </section>}
         </div>
       </section>
@@ -235,9 +235,9 @@ const graphImages = [
   ['/images/renew/uploads/2024/12/grphs-img3.webp', 'Renew Healthcare outcome graph'],
 ]
 
-const fertilitySurgeryCopy = 'Fertility enhancing surgery or minimally invasive reproductive surgery can be used to treat infertility, improve fertility treatment outcomes, or preserve fertility. This is particularly indicative in cases of endometriosis, PCOS, uterine fibroids, fallopian tube blockage etc. However, reproductive surgery may not improve fertility outcomes and may, in some instances, damage ovarian reserve. There fore it is always advised to get the surgery done under the same fertility specialist who is treating the patient for infertility treatment. The treating consultant will understand the boundary conditions of the surgery & will approach accordingly rather than regular surgeons. The success of the following treatment depends heavily on the quality of the surgery that takes place. The minimally invasive surgery is a part of the entire treatment process. In Renew Healthcare, we encompass every aspect of the treatment under one roof & provide 360degree solution. So before going under the knife, ask yourself, am I getting the best possible & holistic treatment under a single consultant & a single clinic? And last but not least, ensure that the surgery is documented & a video recording is provided to you. This helps a lot in your case discussion & future treatment plan.'
+const fertilitySurgeryCopy = 'Fertility enhancing surgery or minimally invasive reproductive surgery can be used to treat infertility, improve fertility treatment outcomes, or preserve fertility. This is particularly indicative in cases of endometriosis, PCOS, uterine fibroids, fallopian tube blockage etc. However, reproductive surgery may not improve fertility outcomes and may, in some instances, damage ovarian reserve. There fore it is always advised to get the surgery done under the same fertility specialist who is treating the patient for infertility treatment. The treating consultant will understand the boundary conditions of the surgery & will approach accordingly rather than regular surgeons. The success of the following treatment depends heavily on the quality of the surgery that takes place. The minimally invasive surgery is a part of the entire treatment process. In Renew Healthcare, we encompass every aspect of the treatment under one roof & provide 360degree solution. So before going under the knife, ask yourself, is my treatment being planned holistically, under a single consultant & a single clinic? And last but not least, ensure that the surgery is documented & a video recording is provided to you. This helps a lot in your case discussion & future treatment plan.'
 
-const transparencyCopy = 'Renew Healthcare is absolutely transparent in terms of clinical practices, costing & success rate. We are one of the few clinics in India who share detailed information right from the time of stimulation. We inform the patient on the number of eggs retrieved once ovum pick up is done, we keep the patient informed on the development of the embryos, and we discuss what is the best possible outcome. We are one of the few clinics in the country who promote "self cycle first" policy, which means that we try to reach conception through self egg & self sperm. As a policy, we counsel patients for self cycle & then if needed we go for donor support. Our self: donor cycle ratio is 90:10. In terms of financial counselling, we assure patients that there is no hidden costs unlike other IVF clinics. On the very first meeting we explain every aspect of the treatment plan with payment schedules. This apparently look to be on the higher side, but since we discuss every aspect of the treatment during financial counselling, patients do not end up paying anything more than what has been discussed. We are proud to share our detailed success rate in our website, month on month for the last 12 months. We update the details every month so that patients get clarity in terms of the quality of work that is done in Renew Healthcare.'
+const transparencyCopy = 'At Renew Healthcare, we aim to be transparent about clinical practices, costing & success rates. We share detailed information with patients right from the time of stimulation. We inform the patient on the number of eggs retrieved once ovum pick up is done, we keep the patient informed on the development of the embryos, and we discuss the most suitable next steps and realistic outcomes. We follow a "self cycle first" policy, which means that we try to reach conception through self egg & self sperm. As a policy, we counsel patients for self cycle & then if needed we go for donor support. Our self: donor cycle ratio is 90:10. In terms of financial counselling, we aim to explain all expected costs upfront so that there are no hidden costs. On the very first meeting we explain every aspect of the treatment plan with payment schedules. This apparently look to be on the higher side, but since we discuss every aspect of the treatment during financial counselling, patients do not end up paying anything more than what has been discussed. We share our detailed success rate data on our website, month on month for the last 12 months, and update it every month so that patients have clarity about our clinical outcomes. Treatment outcomes vary depending on individual factors, including age, medical condition and genetic history.'
 
 function PackageContent() {
   return (
@@ -245,7 +245,7 @@ function PackageContent() {
       <section className="packages-pricing">
         <div className="packages-section-head">
           <span>IVF Package</span>
-          <h3>Our Honest Pricing Philosophy</h3>
+          <h3>IVF Package Pricing</h3>
         </div>
         <div className="packages-table-wrap">
           <table className="packages-table">
@@ -253,8 +253,8 @@ function PackageContent() {
               <tr>
                 <th>SL</th>
                 <th>IVF Package Inclusions</th>
-                <th>Standard Clinic Price</th>
-                <th>Freedom From Infertility Package In Renew Fertility</th>
+                <th>Item Price (Billed Individually)</th>
+                <th>Freedom From Infertility Package (Renew Fertility)</th>
               </tr>
             </thead>
             <tbody>
@@ -262,15 +262,15 @@ function PackageContent() {
                 <tr key={sl}>
                   <td data-label="SL">{sl}</td>
                   <td data-label="IVF Package Inclusions">{inclusion}</td>
-                  <td data-label="Standard Clinic Price">{price}</td>
-                  <td data-label="Renew Package"><span className="package-check" aria-label="Included">Yes</span></td>
+                  <td data-label="Item Price (Billed Individually)">{price}</td>
+                  <td data-label="Package"><span className="package-check" aria-label="Included">Yes</span></td>
                 </tr>
               ))}
               <tr className="packages-total-row">
                 <td data-label="SL" />
                 <td data-label="IVF Package Inclusions">Total</td>
-                <td data-label="Standard Clinic Price">150000</td>
-                <td data-label="Renew Package">100000</td>
+                <td data-label="Item Price (Billed Individually)">150000</td>
+                <td data-label="Package">100000</td>
               </tr>
             </tbody>
           </table>

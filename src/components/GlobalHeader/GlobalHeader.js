@@ -214,7 +214,6 @@ export default function GlobalHeader({ onCallback }) {
                 </div>
               </div>
             </SimpleDropdown>
-            <Link to="/success-stories" className="global-nav-link">Success Stories</Link>
             <SimpleDropdown label="More" {...closeOnSelect('More')} triggerProps={reopenOnTrigger('More')} className={`is-more ${closedMenu === 'More' ? 'is-closed' : ''}`}>
               <div className="global-nav-panel more-panel">
                 {moreGroups.map(([group, items]) => (
@@ -232,7 +231,7 @@ export default function GlobalHeader({ onCallback }) {
           </nav>
 
           <div className="top-actions">
-            {!isContactPage && <Link to={appointmentPath} className="btn-book">Book Your Appointment</Link>}
+            {!isContactPage && <Link to={appointmentPath} className="btn-book">Enquire About Appointments</Link>}
             <button type="button" onClick={onCallback} className="btn-callback">Request Call Back</button>
           </div>
 
@@ -265,7 +264,6 @@ export default function GlobalHeader({ onCallback }) {
                 {featuredDoctors.map(doctor => <Link key={doctor.slug} to={`/doctor/${doctor.slug}`} onClick={() => setOpen(false)}>{doctor.name}</Link>)}
               </div>
             )}
-            <Link to="/success-stories" onClick={() => setOpen(false)}>Success Stories</Link>
             <button type="button" onClick={() => setPanel(panel === 'More' ? '' : 'More')}>More <span>{panel === 'More' ? '−' : '+'}</span></button>
             {panel === 'More' && (
               <div className="mobile-panel">

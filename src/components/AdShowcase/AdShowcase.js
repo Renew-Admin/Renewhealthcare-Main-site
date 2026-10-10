@@ -5,7 +5,7 @@ import './AdShowcase.css'
 
 const SLIDES = [
   { src: '/images/renew/uploads/2026/03/Main-Banner-1.jpg.webp', alt: 'Renew Healthcare — crafting happy families, one baby at a time' },
-  { src: '/images/renew/uploads/2026/03/IVF-IUI-Ad-English.jpg.webp', alt: 'IVF & IUI treatment offer at Renew Healthcare' },
+  { src: '/images/renew/uploads/2026/03/IVF-IUI-Ad-English.jpg.webp', alt: 'IVF & IUI treatment at Renew Healthcare' },
   { src: '/images/renew/uploads/2026/03/IVF-IUI-Ad-Bengali.jpg.webp', alt: 'IVF ও IUI চিকিৎসা — Renew Healthcare' },
 ]
 
@@ -13,7 +13,6 @@ const STATS = [
   ['27+', 'Years of expertise'],
   ['9,000+', 'IVF procedures'],
   ['6,000+', 'Babies delivered'],
-  ['4.9 ★', '2,500+ reviews'],
 ]
 
 const POINTS = [
@@ -44,7 +43,7 @@ export default function AdShowcase() {
   const go = i => setIndex((i + total) % total)
 
   return (
-    <section className="wr-showcase" id="ivf-offer">
+    <section className="wr-showcase" id="ivf-care">
       <div
         className="wr-carousel"
         onMouseEnter={() => setPaused(true)}
@@ -95,8 +94,8 @@ export default function AdShowcase() {
 
         <motion.p className="wr-lead" {...reveal} transition={{ ...reveal.transition, delay: 0.1 }}>
           From your first consultation to the moment you hold your baby, Renew Healthcare guides
-          you with compassion, clinical excellence, and complete transparency — among the highest
-          IVF success rates in Kolkata.
+          you with compassion and complete transparency. Treatment outcomes vary depending on individual
+          factors, including age, medical condition and genetic history.
         </motion.p>
 
         <motion.ul className="wr-points" {...reveal} transition={{ ...reveal.transition, delay: 0.12 }}>
@@ -113,7 +112,7 @@ export default function AdShowcase() {
         </motion.div>
 
         <motion.div className="wr-actions" {...reveal} transition={{ ...reveal.transition, delay: 0.16 }}>
-          <Link to="/contact" className="wr-primary">Book Your Appointment <span aria-hidden="true">→</span></Link>
+          <Link to="/contact" className="wr-primary">Enquire About Appointments <span aria-hidden="true">→</span></Link>
           <a href="tel:06292312076" className="wr-secondary">Call 062923 12076</a>
         </motion.div>
       </div>

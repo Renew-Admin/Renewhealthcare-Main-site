@@ -23,7 +23,7 @@ export const locations = [
     doctors: ['Dr. Dorothy P Ghosh'],
     image: '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg',
     gallery: ['/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg', '/images/renew/uploads/2025/03/renew-healthcare-jamshedpur.jpg'],
-    intro: 'Renew Health Care Jamshedpur, “Renew Fertility” is for couples who are still deprived of the joy of having a child. Here you can consult our renowned infertility specialist Dr. Dorothy Ghosh.',
+    intro: 'Renew Health Care Jamshedpur, “Renew Fertility” is for couples who are still deprived of the joy of having a child. Here you can consult our infertility specialist Dr. Dorothy Ghosh.',
   },
   {
     slug: 'gariahat',

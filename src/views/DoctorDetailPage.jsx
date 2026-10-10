@@ -3,7 +3,7 @@ import './ContentPages.css'
 import './ServicesPages.css'
 
 function getDisplayCategory(category) {
-  return category === 'Our Experts' ? 'Fertility Experts' : category
+  return category === 'Our Experts' ? 'Fertility Specialists' : category
 }
 
 function asList(value) {
@@ -103,7 +103,7 @@ export default function DoctorDetailPage({ doctor }) {
                   : <p>{doctor.name} is part of the Renew Healthcare team, supporting patients through fertility, reproductive health, and family-building care.</p>}
                 <p>For appointments, consultation details, and availability, contact Renew Healthcare directly.</p>
                 <div className="doctor-detail-actions">
-                  <Link to="/contact">Book an appointment</Link>
+                  <Link to="/contact">Enquire About Appointments</Link>
                   <Link to="/doctors">Back to doctors</Link>
                 </div>
               </div>

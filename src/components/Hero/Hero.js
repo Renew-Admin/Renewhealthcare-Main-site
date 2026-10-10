@@ -13,9 +13,9 @@ const SLIDES = [
   {
     image: '/images/hero_woman_1.webp',
     alt: 'A woman smiling, looking toward the light',
-    titleA: 'Kolkata’s Trusted IVF',
-    titleB: 'and Fertility Centre',
-    desc: 'Expert and compassionate care for every step of your journey. Led by Dr. Rajeev Agarwal, we offer IVF, IUI, gynaecology and pregnancy care with a patient-first approach.',
+    titleA: 'IVF and Fertility',
+    titleB: 'Care in Kolkata',
+    desc: 'Compassionate, personalised care at every step of your journey. Led by Dr. Rajeev Agarwal, we offer IVF, IUI, gynaecology and pregnancy care with a patient-first approach.',
     cardTitle: ['Start your', 'parenthood journey'],
     cardDesc: ['Personalized fertility care', 'for every step.'],
   },
@@ -25,9 +25,9 @@ const SLIDES = [
     imgClass: 'is-kid',
     titleA: 'From hope to',
     titleB: 'a heartbeat',
-    desc: 'Advanced IVF and IUI treatments with some of the highest success rates in Kolkata — bringing the joy of parenthood within reach of every family.',
-    cardTitle: ['Welcome', 'little miracles'],
-    cardDesc: ['Trusted by 2,000+', 'happy families.'],
+    desc: 'IVF and IUI treatment with a clear explanation of each step, its risks and what to expect. Treatment outcomes vary depending on individual factors, including age, medical condition and genetic history.',
+    cardTitle: ['Fertility care', 'explained clearly'],
+    cardDesc: ['Personalised plans', 'for every couple.'],
   },
   {
     image: '/images/hero_family.webp',
@@ -44,7 +44,7 @@ const HERO_H1 = 'IVF & Fertility Centre in Kolkata'
 
 const HERO_STATS = [
   { label: 'Years of Experience', value: 27 },
-  { label: 'Happy Clients', value: 12000, short: 'k' },
+  { label: 'Patients Seen', value: 12000, short: 'k' },
   { label: 'Number Of Babies Delivered', value: 6000, short: 'k' },
   { label: 'Number of IVFs', value: 9000, short: 'k' },
 ]
@@ -60,7 +60,7 @@ const HERO_CHIPS = [
   'Ultrasonography',
   'IVF treatment near me',
   'Pathology/Blood test',
-  'best IVF centre in Kolkata',
+  'IVF and fertility care Kolkata',
   'Home Collection',
 ]
 
@@ -263,11 +263,11 @@ function Hero() {
             <motion.div className="trust-block" {...item}>
               <div className="avatar-row">
                 {AVATARS.map((src, i) => (
-                  <img key={i} src={src} alt={`Patient ${i + 1}`} className="trust-avatar" />
+                  <img key={i} src={src} alt="" aria-hidden="true" className="trust-avatar" />
                 ))}
                 <div className="avatar-count">+2k</div>
               </div>
-              <span className="trust-text">Trusted by 2,000+ patients worldwide</span>
+              <span className="trust-text">2,000+ families supported</span>
             </motion.div>
 
             <motion.div className="holistic" {...item}>

@@ -99,7 +99,7 @@ export default function ServicePage({ service, relatedServices = [] }) {
               <img src={service.thumbnailImg} alt={service.title} />
               <h3>{service.category}</h3>
               <p>Renew Healthcare offers this service with specialist-led guidance, clinical clarity, and patient-first support.</p>
-              <Link to="/contact">Book Your Appointment →</Link>
+              <Link to="/contact">Enquire About Appointments →</Link>
             </div>
           </div>
 
@@ -131,11 +131,11 @@ export default function ServicePage({ service, relatedServices = [] }) {
           <section className="service-cta-band">
             <div>
               <span>Need guidance?</span>
-              <h2>Book Your Appointment</h2>
+              <h2>Contact the Clinic to Enquire About the Earliest Available Appointment Slot</h2>
               <p>Speak with Renew Healthcare for the right next step in your care journey.</p>
             </div>
             <div className="service-cta-actions">
-              <Link to="/contact">Book Your Appointment</Link>
+              <Link to="/contact">Enquire About Appointments</Link>
               <a href="tel:06292312076">Call 062923 12076</a>
             </div>
           </section>

@@ -5,8 +5,8 @@ import { useBlogs } from '../../hooks/useBlogs.js'
 import './HomeSections.css'
 
 const whyItems = [
-  ['why-ch-ic1.png', 'More than two decades of experience', 'Highly experienced IVF fertility specialists in Kolkata for diagnosis and treatments for varied fertility issues.'],
-  ['why-ch-ic2.png', 'Cost', 'Best possible treatment for every section of society, with subsidised support through Renewing Hope Foundation.'],
+  ['why-ch-ic1.png', 'More than two decades of experience', 'Fertility specialists in Kolkata with more than two decades of experience in diagnosis and treatments for varied fertility issues.'],
+  ['why-ch-ic2.png', 'Cost', 'Treatment planned for every section of society, with subsidised support through Renewing Hope Foundation.'],
   ['why-ch-ic3.png', 'Own eggs and sperm', 'Encouragement of using own eggs and sperm, even in complex fertility conditions.'],
   ['why-ch-ic5.png', 'Referral centre for genetics', 'Solving complex genetic problems through the IVF process with advanced counselling.'],
   ['why-ch-ic6.png', 'Focus on natural conception', 'Woman care from adolescence to menopause with emphasis on natural conception whenever possible.'],
@@ -323,15 +323,15 @@ export default function HomeSections({ initialBlogs }) {
           <SectionHeading
             eyebrow="Why Renew Healthcare"
             title={<><span>Advanced fertility care</span><span className="heading-blue">with transparent guidance.</span></>}
-            text="Our IVF Centre in Kolkata offers advanced and reliable solutions for couples looking to start their parenthood journey, with strict protocols, global expertise, and compassionate support."
+            text="Our IVF centre in Kolkata offers fertility treatment for couples looking to start their parenthood journey, with documented laboratory protocols and compassionate support."
           />
 
           <div className="video-why-card">
             <div className={`video-why-copy ${whyExpanded ? 'is-expanded' : ''}`}>
               <h3>Why Renew Healthcare</h3>
-              <p className="video-why-summary">Advanced IVF care with safe lab protocols and compassionate support.</p>
-              <p className="video-why-intro" id="why-renew-mobile-copy">Our IVF Centre in Kolkata offers advanced and reliable solutions for couples looking to start their parenthood journey. Our IVF laboratories follow strict international protocols for handling eggs and sperm, ensuring the safest and most optimal conditions.</p>
-              <p className="video-why-detail">We provide a wide range of infertility treatments under one roof, making the process seamless and convenient. Backed by experienced embryologists, gynaecologists, and specialists with global expertise, we focus on delivering high-quality care with a personalized approach.</p>
+              <p className="video-why-summary">IVF care with documented lab protocols and compassionate support.</p>
+              <p className="video-why-intro" id="why-renew-mobile-copy">Our IVF centre in Kolkata offers fertility treatment for couples looking to start their parenthood journey. Our IVF laboratories follow internationally recognised protocols for handling eggs and sperm.</p>
+              <p className="video-why-detail">We provide a wide range of infertility treatments under one roof, making the process seamless and convenient. Our team of embryologists, gynaecologists and specialists focuses on personalised care. Treatment outcomes vary depending on individual factors, including age, medical condition and genetic history.</p>
               <button
                 className="video-why-read-more"
                 type="button"
@@ -459,7 +459,7 @@ export default function HomeSections({ initialBlogs }) {
         <div className="home-band-inner">
           <SectionHeading
             eyebrow="As Featured In"
-            title={<><span>Trusted by leading</span> <span className="heading-blue">media houses</span></>}
+            title={<><span>Featured in</span> <span className="heading-blue">the media</span></>}
           />
           <div className="media-carousel" aria-label="Media logos">
             <div className="media-track">

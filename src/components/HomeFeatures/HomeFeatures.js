@@ -63,6 +63,8 @@ function NewsSection() {
   )
 }
 
+const SHOW_PATIENT_TESTIMONIALS = false
+
 function TestimonialsSection() {
   return (
     <section className="home-band rh-testimonials-section" id="testimonials">
@@ -186,7 +188,7 @@ function AppointmentSection() {
         </div>
 
         <div className="rh-appointment-form-wrap">
-          <span className="rh-appointment-eyebrow">Book An Appointment</span>
+          <span className="rh-appointment-eyebrow">Appointment Enquiry</span>
           <h2>{appointmentInfo.heading}</h2>
           <p className="rh-appointment-sub">
             Share your details and our fertility care team will get back to you to confirm your
@@ -271,7 +273,9 @@ export default function HomeFeatures() {
   return (
     <>
       <NewsSection />
-      <TestimonialsSection />
+      {/* Patient testimonials are suspended pending compliance review under the
+          NMC advertising guidelines (Oct 2026). Re-enable once approved. */}
+      {SHOW_PATIENT_TESTIMONIALS && <TestimonialsSection />}
       <FailedIvfCta />
       <AppointmentSection />
     </>

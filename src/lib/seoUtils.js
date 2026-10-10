@@ -1,7 +1,7 @@
 export const SITE = 'https://renewhealthcare.in'
 export const DEFAULT_SEO_IMAGE = '/images/renew/uploads/2024/07/renew-healthcare-logo.jpg.webp'
-export const DEFAULT_TITLE = 'Renew Healthcare - Best IVF & Fertility Centre in Kolkata'
-export const DEFAULT_DESCRIPTION = 'Renew Healthcare is a leading IVF and fertility centre in Kolkata, led by Dr. Rajeev Agarwal. Advanced IVF, IUI, gynaecology, pregnancy and genetic care with transparent costing.'
+export const DEFAULT_TITLE = 'Renew Healthcare - IVF and Fertility Care in Kolkata'
+export const DEFAULT_DESCRIPTION = 'Renew Healthcare offers IVF and fertility care in Kolkata, led by Dr. Rajeev Agarwal. IVF, IUI, gynaecology, pregnancy and genetic care with transparent costing.'
 
 export function normalizePath(path = '/') {
   const raw = String(path || '/').split(/[?#]/)[0]

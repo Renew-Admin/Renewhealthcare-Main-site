@@ -59,7 +59,7 @@ export default function BlogListPage({ initialBlogs }) {
           <div className="service-heading-block">
             <span>Renew Healthcare Blog</span>
             <h2>Fertility &amp; pregnancy <span className="heading-blue">care insights</span></h2>
-            <p>{blogs.length} expert articles on IVF, IUI, fertility, pregnancy, wellness, and reproductive health.</p>
+            <p>{blogs.length} educational articles on IVF, IUI, fertility, pregnancy, wellness, and reproductive health.</p>
           </div>
 
           <div className="blogx-layout">
@@ -217,7 +217,7 @@ function BlogEnquiryForm() {
         <span className="blogx-side-form-dot" />
         <div>
           <strong>Request a Call Back</strong>
-          <small>Free consultation with our fertility experts</small>
+          <small>Request a call back from the clinic</small>
         </div>
       </div>
       <input type="text" name="name" placeholder="Your name" required />
@@ -241,7 +241,7 @@ function BlogEnquiryForm() {
       {purpose === OTHER_PURPOSE && <PurposeOtherInput />}
       <TodayDateInput />
       <textarea name="message" placeholder="Your message (optional, max 300 characters)" rows={3} maxLength={300} />
-      <button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Get a Free Consultation'}</button>
+      <button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Request a Call Back'}</button>
       {status === 'sent' && <p className="lead-form-msg ok">Thank you! We&rsquo;ll be in touch shortly.</p>}
       {status === 'error' && <p className="lead-form-msg err">{error}</p>}
       <a className="blogx-side-call" href="tel:06292312076">or call 062923 12076</a>

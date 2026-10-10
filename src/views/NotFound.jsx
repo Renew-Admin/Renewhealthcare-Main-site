@@ -20,7 +20,6 @@ export default function NotFound() {
           <div className="notfound-links">
             <Link to="/doctors">Our Doctors</Link>
             <Link to="/blogs">Blogs</Link>
-            <Link to="/success-stories">Success Stories</Link>
             <Link to="/contact">Contact</Link>
           </div>
         </div>

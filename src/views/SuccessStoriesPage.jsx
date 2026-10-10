@@ -12,10 +12,15 @@ const reveal = {
   transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
 }
 
+// Patient testimonials, star ratings and review widgets are suspended pending
+// compliance review under the NMC advertising guidelines (Oct 2026). Flip this
+// back to true only once the clinic has approved the content.
+const SHOW_PATIENT_TESTIMONIALS = false
+
 const stats = [
   ['6,000+', 'Babies delivered'],
   ['9,000+', 'IVF procedures'],
-  ['27+', 'Years of expertise'],
+  ['27+', 'Years of experience'],
   ['4.9 ★', '2,500+ Google reviews'],
 ]
 
@@ -39,6 +44,8 @@ const stories = [
 
 // testimonialRows: admin testimonials fetched on the server for the reviews wall.
 export default function SuccessStoriesPage({ testimonialRows }) {
+  if (!SHOW_PATIENT_TESTIMONIALS) return <PatientStoriesUnderReview />
+
   return (
     <main className="content-page">
       <section className="service-banner">
@@ -101,7 +108,45 @@ export default function SuccessStoriesPage({ testimonialRows }) {
               <p>Speak with Renew Healthcare for personal guidance and care.</p>
             </div>
             <div className="service-cta-actions">
-              <Link to="/contact">Book Your Appointment</Link>
+              <Link to="/contact">Enquire About Appointments</Link>
+              <a href="tel:06292312076">Call 062923 12076</a>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function PatientStoriesUnderReview() {
+  return (
+    <main className="content-page">
+      <section className="service-banner">
+        <img src="/images/renew/uploads/2024/12/Inner-Page-Banner-3.jpg" alt="Renew Healthcare" />
+        <div className="service-banner-overlay" />
+        <div className="service-banner-content">
+          <span>Home / Patient Stories</span>
+          <h1>Patient Stories</h1>
+        </div>
+      </section>
+
+      <section className="service-content-band">
+        <div className="service-content-inner">
+          <div className="service-heading-block is-left">
+            <span>Under review</span>
+            <h2>Patient stories are currently under review</h2>
+            <p>We are reviewing the patient stories and reviews on this website against current National Medical Commission guidelines on healthcare communication. They will not be shown until that review is complete.</p>
+            <p>Treatment outcomes vary depending on individual factors, including age, medical condition and genetic history. To understand how these factors may apply to you, please speak with one of our doctors, or read about <Link to="/ivf-success-factors-and-rates">IVF success factors</Link>.</p>
+          </div>
+
+          <section className="service-cta-band">
+            <div>
+              <span>Need guidance?</span>
+              <h2>Contact the Clinic to Enquire About the Earliest Available Appointment Slot</h2>
+              <p>Speak with Renew Healthcare for personal guidance and care.</p>
+            </div>
+            <div className="service-cta-actions">
+              <Link to="/contact">Enquire About Appointments</Link>
               <a href="tel:06292312076">Call 062923 12076</a>
             </div>
           </section>

@@ -14,20 +14,20 @@ export default function AboutRenew({ onCallback }) {
           </div>
 
           <h2>
-            Best IVF Centre
+            IVF and Fertility Care
             <span className="heading-blue">in Kolkata</span>
           </h2>
 
           <p>
             We are a team of experienced and compassionate healthcare professionals,
-            led by Dr. Rajeev Agarwal, best fertility specialist in Kolkata. We offer
+            led by fertility specialist Dr. Rajeev Agarwal. We offer
             IVF, laparoscopy, gynaecology and pregnancy care, supported by advanced
             technology and a patient-first approach.
           </p>
 
           <p>
             We understand that the journey to parenthood can be emotional and
-            challenging. As a trusted IVF Centre in Kolkata, we provide personalized
+            challenging. As an IVF centre in Kolkata, we provide personalised
             care, clear guidance, and continuous support at every step.
           </p>
 
@@ -48,7 +48,7 @@ export default function AboutRenew({ onCallback }) {
             <strong>2,000+</strong>
             <span className="about-renew-trust-copy">
               <span className="about-renew-trust-line1">families supported with compassionate,</span>
-              <span className="about-renew-trust-line2">expert care</span>
+              <span className="about-renew-trust-line2">personalised care</span>
             </span>
           </div>
         </div>

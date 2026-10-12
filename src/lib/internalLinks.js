@@ -24,6 +24,22 @@ const LEGACY_PATH_ALIASES = new Map([
   ['/icsi-ivf-steps', '/services/intracytoplasmic-sperm-injection-icsi'],
   ['/preconception-counseling', '/services/pre-conception-counseling'],
   ['/high-risk-pregnancy', '/services/high-risk-pregnancy-management'],
+  // Shortened/working-title slugs used in cross-links; the live slug differs (RH-02).
+  ['/blogs/how-many-eggs-good-at-your-age', '/blogs/how-many-eggs-is-a-good-number'],
+  // "really" was dropped from the published slug.
+  ['/blogs/how-many-ivf-cycles-does-it-really-take', '/blogs/how-many-ivf-cycles-does-it-take'],
+  // Cross-links use the short title; the published slug carries the full subtitle.
+  ['/blogs/erectile-problems-while-trying-to-conceive', '/blogs/erectile-problems-while-trying-to-conceive-what-causes-them-and-what-can-be-done'],
+  // Published as a question slug, linked by its short form.
+  ['/blogs/ivf-kolkata-if-you-live-outside-the-city', '/blogs/how-do-i-plan-ivf-in-kolkata-if-i-live-outside-the-city'],
+  // Retired WordPress "why choose" page -> the live high-risk pregnancy service.
+  ['/why-choose-renew-healthcare-for-high-risk-pregnancy-management', '/services/high-risk-pregnancy-management'],
+  // Retired WordPress child page -> the live pre-conception counselling service.
+  ['/preconception-counseling/steps-of-preconception-counseling', '/services/pre-conception-counseling'],
+  // Surgical sperm aspiration is offered as TESA/PESA; no page exists under the old name.
+  ['/services/surgical-sperm-aspiration', '/services/tesa-pesa'],
+  // Judgment call: the anchor text is "Book your appointment" and the old landing page is gone.
+  ['/landing-page', '/contact'],
 ])
 
 function isInternal(href) {

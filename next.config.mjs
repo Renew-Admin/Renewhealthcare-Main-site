@@ -54,7 +54,8 @@ const nextConfig = {
   // OpenNext. Every rule is a single 301 hop:
   //   1. retired duplicate URLs (RH-02) -> surviving URL
   //   2. legacy URLs (old root-level blog paths, /stories) -> canonical URL
-  //   3. any other trailing-slash URL -> the same URL without the slash
+  //   3. tag archives (/blogs/tag/*), which never existed here -> /blogs (RH-14)
+  //   4. any other trailing-slash URL -> the same URL without the slash
   // Both the bare and the trailing-slash form of 1 and 2 go straight to the
   // final URL. Retired WordPress URLs answer 410 from route handlers
   // (src/app/comment.php, content.php, products/[id]).
@@ -65,6 +66,8 @@ const nextConfig = {
         { source: from, destination: to, statusCode: 301 },
         { source: `${from}/`, destination: to, statusCode: 301 },
       ]),
+      // No tag archive exists; send the WordPress-era tag URLs to the listing.
+      { source: '/blogs/tag/:tag*', destination: '/blogs', statusCode: 301 },
       { source: '/:path+/', destination: '/:path+', statusCode: 301 },
     ]
   },

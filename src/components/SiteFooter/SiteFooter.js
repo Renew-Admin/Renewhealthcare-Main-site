@@ -21,6 +21,7 @@ const communityLinks = [
   ['Blogs', '/blogs'],
   ['Doctors', '/doctors'],
   ['Services', '/services'],
+  ['Our Locations', '/locations'],
   ['FAQs', '/#faq'],
   ['Packages', '/packages'],
   ['Fellowship', '/course/12-months-fellowship-in-reproductive-medicine'],

@@ -89,3 +89,40 @@ test('RH-03 a tag archive on another site is not touched', () => {
   assert.equal(out, html)
   assert.equal(changed, 0)
 })
+
+// RH-04 / RH-13 — utm_* parameters are stripped from internal links; the
+// chatgpt.com attribution tag is stripped from every link.
+test('RH-04 internal link with only utm parameters loses its query string', () => {
+  const html = '<a href="/services/tesa-pesa?utm_source=chatgpt.com">TESA</a>'
+  const { html: out, changed } = rewriteInternalLinks(html, context)
+  assert.equal(out, '<a href="/services/tesa-pesa">TESA</a>')
+  assert.equal(changed, 1)
+})
+
+test('RH-04 internal link keeps non-utm parameters', () => {
+  const html = '<a href="/contact?utm_source=newsletter&amp;ref=blog&amp;utm_medium=email">Contact</a>'
+  const { html: out, changed } = rewriteInternalLinks(html, context)
+  assert.equal(out, '<a href="/contact?ref=blog">Contact</a>')
+  assert.equal(changed, 1)
+})
+
+test('RH-04 internal link keeps its hash', () => {
+  const html = '<a href="/?utm_source=chatgpt.com#faq">FAQ</a>'
+  const { html: out, changed } = rewriteInternalLinks(html, context)
+  assert.equal(out, '<a href="/#faq">FAQ</a>')
+  assert.equal(changed, 1)
+})
+
+test('RH-13 external link loses utm_source=chatgpt.com but keeps its other parameters', () => {
+  const html = '<a href="https://academic.oup.com/humrep/article/35/1/1/5696364?login=false&utm_source=chatgpt.com" target="_blank">study</a>'
+  const { html: out, changed } = rewriteInternalLinks(html, context)
+  assert.equal(out, '<a href="https://academic.oup.com/humrep/article/35/1/1/5696364?login=false" target="_blank">study</a>')
+  assert.equal(changed, 1)
+})
+
+test('RH-13 external link with a different utm_source is unchanged', () => {
+  const html = '<a href="https://www.who.int/news?utm_source=newsletter">WHO</a>'
+  const { html: out, changed } = rewriteInternalLinks(html, context)
+  assert.equal(out, html)
+  assert.equal(changed, 0)
+})

@@ -60,6 +60,25 @@ function splitHref(href) {
   return { path: match[1] || '', suffix: match[2] || '' }
 }
 
+// Query-string hygiene (RH-04/RH-13). Tracking parameters pasted into the
+// site's own links split analytics sessions, and the chatgpt.com attribution
+// tag some articles were drafted with does not belong in any link we emit.
+const isTrackingParam = param => /^utm_/i.test(param)
+const isChatGptTag = param => param.toLowerCase() === 'utm_source=chatgpt.com'
+
+// Drop the query parameters `shouldDrop` matches from a `?query#hash` suffix,
+// keeping the rest (and the hash) in place. The "?" goes when nothing is left.
+function stripQueryParams(suffix, shouldDrop) {
+  const hashIndex = suffix.indexOf('#')
+  const query = hashIndex === -1 ? suffix : suffix.slice(0, hashIndex)
+  const hash = hashIndex === -1 ? '' : suffix.slice(hashIndex)
+  if (!query.startsWith('?')) return suffix
+  // HTML attributes may spell the separator as &amp; — keep whichever is used.
+  const separator = query.includes('&amp;') ? '&amp;' : '&'
+  const kept = query.slice(1).split(separator).filter(param => param && !shouldDrop(param))
+  return `${kept.length ? `?${kept.join(separator)}` : ''}${hash}`
+}
+
 // The site-relative path of an internal href, or '' for anything else.
 function internalPath(href) {
   if (!isInternal(href)) return ''
@@ -136,7 +155,14 @@ export function rewriteInternalLinks(html, { blogSlugs, routePaths }) {
   let changed = unlinked.changed
 
   const output = unlinked.html.replace(HREF_PATTERN, (match, prefix, quote, href) => {
-    if (!isInternal(href)) return match
+    if (!isInternal(href)) {
+      // External link: only the chatgpt.com attribution tag is removed.
+      const external = splitHref(href)
+      const cleaned = `${external.path}${stripQueryParams(external.suffix, isChatGptTag)}`
+      if (cleaned === href) return match
+      changed += 1
+      return `${prefix}${quote}${cleaned}${quote}`
+    }
 
     const absolute = /^https?:\/\//i.test(href)
     const withoutOrigin = absolute ? href.slice(SITE.length) || '/' : href
@@ -151,8 +177,8 @@ export function rewriteInternalLinks(html, { blogSlugs, routePaths }) {
     if (!isKnown) unresolved.add(path)
 
     // Internal links are emitted as paths — an absolute URL to our own origin
-    // is just a longer way of saying the same thing.
-    const next = `${resolved}${suffix}`
+    // is just a longer way of saying the same thing — and without utm_* tags.
+    const next = `${resolved}${stripQueryParams(suffix, isTrackingParam)}`
     if (next === href) return match
 
     changed += 1

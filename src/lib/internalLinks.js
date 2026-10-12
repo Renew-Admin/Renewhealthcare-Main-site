@@ -13,6 +13,11 @@ import { SITE, normalizePath } from './seoUtils.js'
 
 const HREF_PATTERN = /(<a\b[^>]*?\bhref=)(["'])([^"']*)\2/gi
 
+// Whole anchors, non-greedy so each match stops at its own </a>. Used to
+// unlink tag archives, which this site never had (RH-03).
+const ANCHOR_PATTERN = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi
+const TAG_ARCHIVE_PATTERN = /^\/blogs\/tag(?:\/|$)/i
+
 // Links the export left pointing at pages that never existed on this site.
 // They 404 today, so any of these is strictly an improvement — but the three
 // near-matches at the bottom are judgment calls, not exact renames.
@@ -53,6 +58,30 @@ function isInternal(href) {
 function splitHref(href) {
   const match = /^([^?#]*)([?#].*)?$/.exec(href)
   return { path: match[1] || '', suffix: match[2] || '' }
+}
+
+// The site-relative path of an internal href, or '' for anything else.
+function internalPath(href) {
+  if (!isInternal(href)) return ''
+  const withoutOrigin = /^https?:\/\//i.test(href) ? href.slice(SITE.length) || '/' : href
+  return splitHref(withoutOrigin).path
+}
+
+/**
+ * Replace every link to a tag archive (/blogs/tag/…) with a <span>, keeping
+ * the anchor's class and inner HTML. WordPress emitted these under the
+ * "Popular Searches" block; the site has no tag pages, so they all 404.
+ */
+function unlinkTagArchives(html) {
+  let changed = 0
+  const output = html.replace(ANCHOR_PATTERN, (match, attrs, inner) => {
+    const href = /\bhref=(["'])([^"']*)\1/i.exec(attrs)
+    if (!href || !TAG_ARCHIVE_PATTERN.test(internalPath(href[2]))) return match
+    const className = /\bclass=(["'])([^"']*)\1/i.exec(attrs)
+    changed += 1
+    return `<span${className ? ` class=${className[1]}${className[2]}${className[1]}` : ''}>${inner}</span>`
+  })
+  return { html: output, changed }
 }
 
 /**
@@ -103,9 +132,10 @@ export function resolveInternalPath(path, { blogSlugs, routePaths }) {
  */
 export function rewriteInternalLinks(html, { blogSlugs, routePaths }) {
   const unresolved = new Set()
-  let changed = 0
+  const unlinked = unlinkTagArchives(String(html || ''))
+  let changed = unlinked.changed
 
-  const output = String(html || '').replace(HREF_PATTERN, (match, prefix, quote, href) => {
+  const output = unlinked.html.replace(HREF_PATTERN, (match, prefix, quote, href) => {
     if (!isInternal(href)) return match
 
     const absolute = /^https?:\/\//i.test(href)

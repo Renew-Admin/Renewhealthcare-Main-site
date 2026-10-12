@@ -60,3 +60,32 @@ test('RH-02 unknown internal path is left alone and reported as unresolved', () 
   assert.equal(changed, 0)
   assert.deepEqual(unresolved, ['/no-such-page'])
 })
+
+// RH-03 — tag-archive anchors become plain spans (the site has no tag pages).
+test('RH-03 tag anchor becomes a span, nested markup survives, next anchor untouched', () => {
+  const html = '<p><a href="/blogs/tag/the-era-test"><b>The ERA test</b></a> is covered in <a href="/blogs/what-is-era">this article</a>.</p>'
+  const { html: out, changed, unresolved } = rewriteInternalLinks(html, context)
+  assert.equal(out, '<p><span><b>The ERA test</b></span> is covered in <a href="/blogs/what-is-era">this article</a>.</p>')
+  assert.equal(changed, 1)
+  assert.deepEqual(unresolved, [])
+})
+
+test('RH-03 keeps the class attribute and handles absolute, trailing-slash and single-quoted hrefs', () => {
+  const html = [
+    '<a class="tag-link" href="https://renewhealthcare.in/blogs/tag/egg-freezing/">Egg Freezing</a>',
+    ' | ',
+    "<a href='/blogs/tag/best-age-to-freeze-eggs' rel=\"tag\">Best Age</a>",
+    ' | ',
+    '<a href="/services/laparoscopy">Laparoscopy</a>',
+  ].join('')
+  const { html: out, changed } = rewriteInternalLinks(html, { blogSlugs, routePaths: new Set([...routePaths, '/services/laparoscopy']) })
+  assert.equal(out, '<span class="tag-link">Egg Freezing</span> | <span>Best Age</span> | <a href="/services/laparoscopy">Laparoscopy</a>')
+  assert.equal(changed, 2)
+})
+
+test('RH-03 a tag archive on another site is not touched', () => {
+  const html = '<a href="https://example.com/blogs/tag/ivf">external</a>'
+  const { html: out, changed } = rewriteInternalLinks(html, context)
+  assert.equal(out, html)
+  assert.equal(changed, 0)
+})

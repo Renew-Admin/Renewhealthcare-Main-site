@@ -11,6 +11,7 @@ import 'server-only'
 import { cache } from 'react'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
+import { demoteBodyHeadings } from './articleHtml.js'
 import { fetchBlogContent, getBlogDirectory } from './blogDirectory.js'
 import { buildBlogListing } from './blogListing.js'
 import { rewriteBlogImageUrls } from './blogImages.js'
@@ -107,6 +108,6 @@ export const getArticle = cache(async (slug) => {
       ...directory.map((item) => `/blogs/${item.slug}`),
     ]),
   }
-  const html = rewriteInternalLinks(rewriteBlogImageUrls(raw), linkContext).html
+  const html = rewriteInternalLinks(rewriteBlogImageUrls(demoteBodyHeadings(raw)), linkContext).html
   return { article, html, directory }
 })

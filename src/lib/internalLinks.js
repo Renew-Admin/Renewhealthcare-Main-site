@@ -13,6 +13,11 @@ import { SITE, normalizePath } from './seoUtils.js'
 
 const HREF_PATTERN = /(<a\b[^>]*?\bhref=)(["'])([^"']*)\2/gi
 
+// Whole anchors, non-greedy so each match stops at its own </a>. Used to
+// unlink tag archives, which this site never had (RH-03).
+const ANCHOR_PATTERN = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi
+const TAG_ARCHIVE_PATTERN = /^\/blogs\/tag(?:\/|$)/i
+
 // Links the export left pointing at pages that never existed on this site.
 // They 404 today, so any of these is strictly an improvement — but the three
 // near-matches at the bottom are judgment calls, not exact renames.
@@ -24,6 +29,22 @@ const LEGACY_PATH_ALIASES = new Map([
   ['/icsi-ivf-steps', '/services/intracytoplasmic-sperm-injection-icsi'],
   ['/preconception-counseling', '/services/pre-conception-counseling'],
   ['/high-risk-pregnancy', '/services/high-risk-pregnancy-management'],
+  // Shortened/working-title slugs used in cross-links; the live slug differs (RH-02).
+  ['/blogs/how-many-eggs-good-at-your-age', '/blogs/how-many-eggs-is-a-good-number'],
+  // "really" was dropped from the published slug.
+  ['/blogs/how-many-ivf-cycles-does-it-really-take', '/blogs/how-many-ivf-cycles-does-it-take'],
+  // Cross-links use the short title; the published slug carries the full subtitle.
+  ['/blogs/erectile-problems-while-trying-to-conceive', '/blogs/erectile-problems-while-trying-to-conceive-what-causes-them-and-what-can-be-done'],
+  // Published as a question slug, linked by its short form.
+  ['/blogs/ivf-kolkata-if-you-live-outside-the-city', '/blogs/how-do-i-plan-ivf-in-kolkata-if-i-live-outside-the-city'],
+  // Retired WordPress "why choose" page -> the live high-risk pregnancy service.
+  ['/why-choose-renew-healthcare-for-high-risk-pregnancy-management', '/services/high-risk-pregnancy-management'],
+  // Retired WordPress child page -> the live pre-conception counselling service.
+  ['/preconception-counseling/steps-of-preconception-counseling', '/services/pre-conception-counseling'],
+  // Surgical sperm aspiration is offered as TESA/PESA; no page exists under the old name.
+  ['/services/surgical-sperm-aspiration', '/services/tesa-pesa'],
+  // Judgment call: the anchor text is "Book your appointment" and the old landing page is gone.
+  ['/landing-page', '/contact'],
 ])
 
 function isInternal(href) {
@@ -37,6 +58,49 @@ function isInternal(href) {
 function splitHref(href) {
   const match = /^([^?#]*)([?#].*)?$/.exec(href)
   return { path: match[1] || '', suffix: match[2] || '' }
+}
+
+// Query-string hygiene (RH-04/RH-13). Tracking parameters pasted into the
+// site's own links split analytics sessions, and the chatgpt.com attribution
+// tag some articles were drafted with does not belong in any link we emit.
+const isTrackingParam = param => /^utm_/i.test(param)
+const isChatGptTag = param => param.toLowerCase() === 'utm_source=chatgpt.com'
+
+// Drop the query parameters `shouldDrop` matches from a `?query#hash` suffix,
+// keeping the rest (and the hash) in place. The "?" goes when nothing is left.
+function stripQueryParams(suffix, shouldDrop) {
+  const hashIndex = suffix.indexOf('#')
+  const query = hashIndex === -1 ? suffix : suffix.slice(0, hashIndex)
+  const hash = hashIndex === -1 ? '' : suffix.slice(hashIndex)
+  if (!query.startsWith('?')) return suffix
+  // HTML attributes may spell the separator as &amp; — keep whichever is used.
+  const separator = query.includes('&amp;') ? '&amp;' : '&'
+  const kept = query.slice(1).split(separator).filter(param => param && !shouldDrop(param))
+  return `${kept.length ? `?${kept.join(separator)}` : ''}${hash}`
+}
+
+// The site-relative path of an internal href, or '' for anything else.
+function internalPath(href) {
+  if (!isInternal(href)) return ''
+  const withoutOrigin = /^https?:\/\//i.test(href) ? href.slice(SITE.length) || '/' : href
+  return splitHref(withoutOrigin).path
+}
+
+/**
+ * Replace every link to a tag archive (/blogs/tag/…) with a <span>, keeping
+ * the anchor's class and inner HTML. WordPress emitted these under the
+ * "Popular Searches" block; the site has no tag pages, so they all 404.
+ */
+function unlinkTagArchives(html) {
+  let changed = 0
+  const output = html.replace(ANCHOR_PATTERN, (match, attrs, inner) => {
+    const href = /\bhref=(["'])([^"']*)\1/i.exec(attrs)
+    if (!href || !TAG_ARCHIVE_PATTERN.test(internalPath(href[2]))) return match
+    const className = /\bclass=(["'])([^"']*)\1/i.exec(attrs)
+    changed += 1
+    return `<span${className ? ` class=${className[1]}${className[2]}${className[1]}` : ''}>${inner}</span>`
+  })
+  return { html: output, changed }
 }
 
 /**
@@ -87,10 +151,18 @@ export function resolveInternalPath(path, { blogSlugs, routePaths }) {
  */
 export function rewriteInternalLinks(html, { blogSlugs, routePaths }) {
   const unresolved = new Set()
-  let changed = 0
+  const unlinked = unlinkTagArchives(String(html || ''))
+  let changed = unlinked.changed
 
-  const output = String(html || '').replace(HREF_PATTERN, (match, prefix, quote, href) => {
-    if (!isInternal(href)) return match
+  const output = unlinked.html.replace(HREF_PATTERN, (match, prefix, quote, href) => {
+    if (!isInternal(href)) {
+      // External link: only the chatgpt.com attribution tag is removed.
+      const external = splitHref(href)
+      const cleaned = `${external.path}${stripQueryParams(external.suffix, isChatGptTag)}`
+      if (cleaned === href) return match
+      changed += 1
+      return `${prefix}${quote}${cleaned}${quote}`
+    }
 
     const absolute = /^https?:\/\//i.test(href)
     const withoutOrigin = absolute ? href.slice(SITE.length) || '/' : href
@@ -105,8 +177,8 @@ export function rewriteInternalLinks(html, { blogSlugs, routePaths }) {
     if (!isKnown) unresolved.add(path)
 
     // Internal links are emitted as paths — an absolute URL to our own origin
-    // is just a longer way of saying the same thing.
-    const next = `${resolved}${suffix}`
+    // is just a longer way of saying the same thing — and without utm_* tags.
+    const next = `${resolved}${stripQueryParams(suffix, isTrackingParam)}`
     if (next === href) return match
 
     changed += 1

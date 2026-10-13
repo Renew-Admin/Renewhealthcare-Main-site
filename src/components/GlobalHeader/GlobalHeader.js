@@ -100,7 +100,7 @@ const routeMap = {
 }
 
 const externalMap = {
-  'Fertility Without Borders': 'https://www.drrajeevagarwal.co.in/',
+  'Fertility Without Borders': 'https://drrajeevagarwal.co.in/',
 }
 
 function toPath(label) {

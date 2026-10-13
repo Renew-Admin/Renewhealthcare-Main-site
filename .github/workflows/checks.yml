@@ -1,0 +1,30 @@
+name: checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test
+
+      # Fails if any static article still links to a redirecting internal URL.
+      - run: node scripts/fix-internal-links.mjs --check
+
+      # Offline build: Supabase is never contacted, static data is used instead.
+      - run: npm run build:next
+        env:
+          RENEW_OFFLINE: '1'

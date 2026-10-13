@@ -296,7 +296,7 @@ function Hero() {
             </svg>
           </div>
 
-          <h3 className="journey-title">{s.cardTitle[0]}<br />{s.cardTitle[1]}</h3>
+          <h2 className="journey-title">{s.cardTitle[0]}<br />{s.cardTitle[1]}</h2>
           <span className="journey-underline" />
 
           <div className="journey-bottom">

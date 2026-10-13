@@ -52,19 +52,33 @@ const nextConfig = {
   // Redirect rules carried over from the old Cloudflare Worker, as plain
   // config (no middleware) so they run on any host, including Cloudflare via
   // OpenNext. Every rule is a single 301 hop:
+  //   0. www.renewhealthcare.in -> the apex host, same path (RH-06)
   //   1. retired duplicate URLs (RH-02) -> surviving URL
   //   2. legacy URLs (old root-level blog paths, /stories) -> canonical URL
-  //   3. any other trailing-slash URL -> the same URL without the slash
+  //   3. tag archives (/blogs/tag/*), which never existed here -> /blogs (RH-14)
+  //   4. any other trailing-slash URL -> the same URL without the slash
   // Both the bare and the trailing-slash form of 1 and 2 go straight to the
   // final URL. Retired WordPress URLs answer 410 from route handlers
   // (src/app/comment.php, content.php, products/[id]).
   async redirects() {
     const pairs = [...DUPLICATE_REDIRECTS.entries(), ...getLegacyRedirects()]
     return [
+      // The www host is a duplicate of the apex and must collapse onto it.
+      // A Cloudflare redirect rule (www -> apex at the edge) is the recommended
+      // belt-and-braces; this rule is the in-app fallback. OpenNext's handling
+      // of host-conditioned (`has`) redirects must be confirmed after deploy.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.renewhealthcare.in' }],
+        destination: 'https://renewhealthcare.in/:path*',
+        statusCode: 301,
+      },
       ...pairs.flatMap(([from, to]) => [
         { source: from, destination: to, statusCode: 301 },
         { source: `${from}/`, destination: to, statusCode: 301 },
       ]),
+      // No tag archive exists; send the WordPress-era tag URLs to the listing.
+      { source: '/blogs/tag/:tag*', destination: '/blogs', statusCode: 301 },
       { source: '/:path+/', destination: '/:path+', statusCode: 301 },
     ]
   },

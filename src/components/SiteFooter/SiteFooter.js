@@ -21,6 +21,7 @@ const communityLinks = [
   ['Blogs', '/blogs'],
   ['Doctors', '/doctors'],
   ['Services', '/services'],
+  ['Our Locations', '/locations'],
   ['FAQs', '/#faq'],
   ['Packages', '/packages'],
   ['Fellowship', '/course/12-months-fellowship-in-reproductive-medicine'],
@@ -206,7 +207,7 @@ export default function SiteFooter({ onCallback }) {
                       </div>
                       <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="purpose">
-                          <select className="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false" name="purpose" defaultValue="" required onChange={e => setPurpose(e.target.value)}>
+                          <select className="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false" aria-label="Purpose of enquiry" name="purpose" defaultValue="" required onChange={e => setPurpose(e.target.value)}>
                             <option value="" disabled>Purpose</option>
                             <option value="Surrogacy">Surrogacy</option>
                             <option value="Egg Freezing">Egg Freezing</option>

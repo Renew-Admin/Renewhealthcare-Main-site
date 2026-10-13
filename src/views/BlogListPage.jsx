@@ -224,7 +224,7 @@ function BlogEnquiryForm() {
       <input type="tel" name="customer_number" placeholder="Your Phone Number" inputMode="numeric" maxLength={10} required />
       <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" inputMode="numeric" maxLength={10} required />
       <input type="email" name="email" placeholder="Email address" />
-      <select name="purpose" defaultValue="" required onChange={e => setPurpose(e.target.value)}>
+      <select name="purpose" aria-label="Purpose of enquiry" defaultValue="" required onChange={e => setPurpose(e.target.value)}>
         <option value="" disabled>Choose a purpose</option>
         <option value="Surrogacy">Surrogacy</option>
         <option value="Egg Freezing">Egg Freezing</option>

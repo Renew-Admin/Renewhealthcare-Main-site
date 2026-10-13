@@ -126,3 +126,12 @@ test('RH-13 external link with a different utm_source is unchanged', () => {
   assert.equal(out, html)
   assert.equal(changed, 0)
 })
+
+// RH-02 follow-up — a path with no live destination is unlinked at render time
+// so CMS-served copies of the article lose the dead link too.
+test('RH-02 an anchor to /how-can-you-access-ipgc becomes plain text, other anchors untouched', () => {
+  const html = '<p>the <a href="/how-can-you-access-ipgc">standard care protocol</a> and <a href="https://renewhealthcare.in/how-can-you-access-ipgc/">again</a>, see <a href="/services/high-risk-pregnancy-management">this</a>.</p>'
+  const { html: out, changed } = rewriteInternalLinks(html, { blogSlugs: new Set(), routePaths: new Set(['/services/high-risk-pregnancy-management']) })
+  assert.equal(out, '<p>the <span>standard care protocol</span> and <span>again</span>, see <a href="/services/high-risk-pregnancy-management">this</a>.</p>')
+  assert.equal(changed, 2)
+})

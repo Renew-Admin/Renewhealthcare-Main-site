@@ -18,6 +18,21 @@ const HREF_PATTERN = /(<a\b[^>]*?\bhref=)(["'])([^"']*)\2/gi
 const ANCHOR_PATTERN = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi
 const TAG_ARCHIVE_PATTERN = /^\/blogs\/tag(?:\/|$)/i
 
+// Internal paths that have no live destination at all, so the anchor is
+// turned into plain text rather than pointed somewhere (RH-02). The static
+// copy of an article can be edited by hand, but the same body also lives in
+// Supabase for CMS-served posts, so this has to happen at render time too.
+const UNLINK_PATHS = new Set([
+  // "standard care protocol" link to a WordPress page that no longer exists.
+  '/how-can-you-access-ipgc',
+])
+
+function hasNoDestination(path) {
+  if (!path) return false
+  if (TAG_ARCHIVE_PATTERN.test(path)) return true
+  return UNLINK_PATHS.has(normalizePath(path))
+}
+
 // Links the export left pointing at pages that never existed on this site.
 // They 404 today, so any of these is strictly an improvement — but the three
 // near-matches at the bottom are judgment calls, not exact renames.
@@ -87,15 +102,16 @@ function internalPath(href) {
 }
 
 /**
- * Replace every link to a tag archive (/blogs/tag/…) with a <span>, keeping
- * the anchor's class and inner HTML. WordPress emitted these under the
- * "Popular Searches" block; the site has no tag pages, so they all 404.
+ * Replace every link to a tag archive (/blogs/tag/…) or to a path in
+ * UNLINK_PATHS with a <span>, keeping the anchor's class and inner HTML.
+ * WordPress emitted the tag links under the "Popular Searches" block; the
+ * site has no tag pages, so they all 404.
  */
 function unlinkTagArchives(html) {
   let changed = 0
   const output = html.replace(ANCHOR_PATTERN, (match, attrs, inner) => {
     const href = /\bhref=(["'])([^"']*)\1/i.exec(attrs)
-    if (!href || !TAG_ARCHIVE_PATTERN.test(internalPath(href[2]))) return match
+    if (!href || !hasNoDestination(internalPath(href[2]))) return match
     const className = /\bclass=(["'])([^"']*)\1/i.exec(attrs)
     changed += 1
     return `<span${className ? ` class=${className[1]}${className[2]}${className[1]}` : ''}>${inner}</span>`

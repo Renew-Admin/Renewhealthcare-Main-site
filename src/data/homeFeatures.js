@@ -3,6 +3,9 @@
 // /assets/renew folder (never the old WordPress domain); Instagram reel links
 // stay as external URLs.
 
+// RH-07: the OnlyMyHealth item ("World IVF Day 2024: Expert Explains How Age
+// Affects IVF Treatment") was removed — its URL answers 410 Gone and no moved
+// or archived copy exists. Re-add it only with a verified live link.
 export const newsItems = [
   {
     title: 'IVF Myths And Facts: Expert Addresses Common Misconceptions',
@@ -15,12 +18,6 @@ export const newsItems = [
     image: '/assets/renew/news/world-ivf-day.webp',
     link: 'https://www.timesnownews.com/health/world-ivf-day-2024-expert-debunks-myths-and-misconceptions-around-ivf-article-111990500',
     source: 'Times Now',
-  },
-  {
-    title: 'World IVF Day 2024: Expert Explains How Age Affects IVF Treatment',
-    image: '/assets/renew/news/age-affects-ivf.jpg',
-    link: 'https://www.onlymyhealth.com/world-ivf-day-how-does-age-affect-ivf-treatment-1721800929',
-    source: 'OnlyMyHealth',
   },
   {
     title: 'Busting Some Common Myths Related to Infertility and Pregnancy',

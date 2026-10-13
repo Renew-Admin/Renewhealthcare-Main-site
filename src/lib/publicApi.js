@@ -48,9 +48,14 @@ export async function fetchPublicSettings() {
   return Object.fromEntries(rows.map((row) => [row.key, row.value]))
 }
 
-/** Published blog rows, newest first. Never throws. */
+// Columns the blog cards need (toBlog() in blogRow.js). Deliberately excludes
+// `content`: the homepage and /blogs only list posts, and pulling every
+// article's full HTML on each page load is wasted transfer (PERF-R4).
+export const POST_LIST_COLUMNS = 'slug,title,excerpt,category,cover_image,published_at,created_at,read_mins,is_featured'
+
+/** Published blog rows (listing columns only), newest first. Never throws. */
 export function fetchPublishedPostRows() {
-  return selectRows('blogs', 'select=*&published=eq.true&order=published_at.desc')
+  return selectRows('blogs', `select=${POST_LIST_COLUMNS}&published=eq.true&order=published_at.desc`)
 }
 
 /** Insert one lead (anyone may insert; only admins can read). Throws on failure. */

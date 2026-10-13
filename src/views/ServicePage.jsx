@@ -20,20 +20,30 @@ function TextBlock({ text }) {
     return clean.split(' ').slice(0, 24).join(' ')
   }
 
-  return String(text || '')
-    .split('\n')
-    .filter(Boolean)
-    .map((part, index) => {
-      if (part.startsWith('- ')) {
-        return <li key={index}>{part.slice(2)}</li>
-      }
+  // Paragraphs stay strings; each run of consecutive "- " lines becomes one
+  // array so it renders as a single <ul> (an <li> must have a list parent).
+  const blocks = []
+  for (const part of String(text || '').split('\n').filter(Boolean)) {
+    if (!part.startsWith('- ')) blocks.push(part)
+    else if (Array.isArray(blocks.at(-1))) blocks.at(-1).push(part.slice(2))
+    else blocks.push([part.slice(2)])
+  }
+
+  return blocks.map((block, index) => {
+    if (Array.isArray(block)) {
       return (
-        <p key={index}>
-          <span className="mobile-copy-short">{compactText(part)}</span>
-          <span className="desktop-copy-full">{part}</span>
-        </p>
+        <ul key={index}>
+          {block.map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}
+        </ul>
       )
-    })
+    }
+    return (
+      <p key={index}>
+        <span className="mobile-copy-short">{compactText(block)}</span>
+        <span className="desktop-copy-full">{block}</span>
+      </p>
+    )
+  })
 }
 
 // The answer is always in the HTML (crawlers and the FAQPage schema need it);

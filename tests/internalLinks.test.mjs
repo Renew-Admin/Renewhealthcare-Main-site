@@ -135,3 +135,12 @@ test('RH-02 an anchor to /how-can-you-access-ipgc becomes plain text, other anch
   assert.equal(out, '<p>the <span>standard care protocol</span> and <span>again</span>, see <a href="/services/high-risk-pregnancy-management">this</a>.</p>')
   assert.equal(changed, 2)
 })
+
+// RH-10/RH-11/RH-12 — moved external citations are rewritten at render time
+// so the Supabase-served copies match the corrected static files.
+test('RH-10 moved external citations are rewritten, others untouched', () => {
+  const html = '<a href="http://my.clevelandclinic.org/health/articles/23439-ovulation">ovulation</a> <a href="https://www.mayoclinic.org/diseases-conditions/ovarian-hyperstimulation-syndrome/symptoms-causes/syc-20354697?utm_source=chatgpt.com">OHSS</a> <a href="https://advancedfertility.com/ivf-in-detail/embryo-transfer/">ET</a> <a href="https://www.mayoclinic.org/diseases-conditions/preeclampsia/symptoms-causes/syc-20355745">keep</a>'
+  const { html: out, changed } = rewriteInternalLinks(html, { blogSlugs: new Set(), routePaths: new Set() })
+  assert.equal(out, '<a href="https://my.clevelandclinic.org/health/articles/23439-ovulation">ovulation</a> <a href="https://www.mayoclinic.org/diseases-conditions/ovarian-hyperstimulation-syndrome-ohss/symptoms-causes/syc-20354697">OHSS</a> <a href="https://www.advancedfertility.com/ivf-in-detail/embryo-transfer">ET</a> <a href="https://www.mayoclinic.org/diseases-conditions/preeclampsia/symptoms-causes/syc-20355745">keep</a>')
+  assert.equal(changed, 3)
+})

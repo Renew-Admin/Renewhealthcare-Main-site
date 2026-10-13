@@ -81,6 +81,26 @@ function splitHref(href) {
 const isTrackingParam = param => /^utm_/i.test(param)
 const isChatGptTag = param => param.toLowerCase() === 'utm_source=chatgpt.com'
 
+// External citations whose published URL has moved or gone insecure. The
+// static article copies were corrected by hand (RH-10/RH-11/RH-12), but the
+// same bodies are served from Supabase in production, so the rewrite also
+// happens here. Keys are matched after any utm stripping, without a trailing
+// slash; every target was checked in a browser on 12 Oct 2026.
+const EXTERNAL_URL_REWRITES = new Map([
+  ['https://www.mayoclinic.org/diseases-conditions/ovarian-hyperstimulation-syndrome/symptoms-causes/syc-20354697',
+    'https://www.mayoclinic.org/diseases-conditions/ovarian-hyperstimulation-syndrome-ohss/symptoms-causes/syc-20354697'],
+  ['http://my.clevelandclinic.org/health/articles/23439-ovulation',
+    'https://my.clevelandclinic.org/health/articles/23439-ovulation'],
+  ['https://www.cnn.com/2013/07/11/world/conjoined-twins-fast-facts/index.html',
+    'https://www.cnn.com/health/conjoined-twins-fast-facts'],
+  ['https://advancedfertility.com/ivf-in-detail/embryo-transfer',
+    'https://www.advancedfertility.com/ivf-in-detail/embryo-transfer'],
+])
+
+function rewriteExternalUrl(path) {
+  return EXTERNAL_URL_REWRITES.get(path.replace(/\/+$/, '')) || path
+}
+
 // Drop the query parameters `shouldDrop` matches from a `?query#hash` suffix,
 // keeping the rest (and the hash) in place. The "?" goes when nothing is left.
 function stripQueryParams(suffix, shouldDrop) {
@@ -172,9 +192,10 @@ export function rewriteInternalLinks(html, { blogSlugs, routePaths }) {
 
   const output = unlinked.html.replace(HREF_PATTERN, (match, prefix, quote, href) => {
     if (!isInternal(href)) {
-      // External link: only the chatgpt.com attribution tag is removed.
+      // External link: the chatgpt.com attribution tag is removed and a few
+      // moved citations are pointed at their current URL.
       const external = splitHref(href)
-      const cleaned = `${external.path}${stripQueryParams(external.suffix, isChatGptTag)}`
+      const cleaned = `${rewriteExternalUrl(external.path)}${stripQueryParams(external.suffix, isChatGptTag)}`
       if (cleaned === href) return match
       changed += 1
       return `${prefix}${quote}${cleaned}${quote}`

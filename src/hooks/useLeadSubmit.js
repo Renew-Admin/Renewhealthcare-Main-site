@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createLead } from '../lib/leads.js'
 import { trackMetaEvent } from '../lib/metaPixel.js'
+import { track } from '../lib/analytics.js'
 
 // Format rules shared by every lead form, keyed by field name (the footer form
 // keeps its WordPress-era capitalised names).
@@ -42,6 +43,9 @@ export function validateLeadForm(form) {
       el.addEventListener('change', clear, { once: true })
     }
   }
+  // reportValidity() fires the fields' `invalid` events, which ContactTracking
+  // turns into a single form_error event (the same path the browser's own
+  // required-field check uses), so nothing is tracked here.
   return form.reportValidity()
 }
 
@@ -56,10 +60,15 @@ export function useLeadSubmit() {
     setError('')
     try {
       await createLead(payload)
+      // The lead row was accepted by the server (Supabase insert resolved).
+      // `submit` refuses re-entry while 'sending', so a double click or a
+      // re-render cannot fire this twice for one submission.
+      track('generate_lead', { form_type: payload?.source || 'website' })
       trackMetaEvent('Lead', { content_name: payload?.source || 'website' })
       setStatus('sent')
       return true
     } catch (err) {
+      track('form_error', { form_type: payload?.source || 'website', error_type: 'submit_failed' })
       setError(err?.message || 'Something went wrong. Please call us instead.')
       setStatus('error')
       return false

@@ -14,6 +14,7 @@ binding = "ASSETS"
 #
 #   npx wrangler secret put SUPABASE_URL
 #   npx wrangler secret put SUPABASE_ANON_KEY
+#   npx wrangler secret put MAKE_WEBHOOK_URL   (lead forwarding, /api/lead)
 #
 # The build also needs VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY (and
 # optionally META_PIXEL_ID) as build variables — see docs/NEXTJS-MIGRATION.md.

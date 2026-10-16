@@ -42,28 +42,26 @@ export async function createLead(input) {
     return;
   }
 
-  // 1. Dispatch to Webhook (always work regardless of domain/environment)
-  const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_URL || 'https://hook.us2.make.com/kfd4wrx1hohk6cy8pv8j4oe93b496lb2';
-  if (webhookUrl) {
-    try {
-      fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...row,
-          customer_number: customerNumber || null,
-          whatsapp_number: whatsappNumber || null,
-          purpose: purpose || null,
-          purpose_details: purposeDetails || null,
-          date: formDate || null,
-          submitted_at: new Date().toISOString(),
-        }),
-      }).catch(err => console.warn('[createLead] Webhook delivery failed:', err));
-    } catch (webhookErr) {
-      console.warn('[createLead] Webhook call error:', webhookErr);
-    }
+  // 1. Forward to the CRM automation through our own server route. The
+  // Make.com webhook URL lives only in the Worker secret MAKE_WEBHOOK_URL and is
+  // never shipped to the browser (see src/app/api/lead/route.js).
+  try {
+    fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
+      body: JSON.stringify({
+        ...row,
+        customer_number: customerNumber || null,
+        whatsapp_number: whatsappNumber || null,
+        purpose: purpose || null,
+        purpose_details: purposeDetails || null,
+        date: formDate || null,
+        submitted_at: new Date().toISOString(),
+      }),
+    }).catch(() => console.warn('[createLead] CRM forward failed'))
+  } catch {
+    console.warn('[createLead] CRM forward error')
   }
 
   // 2. Save to Supabase (if configured)

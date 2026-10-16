@@ -14,7 +14,8 @@ const ALLOWED_ORIGINS = new Set(['https://renewhealthcare.in', 'https://www.rene
 // check in tests/analytics.test.mjs and docs/ANALYTICS.md cover this.
 // Once the secret is set, the secret wins; then rotate the hook in Make.com and
 // delete this constant.
-const FALLBACK_WEBHOOK = 'https://hook.us2.make.com/kfd4wrx1hohk6cy8pv8j4oe93b496lb2'
+// Rotated 2026-10-16: the previous hook was exposed in public JS and is retired.
+const FALLBACK_WEBHOOK = 'https://hook.us2.make.com/6xpanv5ydh56jvn3neeifsslusy6edj3'
 let warnedFallback = false
 const allow = createRateLimiter()
 const isDuplicate = createDuplicateGuard()

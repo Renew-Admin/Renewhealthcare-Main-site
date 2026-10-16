@@ -12,7 +12,7 @@ const box = {
   position: 'fixed', left: 16, right: 88, bottom: 16, zIndex: 115,
   maxWidth: 560, margin: '0 auto', background: '#ffffff', color: '#1f2933',
   borderRadius: 14, boxShadow: '0 10px 40px rgba(7,40,70,.25)', padding: '18px 20px',
-  fontFamily: 'Manrope, system-ui, sans-serif', fontSize: 14, lineHeight: 1.5,
+  fontFamily: 'Manrope, system-ui, sans-serif', fontSize: 14, lineHeight: 1.5, textAlign: 'left',
 }
 const row = { display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14 }
 const btn = {

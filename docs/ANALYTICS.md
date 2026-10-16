@@ -52,7 +52,7 @@ Checks: Origin must be renewhealthcare.in, JSON only, ≤ 8 KB, schema validatio
 
 Supabase insert is unchanged (browser, anon key, insert-only RLS) and remains the source of truth for `generate_lead`.
 
-**Set before deploying:** `npx wrangler secret put MAKE_WEBHOOK_URL` (or Cloudflare dashboard → Workers → renewhealthcare → Settings → Variables and secrets). Without it `/api/lead` returns 503 and leads reach Supabase only.
+**Secret:** `npx wrangler secret put MAKE_WEBHOOK_URL` (or Cloudflare dashboard → Workers → renewhealthcare → Settings → Variables and secrets). Until it is set, the route uses a transitional server-side fallback (current hook) so lead delivery never breaks; that constant lives only in the Worker, never in browser JS. After setting the secret: rotate the hook in Make.com, update the secret, delete `FALLBACK_WEBHOOK`.
 
 **Recommended:** Cloudflare WAF rate-limiting rule on `/api/lead` (e.g. 10 requests / minute / IP → block 10 min), then rotate the Make.com webhook (create a new hook in the scenario, update the secret, delete the old hook).
 

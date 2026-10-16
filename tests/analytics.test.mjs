@@ -62,3 +62,19 @@ test('rate limiter and duplicate guard', () => {
   assert.equal(dup('k', 10), true)
   assert.equal(dup('k', 5000), false)
 })
+
+test('lead webhook id only exists in the server route, never in browser code', async () => {
+  const { readdirSync, readFileSync, statSync } = await import('node:fs')
+  const { join } = await import('node:path')
+  const ID = 'kfd4wrx1hohk6cy8pv8j4oe93b496lb2'
+  const hits = []
+  const walk = (dir) => {
+    for (const name of readdirSync(dir)) {
+      const p = join(dir, name)
+      if (statSync(p).isDirectory()) walk(p)
+      else if (/\.(m?js|jsx|ts|tsx)$/.test(name) && readFileSync(p, 'utf8').includes(ID)) hits.push(p)
+    }
+  }
+  walk('src')
+  assert.deepEqual(hits, ['src/app/api/lead/route.js'])
+})

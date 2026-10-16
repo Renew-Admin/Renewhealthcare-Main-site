@@ -7,6 +7,15 @@
 import { MAX_BODY_BYTES, createDuplicateGuard, createRateLimiter, validateLead } from '../../../lib/leadValidation.js'
 
 const ALLOWED_ORIGINS = new Set(['https://renewhealthcare.in', 'https://www.renewhealthcare.in'])
+
+// Transitional server-side fallback so leads keep reaching Make.com until the
+// Worker secret MAKE_WEBHOOK_URL is set. This module runs only in the Worker
+// (route handler); it is never bundled into browser JavaScript — the build
+// check in tests/analytics.test.mjs and docs/ANALYTICS.md cover this.
+// Once the secret is set, the secret wins; then rotate the hook in Make.com and
+// delete this constant.
+const FALLBACK_WEBHOOK = 'https://hook.us2.make.com/kfd4wrx1hohk6cy8pv8j4oe93b496lb2'
+let warnedFallback = false
 const allow = createRateLimiter()
 const isDuplicate = createDuplicateGuard()
 
@@ -47,10 +56,13 @@ export async function POST(request) {
   const phoneKey = (lead.customer_number || lead.phone || '').replace(/\D/g, '')
   if (isDuplicate(`${phoneKey}:${lead.source}`)) return reply(200, { ok: true, duplicate: true })
 
-  const webhook = process.env.MAKE_WEBHOOK_URL
+  let webhook = process.env.MAKE_WEBHOOK_URL
   if (!webhook) {
-    console.error('[api/lead] MAKE_WEBHOOK_URL is not configured')
-    return reply(503, { ok: false, error: 'not_configured' })
+    webhook = FALLBACK_WEBHOOK
+    if (!warnedFallback) {
+      warnedFallback = true
+      console.warn('[api/lead] MAKE_WEBHOOK_URL secret not set; using server-side fallback')
+    }
   }
 
   try {

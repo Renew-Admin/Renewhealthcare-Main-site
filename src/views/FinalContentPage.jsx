@@ -394,7 +394,7 @@ function ContactBlock() {
       </div>
 
       <div className="contact-grid">
-        <form className="contact-form" onSubmit={onSubmit}>
+        <form className="contact-form" data-form-type="contact-page" onSubmit={onSubmit}>
           <input name="name" placeholder="Name" required />
           <input type="tel" name="customer_number" placeholder="Your Phone Number" inputMode="numeric" maxLength={10} required />
           <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" inputMode="numeric" maxLength={10} required />

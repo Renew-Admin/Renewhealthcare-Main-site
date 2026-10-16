@@ -212,7 +212,7 @@ function BlogEnquiryForm() {
     }
   }
   return (
-    <form className="blogx-side-form" onSubmit={onSubmit}>
+    <form className="blogx-side-form" data-form-type="blog-enquiry" onSubmit={onSubmit}>
       <div className="blogx-side-form-head">
         <span className="blogx-side-form-dot" />
         <div>

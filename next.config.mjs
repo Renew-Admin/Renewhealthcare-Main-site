@@ -36,7 +36,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_SUPABASE_URL: pick('NEXT_PUBLIC_SUPABASE_URL', 'VITE_SUPABASE_URL'),
     NEXT_PUBLIC_SUPABASE_ANON_KEY: pick('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'VITE_SUPABASE_ANON_KEY'),
-    NEXT_PUBLIC_WEBHOOK_URL: offline ? '' : process.env.NEXT_PUBLIC_WEBHOOK_URL || process.env.VITE_WEBHOOK_URL || '',
+    // The lead webhook is a server-only secret (MAKE_WEBHOOK_URL); it must never be NEXT_PUBLIC_.
     NEXT_PUBLIC_GMB_WEBHOOK_BALLYGUNGE: offline ? '' : process.env.VITE_GMB_WEBHOOK_BALLYGUNGE || '',
     NEXT_PUBLIC_GMB_WEBHOOK_SALTLAKE: offline ? '' : process.env.VITE_GMB_WEBHOOK_SALTLAKE || '',
     NEXT_PUBLIC_GMB_WEBHOOK_JAMSHEDPUR: offline ? '' : process.env.VITE_GMB_WEBHOOK_JAMSHEDPUR || '',

@@ -6,8 +6,7 @@
 // there is exactly one source for every head tag.
 import Script from 'next/script'
 import { SITE } from '../lib/seoUtils.js'
-
-const GA_MEASUREMENT_ID = 'G-VL7SJC7ENL'
+import { GA_MEASUREMENT_ID, gtagInitScript } from '../lib/analytics.js'
 // Local offline runs (RENEW_OFFLINE=1) must not report page views to the
 // production Google Analytics property.
 const analyticsEnabled = process.env.RENEW_OFFLINE !== '1'
@@ -42,17 +41,14 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <div id="root">{children}</div>
-        {/* Google tag (gtag.js). Page views are sent by usePageTracking on every route change,
-            so gtag() must exist before hydration — the init snippet runs beforeInteractive
-            and queues into dataLayer until the library loads. */}
+        {/* Google tag (gtag.js). The init snippet runs beforeInteractive so Consent Mode
+            defaults (all denied until the visitor chooses) and the production-host guard
+            are in place before gtag.js loads. Page views come only from usePageTracking. */}
         {analyticsEnabled && (
           <>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} strategy="afterInteractive" />
             <Script id="gtag-init" strategy="beforeInteractive">
-              {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });`}
+              {gtagInitScript()}
             </Script>
           </>
         )}

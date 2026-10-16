@@ -11,6 +11,7 @@ import {
   faYoutube,
 } from '@fortawesome/free-brands-svg-icons'
 import { useLeadSubmit, validateLeadForm } from '../../hooks/useLeadSubmit.js'
+import { openConsentSettings } from '../../lib/consent.js'
 import './SiteFooter.css'
 import TodayDateInput from '../TodayDateInput.js'
 import PurposeOtherInput, { OTHER_PURPOSE } from '../PurposeOtherInput.js'
@@ -183,7 +184,7 @@ export default function SiteFooter({ onCallback }) {
                     <p role="status" aria-live="polite" aria-atomic="true"></p>
                     <ul></ul>
                   </div>
-                  <form action="/#wpcf7-f558-o4" method="post" className="wpcf7-form init" aria-label="Contact form" data-status="init" onSubmit={handleSubmit}>
+                  <form action="/#wpcf7-f558-o4" method="post" className="wpcf7-form init" aria-label="Contact form" data-status="init" data-form-type="footer" onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-lg-12">
                         <span className="wpcf7-form-control-wrap" data-name="Name">
@@ -273,6 +274,7 @@ export default function SiteFooter({ onCallback }) {
               <ul className="d-flex gap-3 flex-end">
                 <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                 <li><Link to="/patient-rights-responsibilities">Patient Rights &amp; Responsibilities</Link></li>
+                <li><button type="button" className="footer-cookie-settings" onClick={openConsentSettings} style={{ background: 'none', border: 0, padding: 0, color: 'inherit', font: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}>Cookie settings</button></li>
               </ul>
             </div>
           </div>

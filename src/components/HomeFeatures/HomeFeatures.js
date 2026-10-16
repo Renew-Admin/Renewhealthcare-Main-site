@@ -195,7 +195,7 @@ function AppointmentSection() {
             consultation.
           </p>
 
-          <form className="rh-appointment-form" onSubmit={onSubmit}>
+          <form className="rh-appointment-form" data-form-type="appointment" onSubmit={onSubmit}>
             {/* Hidden marketing attribution fields */}
             {TRACKING_KEYS.map((key) => (
               <input key={key} type="hidden" name={key} value={tracking[key] || ''} />

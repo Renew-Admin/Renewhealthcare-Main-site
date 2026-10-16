@@ -3,3 +3,5 @@
 # In production these are Worker secrets — see wrangler.toml.
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
+# Make.com lead webhook used by /api/lead (server-only, never NEXT_PUBLIC_).
+MAKE_WEBHOOK_URL=

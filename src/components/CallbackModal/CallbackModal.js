@@ -45,7 +45,7 @@ export default function CallbackModal({ open, onClose }) {
           </button>
         </div>
 
-        <form className="callback-form" onSubmit={onSubmit}>
+        <form className="callback-form" data-form-type="callback-modal" onSubmit={onSubmit}>
           <input type="text" name="name" placeholder="Name" required />
           <input type="tel" name="customer_number" placeholder="Your Phone Number" inputMode="numeric" maxLength={10} required />
           <input type="tel" name="whatsapp_number" placeholder="WhatsApp Number" inputMode="numeric" maxLength={10} required />

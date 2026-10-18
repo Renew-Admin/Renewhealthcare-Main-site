@@ -29,6 +29,9 @@ const nextConfig = {
   // the old Cloudflare Worker did it, instead of Next's default 308.
   skipTrailingSlashRedirect: true,
 
+  // Do not advertise the framework (health report 2026-10-18, item 6).
+  poweredByHeader: false,
+
   // Always emit <title>, meta and canonical tags in the initial <head>,
   // for every client (not only the user agents Next recognises as bots).
   htmlLimitedBots: /.*/,

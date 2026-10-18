@@ -113,7 +113,7 @@ export default function SiteFooter({ onCallback }) {
                 <div className="footer-logo">
                   <Link to="/">
                     <img
-                      src="/images/renew/uploads/2024/07/foter-logo.png"
+                      src="/images/renew/uploads/2024/07/foter-logo.webp"
                       alt="Renew Healthcare Kolkata"
                       title="foter-logo"
                     />

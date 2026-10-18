@@ -1,6 +1,7 @@
 import { Link, useLocation } from '../../lib/router.js'
 import { useState } from 'react'
 import { doctors } from '../../data/doctors.js'
+import { srcSetFor } from '../../lib/responsiveImages.js'
 import './GlobalHeader.css'
 
 const serviceColumns = [
@@ -204,7 +205,8 @@ export default function GlobalHeader({ onCallback }) {
                 <div className="doctor-panel-grid">
                   {featuredDoctors.map(doctor => (
                     <Link className="doctor-panel-card" to={`/doctor/${doctor.slug}`} key={doctor.slug}>
-                      <img src={doctor.photo} alt="" />
+                      {/* Hidden until the menu opens: lazy so the photos are not fetched on every page load. */}
+                      <img src={doctor.photo} alt="" loading="lazy" decoding="async" srcSet={srcSetFor(doctor.photo)} sizes="64px" />
                       <span>
                         <strong>{doctor.name}</strong>
                         <small>{doctor.role}</small>

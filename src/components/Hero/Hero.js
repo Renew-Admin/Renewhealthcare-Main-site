@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
+import { srcSetFor } from '../../lib/responsiveImages.js'
 import './Hero.css'
 
 const AVATARS = [
@@ -185,6 +186,10 @@ function Hero() {
               <motion.img
                 key={i}
                 src={slide.image}
+                // Same srcset/sizes as the mobile copy, so both resolve to one
+                // file (phones get the 800w version instead of 1672w).
+                srcSet={srcSetFor(slide.image)}
+                sizes="100vw"
                 alt={slide.alt}
                 className={`hero-photo-img ${slide.imgClass || ''}`}
                 // Slide 1 is the LCP image; later slides are hidden at load.
@@ -223,6 +228,8 @@ function Hero() {
                 <motion.img
                   key={slide.image}
                   src={slide.image}
+                  srcSet={srcSetFor(slide.image)}
+                  sizes="100vw"
                   alt=""
                   aria-hidden="true"
                   className={`hero-mobile-photo-img ${slide.imgClass || ''}`}

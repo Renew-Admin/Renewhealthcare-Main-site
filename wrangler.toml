@@ -1,7 +1,7 @@
 # Cloudflare Worker for the Next.js site, built by the OpenNext adapter
 # (`npm run build` -> .open-next/). Deploy with `npx wrangler deploy`.
 name = "renewhealthcare"
-main = ".open-next/worker.js"
+main = "custom-worker.js"
 compatibility_date = "2026-07-14"
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 

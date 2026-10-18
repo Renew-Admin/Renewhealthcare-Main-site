@@ -187,6 +187,10 @@ function Hero() {
                 src={slide.image}
                 alt={slide.alt}
                 className={`hero-photo-img ${slide.imgClass || ''}`}
+                // Slide 1 is the LCP image; later slides are hidden at load.
+                fetchPriority={i === 0 ? 'high' : 'low'}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
                 initial={false}
                 animate={{ opacity: index === i ? 1 : 0, scale: index === i ? 1 : 1.04 }}
                 transition={{ duration: 0.9, ease: 'easeInOut' }}
@@ -222,6 +226,9 @@ function Hero() {
                   alt=""
                   aria-hidden="true"
                   className={`hero-mobile-photo-img ${slide.imgClass || ''}`}
+                  fetchPriority={i === 0 ? 'high' : 'low'}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
                   initial={false}
                   animate={{ opacity: index === i ? 1 : 0, scale: index === i ? 1 : 1.04 }}
                   transition={{ duration: 0.65, ease: 'easeInOut' }}

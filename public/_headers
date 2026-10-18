@@ -1,0 +1,10 @@
+# Security headers for static files served straight from Workers assets
+# (images, fonts, CSS, JS). Pages, redirects and /api/* get the same headers
+# from custom-worker.js (src/lib/edgeSecurity.js). Keep the two in sync.
+/*
+  Strict-Transport-Security: max-age=86400
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: frame-ancestors 'self'; base-uri 'self'; object-src 'none'

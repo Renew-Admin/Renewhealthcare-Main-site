@@ -343,7 +343,7 @@ export default function HomeSections({ initialBlogs }) {
               </button>
             </div>
             <a className="video-why-media" href="https://www.youtube.com/watch?v=lepLNR46L-c" target="_blank" rel="noreferrer" aria-label="Watch Renew Healthcare video">
-              <img src="/images/renew/uploads/2025/01/Collage-Banner2.png" alt="Renew Healthcare patient success collage" />
+              <img src="/images/renew/uploads/2025/01/Collage-Banner2.png" alt="Renew Healthcare patient success collage" loading="lazy" decoding="async" />
               <span aria-hidden="true">▶</span>
             </a>
           </div>
@@ -353,7 +353,7 @@ export default function HomeSections({ initialBlogs }) {
               {whyItems.map(([icon, title, text]) => (
                 <article className="home-card why-card" key={title}>
                   <div className="why-icon">
-                    <img src={`/images/renew/uploads/2024/07/${icon}`} alt="" />
+                    <img src={`/images/renew/uploads/2024/07/${icon}`} alt="" loading="lazy" decoding="async" />
                   </div>
                   <h3>{title}</h3>
                   <p>{text}</p>
@@ -373,7 +373,7 @@ export default function HomeSections({ initialBlogs }) {
           <CardCarousel className="journey-grid" label="Parenthood journey blocks">
             {journeyCards.map(([title, image]) => (
               <button type="button" className="home-card journey-stage-card" key={title}>
-                <img src={image} alt={title} />
+                <img src={image} alt={title} loading="lazy" decoding="async" />
                 <span>{title}</span>
               </button>
             ))}
@@ -410,7 +410,7 @@ export default function HomeSections({ initialBlogs }) {
           <div className="doctor-desktop-layout">
             <article className="home-card doctor-card doctor-feature-card">
               <div className="doctor-image">
-                <img src={leadDoctor[2]} alt={leadDoctor[0]} />
+                <img src={leadDoctor[2]} alt={leadDoctor[0]} loading="lazy" decoding="async" />
               </div>
               <div className="doctor-info">
                 <h3>{leadDoctor[0]}</h3>
@@ -423,7 +423,7 @@ export default function HomeSections({ initialBlogs }) {
               {scrollingDoctors.map(([name, role, image, to]) => (
                 <article className="home-card doctor-card" key={name}>
                   <div className="doctor-image">
-                    <img src={image} alt={name} />
+                    <img src={image} alt={name} loading="lazy" decoding="async" />
                   </div>
                   <div className="doctor-info">
                     <h3>{name}</h3>
@@ -439,7 +439,7 @@ export default function HomeSections({ initialBlogs }) {
             {doctors.map(([name, role, image, to]) => (
               <article className="home-card doctor-card" key={name}>
                 <div className="doctor-image">
-                  <img src={image} alt={name} />
+                  <img src={image} alt={name} loading="lazy" decoding="async" />
                 </div>
                 <div className="doctor-info">
                   <h3>{name}</h3>
@@ -465,7 +465,7 @@ export default function HomeSections({ initialBlogs }) {
             <div className="media-track">
               {[...mediaLogos, ...mediaLogos].map((logo, index) => (
                 <div className="media-logo" key={`${logo}-${index}`}>
-                  <img src={`/images/renew/uploads/2024/08/${logo}`} alt={logo.replace('.png', '').replace(/-/g, ' ')} />
+                  <img src={`/images/renew/uploads/2024/08/${logo}`} alt={logo.replace('.png', '').replace(/-/g, ' ')} loading="lazy" decoding="async" />
                 </div>
               ))}
             </div>
@@ -482,7 +482,7 @@ export default function HomeSections({ initialBlogs }) {
           <div className="clinic-grid">
             {clinics.map(({ name, place, image, to }) => (
               <Link className="home-card clinic-card" to={to} key={name}>
-                <img src={image} alt={name} />
+                <img src={image} alt={name} loading="lazy" decoding="async" />
                 <div>
                   <span>{place}</span>
                   <h3>{name}</h3>

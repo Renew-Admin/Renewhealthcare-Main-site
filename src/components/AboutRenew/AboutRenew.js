@@ -58,6 +58,8 @@ export default function AboutRenew({ onCallback }) {
             <img
               src="/images/renew/uploads/2024/12/ivf-treatment-near-me.png"
               alt="Renew Healthcare clinic, consultation spaces, and patient care team"
+              loading="lazy"
+              decoding="async"
             />
           </div>
 

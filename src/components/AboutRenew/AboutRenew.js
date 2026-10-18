@@ -56,7 +56,7 @@ export default function AboutRenew({ onCallback }) {
         <div className="about-renew-visual">
           <div className="about-renew-image-shell">
             <img
-              src="/images/renew/uploads/2024/12/ivf-treatment-near-me.png"
+              src="/images/renew/uploads/2024/12/ivf-treatment-near-me.webp"
               alt="Renew Healthcare clinic, consultation spaces, and patient care team"
               loading="lazy"
               decoding="async"

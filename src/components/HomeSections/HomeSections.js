@@ -2,7 +2,12 @@
 import { Children, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from '../../lib/router.js'
 import { useBlogs } from '../../hooks/useBlogs.js'
+import { srcSetFor } from '../../lib/responsiveImages.js'
 import './HomeSections.css'
+
+// Rendered width of a doctor card photo: about 85% of the viewport on phones,
+// at most ~320 px on wider screens (measured 18 Oct 2026).
+const DOCTOR_CARD_SIZES = '(max-width: 768px) 85vw, 320px'
 
 const whyItems = [
   ['why-ch-ic1.png', 'More than two decades of experience', 'Fertility specialists in Kolkata with more than two decades of experience in diagnosis and treatments for varied fertility issues.'],
@@ -31,11 +36,11 @@ const doctors = [
 const mediaLogos = ['TOI.png', 'Zee-News.png', 'ABP-live.png', 'Daily-Hunt.png', 'Doctube.png', 'Hindusthan-Times.png', 'India-TV.png', 'Mid-Day.png', 'News-18.png', 'News-Nine.png']
 
 const journeyCards = [
-  ['I am having problems conceiving', '/images/renew/uploads/2024/12/best-ivf-treatment-centre-in-kolkata.png'],
-  ['I want to Start my family building journey', '/images/renew/uploads/2024/12/best-ivf-centre-in-kolkata.png'],
-  ['I am looking for a donor (Egg/Sperm)', '/images/renew/uploads/2024/12/low-cost-ivf-hospital-in-kolkata.png'],
-  ['I want to freeze my gametes (Egg/Sperm/Embryo)', '/images/renew/uploads/2024/12/top-ivf-centre-in-kolkata.png'],
-  ['Preconception Counselling', '/images/renew/uploads/2024/12/top-5-ivf-centre-in-kolkata.png'],
+  ['I am having problems conceiving', '/images/renew/uploads/2024/12/best-ivf-treatment-centre-in-kolkata.webp'],
+  ['I want to Start my family building journey', '/images/renew/uploads/2024/12/best-ivf-centre-in-kolkata.webp'],
+  ['I am looking for a donor (Egg/Sperm)', '/images/renew/uploads/2024/12/low-cost-ivf-hospital-in-kolkata.webp'],
+  ['I want to freeze my gametes (Egg/Sperm/Embryo)', '/images/renew/uploads/2024/12/top-ivf-centre-in-kolkata.webp'],
+  ['Preconception Counselling', '/images/renew/uploads/2024/12/top-5-ivf-centre-in-kolkata.webp'],
 ]
 
 const clinics = [
@@ -343,7 +348,7 @@ export default function HomeSections({ initialBlogs }) {
               </button>
             </div>
             <a className="video-why-media" href="https://www.youtube.com/watch?v=lepLNR46L-c" target="_blank" rel="noreferrer" aria-label="Watch Renew Healthcare video">
-              <img src="/images/renew/uploads/2025/01/Collage-Banner2.png" alt="Renew Healthcare patient success collage" loading="lazy" decoding="async" />
+              <img src="/images/renew/uploads/2025/01/Collage-Banner2.webp" alt="Renew Healthcare patient success collage" loading="lazy" decoding="async" />
               <span aria-hidden="true">▶</span>
             </a>
           </div>
@@ -410,7 +415,7 @@ export default function HomeSections({ initialBlogs }) {
           <div className="doctor-desktop-layout">
             <article className="home-card doctor-card doctor-feature-card">
               <div className="doctor-image">
-                <img src={leadDoctor[2]} alt={leadDoctor[0]} loading="lazy" decoding="async" />
+                <img src={leadDoctor[2]} alt={leadDoctor[0]} loading="lazy" decoding="async" srcSet={srcSetFor(leadDoctor[2])} sizes={DOCTOR_CARD_SIZES} />
               </div>
               <div className="doctor-info">
                 <h3>{leadDoctor[0]}</h3>
@@ -423,7 +428,7 @@ export default function HomeSections({ initialBlogs }) {
               {scrollingDoctors.map(([name, role, image, to]) => (
                 <article className="home-card doctor-card" key={name}>
                   <div className="doctor-image">
-                    <img src={image} alt={name} loading="lazy" decoding="async" />
+                    <img src={image} alt={name} loading="lazy" decoding="async" srcSet={srcSetFor(image)} sizes={DOCTOR_CARD_SIZES} />
                   </div>
                   <div className="doctor-info">
                     <h3>{name}</h3>
@@ -439,7 +444,7 @@ export default function HomeSections({ initialBlogs }) {
             {doctors.map(([name, role, image, to]) => (
               <article className="home-card doctor-card" key={name}>
                 <div className="doctor-image">
-                  <img src={image} alt={name} loading="lazy" decoding="async" />
+                  <img src={image} alt={name} loading="lazy" decoding="async" srcSet={srcSetFor(image)} sizes={DOCTOR_CARD_SIZES} />
                 </div>
                 <div className="doctor-info">
                   <h3>{name}</h3>

@@ -26,36 +26,32 @@ const PAIRS = [
     keep: '/ivf-success-factors-and-rates',
   },
   // RH-05 (Technical Health Status Report, 13 Oct 2026): five pairs share a
-  // title and body. Default rule for all five: keep the OLDER URL (indexed
-  // longer) and retire the newer re-publish. GA4 page views over the 90 days to
-  // 18 Oct 2026 are too small to decide it (2–14 per URL), but the kept URL
-  // wins or ties within one view in four of five pairs; the exception is the
-  // embryo pair (8 vs 4). Swap a pair's sides to flip it.
+  // title and body. Owner decision (18 Oct 2026): keep the NEWEST URL of each
+  // pair and retire the older one. Swap a pair's sides to flip it.
   {
-    // Kept: 5 Sep 2026, 12 views. Retired: 29 Sep 2026, 11 views.
-    retire: '/blogs/antagonist-vs-long-agonist-protocol-your-ivf-calendar-day-by-day',
-    keep: '/blogs/antagonist-vs-long-protocol-calendar',
+    // Kept: 29 Sep 2026. Retired: 5 Sep 2026.
+    retire: '/blogs/antagonist-vs-long-protocol-calendar',
+    keep: '/blogs/antagonist-vs-long-agonist-protocol-your-ivf-calendar-day-by-day',
   },
   {
-    // Kept: 6 Sep 2026, 4 views. Retired: 29 Sep 2026, 8 views.
-    retire: '/blogs/what-happens-to-unused-embryos-in-india-the-10-year-rule-and-your-real-choices',
-    keep: '/blogs/unused-embryos-india-10-year-rule',
+    // Kept: 29 Sep 2026. Retired: 6 Sep 2026.
+    retire: '/blogs/unused-embryos-india-10-year-rule',
+    keep: '/blogs/what-happens-to-unused-embryos-in-india-the-10-year-rule-and-your-real-choices',
   },
   {
-    // Kept: 28 Jul 2026, 14 views. Retired: 28 Sep 2026, 3 views.
-    retire: '/blogs/endometriosis-and-fertility-from-diagnosis-to-ivf',
-    keep: '/blogs/endometriosis-and-fertility',
+    // Kept: 28 Sep 2026. Retired: 28 Jul 2026.
+    retire: '/blogs/endometriosis-and-fertility',
+    keep: '/blogs/endometriosis-and-fertility-from-diagnosis-to-ivf',
   },
   {
-    // Kept: 28 Jul 2026, 11 views. Retired: 30 Sep 2026, 12 views.
-    retire: '/blogs/can-you-get-pregnant-with-amh-below-1-real-answers',
-    keep: '/blogs/can-you-get-pregnant-with-amh-below-1',
+    // Kept: 30 Sep 2026. Retired: 28 Jul 2026.
+    retire: '/blogs/can-you-get-pregnant-with-amh-below-1',
+    keep: '/blogs/can-you-get-pregnant-with-amh-below-1-real-answers',
   },
   {
-    // Kept: 25 Jul 2025, 3 views; its slug matches the shared title.
-    // Retired: 13 Nov 2025, 2 views.
-    retire: '/blogs/genetic-testing-in-ivf',
-    keep: '/blogs/the-power-of-genetics-in-ivf',
+    // Kept: 13 Nov 2025. Retired: 25 Jul 2025.
+    retire: '/blogs/the-power-of-genetics-in-ivf',
+    keep: '/blogs/genetic-testing-in-ivf',
   },
 ]
 

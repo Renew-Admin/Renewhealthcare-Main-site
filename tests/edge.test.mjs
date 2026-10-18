@@ -32,13 +32,13 @@ test('withSecurityHeaders: no HSTS off production https; existing headers win', 
   assert.equal(res.headers.get('x-frame-options'), 'DENY')
 })
 
-test('RH-05: the five duplicate pairs retire the newer URL onto the older one', () => {
+test('RH-05: the five duplicate pairs retire the older URL onto the newest one (owner decision 18 Oct)', () => {
   const expected = {
-    '/blogs/antagonist-vs-long-agonist-protocol-your-ivf-calendar-day-by-day': '/blogs/antagonist-vs-long-protocol-calendar',
-    '/blogs/what-happens-to-unused-embryos-in-india-the-10-year-rule-and-your-real-choices': '/blogs/unused-embryos-india-10-year-rule',
-    '/blogs/endometriosis-and-fertility-from-diagnosis-to-ivf': '/blogs/endometriosis-and-fertility',
-    '/blogs/can-you-get-pregnant-with-amh-below-1-real-answers': '/blogs/can-you-get-pregnant-with-amh-below-1',
-    '/blogs/genetic-testing-in-ivf': '/blogs/the-power-of-genetics-in-ivf',
+    '/blogs/antagonist-vs-long-protocol-calendar': '/blogs/antagonist-vs-long-agonist-protocol-your-ivf-calendar-day-by-day',
+    '/blogs/unused-embryos-india-10-year-rule': '/blogs/what-happens-to-unused-embryos-in-india-the-10-year-rule-and-your-real-choices',
+    '/blogs/endometriosis-and-fertility': '/blogs/endometriosis-and-fertility-from-diagnosis-to-ivf',
+    '/blogs/can-you-get-pregnant-with-amh-below-1': '/blogs/can-you-get-pregnant-with-amh-below-1-real-answers',
+    '/blogs/the-power-of-genetics-in-ivf': '/blogs/genetic-testing-in-ivf',
   }
   for (const [from, to] of Object.entries(expected)) assert.equal(DUPLICATE_REDIRECTS.get(from), to, from)
   // No surviving URL is itself retired (that would create a redirect chain).

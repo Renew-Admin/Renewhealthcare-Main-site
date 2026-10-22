@@ -96,7 +96,7 @@ export const finalPages = {
       },
       {
         "heading": "Locate Your Nearest IVF Center",
-        "body": "Michael John Tower, 1st Floor, Southern Area 06, K-Road Bistupur 831001"
+        "body": "1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur"
       }
     ]
   },
@@ -129,7 +129,7 @@ export const finalPages = {
       },
       {
         "heading": "Locate Your Nearest IVF Center",
-        "body": "Michael John Tower, 1st Floor, Southern Area 06, K-Road Bistupur 831001"
+        "body": "1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur"
       }
     ]
   },

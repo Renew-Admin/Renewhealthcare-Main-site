@@ -1,6 +1,14 @@
 export const locations = [
   {
     slug: 'saltlake',
+    // Google Business Profile brief (18 Oct 2026), Part 4: the one name and
+    // address used on every listing. The CID comes from this branch's own
+    // Google Maps embed below (the place id after "!1s0x…:").
+    gbpName: 'Renew Healthcare',
+    gbpAddress: 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata 700064',
+    postalAddress: { streetAddress: 'CB 69, CB Block, Sector 1, Bidhannagar', addressLocality: 'Kolkata', addressRegion: 'West Bengal', postalCode: '700064' },
+    seoTitle: 'IVF and Fertility Centre in Salt Lake, Kolkata | Renew Healthcare',
+    mapsUrl: 'https://maps.google.com/?cid=3902917559414819569',
     name: 'Saltlake',
     address: 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
     phone: '+91 6292312076',
@@ -14,6 +22,13 @@ export const locations = [
   },
   {
     slug: 'jamshedpur',
+    gbpName: 'Renew Healthcare',
+    gbpAddress: '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur',
+    // PIN 831001 is from the earlier address on this page; the brief asks for
+    // it to be checked against the signboard or a utility bill.
+    postalAddress: { streetAddress: '1st Floor, Michael John Tower, 6 K Road, Bistupur', addressLocality: 'Jamshedpur', addressRegion: 'Jharkhand', postalCode: '831001' },
+    seoTitle: 'IVF and Fertility Centre in Bistupur, Jamshedpur | Renew Healthcare',
+    mapsUrl: 'https://maps.google.com/?cid=7454174246179340593',
     name: 'Jamshedpur',
     address: 'Michael John Tower, 1st Floor, Southern Area 06, K-Road Bistupur 831001',
     phone: '+91 62922 69061',
@@ -27,6 +42,14 @@ export const locations = [
   },
   {
     slug: 'gariahat',
+    gbpName: 'Renew Healthcare',
+    gbpAddress: 'Ground Floor, 18 C, Mandeville Gardens, Ballygunge, Kolkata 700019',
+    // Brief task 31: the Google profile uses this address, so it is the first
+    // line of the page.
+    firstLine: '18 C, Mandeville Gardens, Ballygunge',
+    postalAddress: { streetAddress: 'Ground Floor, 18 C, Mandeville Gardens, Ballygunge', addressLocality: 'Kolkata', addressRegion: 'West Bengal', postalCode: '700019' },
+    seoTitle: 'IVF and Fertility Centre in Ballygunge, Kolkata | Renew Healthcare',
+    mapsUrl: 'https://maps.google.com/?cid=445319978748151357',
     name: 'Renew Ballygunge',
     address: 'Ground Floor, 18 C, Mandeville Gardens, Ekdalia, Ballygunge, Kolkata, West Bengal 700019',
     phone: '+91 62922 69060',

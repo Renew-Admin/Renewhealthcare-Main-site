@@ -7,22 +7,24 @@ import PurposeOtherInput, { OTHER_PURPOSE } from '../components/PurposeOtherInpu
 import './FinalPages.css'
 import './ServicesPages.css'
 
+// Addresses exactly as in the Part 4 table of the Google Business Profile
+// brief (18 Oct 2026), matching the footer, location pages and listings.
 const clinics = [
   {
     name: 'Gariahat (Main)',
-    address: '18C, Mandeville Gardens, Ballygunge, Kolkata, West Bengal 700019',
+    address: 'Ground Floor, 18 C, Mandeville Gardens, Ballygunge, Kolkata 700019',
     phone: '+91 62922 69060',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Mandeville+Gardens+Kolkata',
   },
   {
     name: 'Saltlake',
-    address: 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
+    address: 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata 700064',
     phone: '+91 6292312076',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Saltlake+Kolkata',
   },
   {
     name: 'Jamshedpur',
-    address: 'Michael John Tower, 1st Floor, Southern Area 06, K-Road Bistupur 831001',
+    address: '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur',
     phone: '+91 62922 69061',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Bistupur+Jamshedpur',
   },

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build:next": "node scripts/generate-sitemap.js && next build",
+    "build:next": "node scripts/clear-fetch-cache.js && node scripts/generate-sitemap.js && next build",
     "build": "opennextjs-cloudflare build && opennextjs-cloudflare populateCache local",
     "preview": "opennextjs-cloudflare preview",
     "start": "next start",

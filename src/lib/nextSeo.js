@@ -107,11 +107,17 @@ export function locationClinicSchema(location) {
     '@context': 'https://schema.org',
     '@type': 'MedicalClinic',
     '@id': `${canonicalUrl(path)}#clinic`,
-    name: `Renew Healthcare ${location.name}`.replace('Renew Healthcare Renew', 'Renew'),
+    // Name, address and phone match the branch's Google Business Profile
+    // (brief task 32). Opening hours and coordinates are added only once the
+    // exact values from the profile are supplied.
+    name: location.gbpName || `Renew Healthcare ${location.name}`.replace('Renew Healthcare Renew', 'Renew'),
     url: canonicalUrl(path),
     image: absoluteImageUrl(location.image),
     telephone: location.phone || undefined,
-    address: location.address ? { '@type': 'PostalAddress', streetAddress: location.address, addressCountry: 'IN' } : undefined,
+    address: location.postalAddress
+      ? { '@type': 'PostalAddress', ...location.postalAddress, addressCountry: 'IN' }
+      : location.address ? { '@type': 'PostalAddress', streetAddress: location.address, addressCountry: 'IN' } : undefined,
+    hasMap: location.mapsUrl || undefined,
     parentOrganization: { '@id': `${SITE}/#organization`, name: 'Renew Healthcare' },
   }
 }

@@ -118,6 +118,8 @@ services.forEach(service => {
 locations.forEach(location => {
   addRoute(`/locations/${location.slug}`, {
     title: `${location.name} Clinic`,
+    // Exact titles from the Google Business Profile brief (task 30).
+    fullTitle: location.seoTitle,
     description: location.intro || `${location.name} Renew Healthcare clinic details, services, doctors and appointment information.`,
     image: location.image,
   })

@@ -211,7 +211,7 @@ export default function AdminGmb() {
       defaults={{
         PostDate: todayStr,
         TimeSchedule: '10:00 AM (Asia/Kolkata)',
-        Location: 'Ballygunge',
+        Location: 'Salt Lake',
         Status: 'Scheduled',
       }}
       customValidation={(form) => {

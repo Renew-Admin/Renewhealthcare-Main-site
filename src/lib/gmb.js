@@ -2,7 +2,7 @@ import { supabase, isSupabaseConfigured } from './supabase.js'
 import { deleteGmbImage } from './gmbStorage.js'
 
 export const GMB_LOCATIONS = [
-  { id: 'Salt Lake', label: 'Salt Lake', slug: 'saltlake', envKey: 'VITE_GMB_WEBHOOK_SALTLAKE', disabled: true },
+  { id: 'Salt Lake', label: 'Salt Lake', slug: 'saltlake', envKey: 'VITE_GMB_WEBHOOK_SALTLAKE', disabled: false },
   { id: 'Ballygunge', label: 'Ballygunge', slug: 'ballygunge', envKey: 'VITE_GMB_WEBHOOK_BALLYGUNGE', disabled: false },
   { id: 'Jamshedpur', label: 'Jamshedpur', slug: 'jamshedpur', envKey: 'VITE_GMB_WEBHOOK_JAMSHEDPUR', disabled: true },
 ]
@@ -37,8 +37,9 @@ export function getWebhookUrlForLocation(locationId) {
   const envVal = GMB_WEBHOOK_ENV[loc.envKey]
   if (envVal) return envVal
 
-  // Fallback for Ballygunge if env variable wasn't bundled during build
-  if (loc.slug === 'ballygunge' || loc.id === 'Ballygunge') {
+  // Both active locations use the existing webhook unless a location-specific
+  // URL is configured above.
+  if (loc.slug === 'ballygunge' || loc.slug === 'saltlake') {
     return 'https://hook.us2.make.com/dbl07u9itexa8qo6fo6c49gu39nbj1da'
   }
 

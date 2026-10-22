@@ -5,6 +5,7 @@ import { invalidateTestimonials } from '../hooks/useContent.js'
 export default function AdminTestimonials() {
   return (
     <EntityManager
+      rebuildsSite
       title="Testimonials"
       subtitle="Patient stories shown in the reviews section, before the imported Google reviews."
       addLabel="+ Add testimonial"

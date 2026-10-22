@@ -5,6 +5,7 @@ import { invalidateFaqs } from '../hooks/useContent.js'
 export default function AdminFaqs() {
   return (
     <EntityManager
+      rebuildsSite
       title="FAQs"
       subtitle="Questions shown in the FAQ section, before the built-in defaults."
       addLabel="+ Add FAQ"

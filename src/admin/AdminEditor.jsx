@@ -9,6 +9,7 @@ import {
   slugify, estimateReadMins,
 } from '../lib/blogApi.js'
 import { invalidateBlogsCache } from '../hooks/useBlogs.js'
+import { liveMessage, requestSiteRebuild } from './publishSite.js'
 
 const EMPTY = {
   title: '', slug: '', category: 'Fertility', excerpt: '',
@@ -69,7 +70,8 @@ export default function AdminEditor() {
       if (isEdit) await updatePost(id, payload)
       else await createPost(payload)
       invalidateBlogsCache()
-      toast(isEdit ? 'Post saved' : 'Post published')
+      const started = await requestSiteRebuild()
+      toast(liveMessage(isEdit ? 'Post saved' : 'Post published', started))
       navigate('/admin/blogs')
     } catch (err) {
       const msg = /duplicate|unique/i.test(err?.message || '')

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchAllPosts, deletePost } from '../lib/blogApi.js'
 import { invalidateBlogsCache } from '../hooks/useBlogs.js'
+import { liveMessage, requestSiteRebuild } from './publishSite.js'
 import { EmptyState, Spinner, useToast } from './ui.jsx'
 
 export default function AdminBlogs() {
@@ -25,7 +26,7 @@ export default function AdminBlogs() {
       await deletePost(post.id)
       invalidateBlogsCache()
       setPosts((p) => p.filter((x) => x.id !== post.id))
-      toast('Post deleted')
+      toast(liveMessage('Post deleted', await requestSiteRebuild()))
     } catch (err) {
       toast(err?.message || 'Delete failed', 'error')
     }

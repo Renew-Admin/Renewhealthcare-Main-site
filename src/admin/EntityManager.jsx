@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react'
 import MediaPicker from './MediaPicker.jsx'
 import { EmptyState, Modal, Spinner, useToast } from './ui.jsx'
+import { liveMessage, requestSiteRebuild } from './publishSite.js'
 
 function emptyForm(fields, defaults) {
   const base = {}
@@ -33,7 +34,10 @@ function fieldHasValue(field, value) {
   return String(value ?? '').trim().length > 0
 }
 
-export default function EntityManager({ title, subtitle, addLabel = '+ Add', api, columns, fields, defaults = {}, onMutate, modalWide = false, customValidation, successMessage, topNote }) {
+export default function EntityManager({ title, subtitle, addLabel = '+ Add', api, columns, fields, defaults = {}, onMutate, modalWide = false, customValidation, successMessage, topNote, rebuildsSite = false }) {
+  // Collections shown on prerendered pages (doctors, FAQs, testimonials) pass
+  // rebuildsSite so an edit starts a site rebuild and goes live by itself.
+  const announce = async (base) => (rebuildsSite ? liveMessage(base, await requestSiteRebuild()) : base)
   const toast = useToast()
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading')
@@ -81,7 +85,7 @@ export default function EntityManager({ title, subtitle, addLabel = '+ Add', api
       setSaving(true)
       if (editing) await api.update(editing.id, payload)
       else await api.create(payload)
-      toast(successMessage || (editing ? 'Saved' : 'Added'))
+      toast(await announce(successMessage || (editing ? 'Saved' : 'Added')))
       setOpen(false)
       onMutate?.()
       load()
@@ -98,7 +102,7 @@ export default function EntityManager({ title, subtitle, addLabel = '+ Add', api
       await api.remove(row.id)
       setItems((list) => list.filter((x) => x.id !== row.id))
       onMutate?.()
-      toast('Deleted')
+      toast(await announce('Deleted'))
     } catch (err) {
       toast(err?.message || 'Delete failed', 'error')
     }

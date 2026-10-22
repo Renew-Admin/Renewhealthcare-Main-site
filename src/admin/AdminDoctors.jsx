@@ -45,6 +45,7 @@ function normalizePairList(value, keys) {
 export default function AdminDoctors() {
   return (
     <EntityManager
+      rebuildsSite
       title="Doctors"
       subtitle="Team profiles for the Doctors page. Use normal text fields here; lists are converted automatically when saved."
       addLabel="+ Add doctor"

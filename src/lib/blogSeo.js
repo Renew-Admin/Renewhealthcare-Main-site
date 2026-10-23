@@ -1,6 +1,7 @@
 // blogSeo — language targeting (RH-04) and structured data (RH-05) for blog
 // articles. Pure functions with no platform dependencies, so the Worker can
 // call them while rendering and tests can call them directly.
+import { DOCTOR_AUTHOR, getDoctorArticle } from './doctorArticles.js'
 import { SITE, absoluteImageUrl, canonicalUrl, normalizePath } from './seoUtils.js'
 
 const PUBLISHER = {
@@ -166,19 +167,20 @@ export function extractFaqs(html) {
 // ---------------------------------------------------------------------------
 
 export function buildBlogPostingSchema(article, { lang = 'en', image } = {}) {
+  const doctor = getDoctorArticle(article.slug)
   const path = normalizePath(`/blogs/${article.slug}`)
   const url = canonicalUrl(path)
   return {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: article.title,
-    description: article.excerpt || undefined,
+    description: (doctor && doctor.metaDescription) || article.excerpt || undefined,
     image: [absoluteImageUrl(image || article.image)],
     datePublished: article.iso || undefined,
-    dateModified: article.modifiedIso || article.iso || undefined,
+    dateModified: (doctor && doctor.updated) || article.modifiedIso || article.iso || undefined,
     // The CMS has no per-post author column, so the organisation is the
-    // accurate author. Add an `author` column and map it here if that changes.
-    author: { '@type': 'Organization', name: 'Renew Healthcare', url: SITE },
+    // author, except on pages rewritten by Dr. Agarwal (doctorArticles.js).
+    author: doctor ? DOCTOR_AUTHOR : { '@type': 'Organization', name: 'Renew Healthcare', url: SITE },
     publisher: PUBLISHER,
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     articleSection: article.category || undefined,
@@ -223,6 +225,6 @@ export function buildArticleSchemas(article, articleHtml, { lang = 'en', image }
   return [
     buildBlogPostingSchema(article, { lang, image }),
     buildBreadcrumbSchema(article),
-    buildFaqSchema(extractFaqs(articleHtml), article),
+    buildFaqSchema(getDoctorArticle(article.slug)?.faqs || extractFaqs(articleHtml), article),
   ].filter(Boolean)
 }

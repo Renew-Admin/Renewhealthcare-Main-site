@@ -1122,3 +1122,14 @@
 @media (prefers-reduced-motion: reduce) {
   .blogx-enter { animation: none; }
 }
+
+/* Byline on articles written by Dr. Rajeev Agarwal (src/lib/doctorArticles.js) */
+.blogx-post-byline {
+  margin: 10px auto 0;
+  max-width: 760px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: inherit;
+  opacity: 0.85;
+}
+.blogx-post-updated { white-space: nowrap; }

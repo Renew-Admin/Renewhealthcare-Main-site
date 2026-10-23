@@ -25,7 +25,8 @@ export function toMetadata(seo) {
   const path = normalizePath(seo.path)
   const url = seo.url || canonicalUrl(path)
   const fullTitle = seo.fullTitle || pageTitle(seo.title)
-  const description = truncateDescription(seo.description)
+  // exactDescription: copy supplied word-for-word (doctor-written articles) is not clipped.
+  const description = seo.exactDescription ? String(seo.description).trim() : truncateDescription(seo.description)
   const image = absoluteImageUrl(seo.image || DEFAULT_SEO_IMAGE)
   const languages = Object.fromEntries((seo.alternates || []).map((alt) => [alt.hreflang, alt.href]))
 

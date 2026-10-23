@@ -11,6 +11,7 @@ import { resolveBlogImage } from '../../../../lib/blogImages.js'
 import { buildArticleSchemas, detectArticleLang, getHreflangAlternates } from '../../../../lib/blogSeo.js'
 import { metadataForPath, toMetadata } from '../../../../lib/nextSeo.js'
 import { getArticle, getBlogListing, getDirectory } from '../../../../lib/serverData.js'
+import { DOCTOR_BYLINE, formatLastUpdated, getDoctorArticle } from '../../../../lib/doctorArticles.js'
 
 export const dynamicParams = true
 
@@ -35,10 +36,13 @@ export async function generateMetadata({ params }) {
 
   const { article, html, directory } = resolved
   const { lang, heroImage, alternates } = describe(article, directory, html)
+  const doctor = getDoctorArticle(article.slug)
   return toMetadata({
     path: `/blogs/${article.slug}`,
     title: article.title,
-    description: article.excerpt,
+    fullTitle: doctor?.metaTitle,
+    description: doctor?.metaDescription || article.excerpt,
+    exactDescription: Boolean(doctor?.metaDescription),
     image: heroImage,
     type: 'article',
     lang,
@@ -69,6 +73,11 @@ export default async function BlogArticleRoute({ params }) {
     category: article.category,
     date: listed?.date || article.date,
     readMins: listed?.readMins || article.readMins,
+  }
+  const doctor = getDoctorArticle(article.slug)
+  if (doctor) {
+    blog.byline = DOCTOR_BYLINE
+    blog.lastUpdated = formatLastUpdated(doctor.updated || article.modifiedIso || article.iso)
   }
 
   return (

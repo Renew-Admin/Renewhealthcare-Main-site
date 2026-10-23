@@ -53,6 +53,13 @@ const PAIRS = [
     retire: '/blogs/the-power-of-genetics-in-ivf',
     keep: '/blogs/genetic-testing-in-ivf',
   },
+  {
+    // Lokesh's brief of 23 Oct 2026, task 2: the Bengali Placentrex page
+    // contradicts the new English article. Redirect until a Bengali version of
+    // the new article is written; then remove this entry.
+    retire: '/blogs/placentrex-infertility-treatment-bengali',
+    keep: '/blogs/placentrex-injection-uses-benefits-risks-dosage',
+  },
 ]
 
 /** Retired path -> surviving path. Consumed by the Worker's redirect step. */

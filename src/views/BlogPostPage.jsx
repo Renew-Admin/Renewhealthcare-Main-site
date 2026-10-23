@@ -18,6 +18,12 @@ export default function BlogPostPage({ blog, html, sidebar = [], heroImage, lang
           </nav>
           <span className="blogx-post-pill">{blog.category}</span>
           <h1>{blog.title}</h1>
+          {blog.byline ? (
+            <p className="blogx-post-byline">
+              {blog.byline}
+              {blog.lastUpdated ? <span className="blogx-post-updated"> · Last updated: {blog.lastUpdated}</span> : null}
+            </p>
+          ) : null}
           <div className="blogx-post-meta">
             <span>{blog.date}</span>
             <span className="blogx-post-meta-dot" />

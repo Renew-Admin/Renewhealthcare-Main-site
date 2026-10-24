@@ -1,0 +1,65 @@
+# Opens a draft pull request automatically whenever a working branch is pushed
+# (by Claude Code, a developer, anyone), so no external tool needs
+# "pull requests: write" on this repo to get a PR in front of the reviewer.
+#
+# One-time repo setting (Settings -> Actions -> General -> Workflow permissions):
+#   - "Read and write permissions"
+#   - tick "Allow GitHub Actions to create and approve pull requests"
+# Without that tick the step fails with
+# "GitHub Actions is not permitted to create or approve pull requests".
+#
+# Known limit of the default token: a PR opened with github.token does not
+# start the `checks` workflow's pull_request run on open, because GitHub never
+# starts workflows from events created by GITHUB_TOKEN. Checks still run on
+# the next push to the branch, or immediately if a person closes and reopens
+# the PR. To get checks on open as well, add a repository secret PR_BOT_TOKEN
+# (fine-grained PAT scoped to this repo with Pull requests: Read and write,
+# Contents: Read); the step below uses it automatically when present and the
+# "Allow GitHub Actions to create ..." tick is then not needed.
+
+name: Auto-open PR for working branches
+
+on:
+  push:
+    branches:
+      - 'fix/**'
+      - 'feat/**'
+      - 'seo/**'
+      - 'perf/**'
+      - 'docs/**'
+      - 'analytics/**'
+      - 'release/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: auto-open-pr-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Open a draft PR if none exists for this branch
+        env:
+          GH_TOKEN: ${{ secrets.PR_BOT_TOKEN || github.token }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          open_count=$(gh pr list --head "$BRANCH" --state open --json number --jq 'length')
+          if [ "$open_count" != "0" ]; then
+            echo "An open PR already exists for $BRANCH - nothing to do."
+            exit 0
+          fi
+          title=$(git log -1 --pretty=%s)
+          body=$(git log -1 --pretty=%b)
+          if [ -z "$body" ]; then
+            body="Opened automatically from branch $BRANCH. Review the diff, then mark ready for review."
+          fi
+          gh pr create --draft --base main --head "$BRANCH" --title "$title" --body "$body"
+          echo "Draft PR opened for $BRANCH."

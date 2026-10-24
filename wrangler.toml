@@ -4,6 +4,9 @@ name = "renewhealthcare"
 main = "custom-worker.js"
 compatibility_date = "2026-07-14"
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+# Preserve production runtime secrets configured in the Cloudflare dashboard,
+# including DEPLOY_HOOK_URL, when Workers Builds deploys this Worker.
+keep_vars = true
 
 [assets]
 directory = ".open-next/assets"
@@ -15,6 +18,7 @@ binding = "ASSETS"
 #   npx wrangler secret put SUPABASE_URL
 #   npx wrangler secret put SUPABASE_ANON_KEY
 #   npx wrangler secret put MAKE_WEBHOOK_URL   (lead forwarding, /api/lead)
+#   npx wrangler secret put DEPLOY_HOOK_URL     (admin publishing, /api/rebuild)
 #
 # The build also needs VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY (and
 # optionally META_PIXEL_ID) as build variables — see docs/NEXTJS-MIGRATION.md.

@@ -243,6 +243,39 @@
   color: #fff;
 }
 
+.location-consult-days {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(27, 30, 37, 0.08);
+}
+
+.location-consult-days h4 {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #59636e;
+}
+
+.location-consult-days ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.location-consult-days li {
+  margin: 0 0 6px;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #3d4652;
+}
+
+.location-consult-days p {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+}
+
 .location-map-card {
   overflow: hidden;
   height: 430px;

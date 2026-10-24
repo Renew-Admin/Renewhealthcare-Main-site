@@ -1,5 +1,6 @@
 import { Link } from '../lib/router.js'
 import { formatRegistration } from '../lib/doctorRegistrations.js'
+import { consultationDaysForDoctor } from '../lib/consultationDays.js'
 import './ContentPages.css'
 import './ServicesPages.css'
 
@@ -68,7 +69,8 @@ export default function DoctorDetailPage({ doctor }) {
   const faqs = Array.isArray(doctor.faqs) ? doctor.faqs.filter((item) => hasText(item?.question) && hasText(item?.answer)) : []
   const registration = formatRegistration(doctor.registration)
   const hasClinicalDetails = hasText(doctor.experience_years) || hasText(doctor.milestone_stat) || qualifications.length > 0 || specializations.length > 0 || languages.length > 0 || hasText(registration)
-  const hasLocationDetails = hasText(doctor.clinic_address) || serviceAreas.length > 0
+  const consultsAt = consultationDaysForDoctor(doctor.name)
+  const hasLocationDetails = hasText(doctor.clinic_address) || serviceAreas.length > 0 || consultsAt.length > 0
   const hasAttachments = attachments.length > 0
   const hasFaqs = faqs.length > 0
 
@@ -148,6 +150,18 @@ export default function DoctorDetailPage({ doctor }) {
                     <div className="doctor-profile-subsection">
                       <h4>Past Attachments</h4>
                       <AttachmentList items={attachments} />
+                    </div>
+                  )}
+                  {consultsAt.length > 0 && (
+                    <div className="doctor-profile-subsection">
+                      <h4>Consultation Days</h4>
+                      <ul className="doctor-profile-list">
+                        {consultsAt.map((entry) => (
+                          <li key={entry.slug}>
+                            <Link to={`/locations/${entry.slug}`}>{entry.branch}</Link>: {entry.days}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   )}
                   {hasText(doctor.clinic_address) && (

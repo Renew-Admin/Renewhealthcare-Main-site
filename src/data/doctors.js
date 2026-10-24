@@ -90,6 +90,12 @@ const rows = [
   ['Sales', 'Milun Sarkar', '', 'Senior Executive Business Development', '2024/12/Milun-Sarkar.jpg'],
 ]
 
+// Owner's confirmation, 24 Oct 2026: the one experience figure to use for
+// Dr. Agarwal everywhere (website and directory listings).
+const experienceYears = {
+  'Dr. Rajeev Agarwal': '27 years',
+}
+
 export const doctors = rows.map(([category, name, qualification, role, photoPath]) => ({
   slug: slug(name),
   name,
@@ -98,6 +104,7 @@ export const doctors = rows.map(([category, name, qualification, role, photoPath
   category,
   photo: photo(photoPath),
   bio: doctorBios[name] || '',
+  experience_years: experienceYears[name] || '',
 }))
 
 export const doctorCategories = [...new Set(doctors.map(doctor => doctor.category))]

@@ -3,27 +3,43 @@
 // Website brief (checked 23 Oct 2026): every branch page used the same
 // site-wide pair (the call button dialled Salt Lake, WhatsApp went to
 // Mandeville Gardens), so a Jamshedpur visitor reached neither. On a branch
-// page the buttons now use that branch's own number from
-// src/data/locations.js; everywhere else the site-wide pair is unchanged.
+// page the call button now dials that branch's own number from
+// src/data/locations.js; everywhere else the site-wide number is unchanged.
+//
+// Owner's decisions, 24 Oct 2026: every WhatsApp button on the site (branch
+// pages, the floating button, the contact page) opens the clinic's one
+// central WhatsApp line, +91 62923 12116 (the number the clinic's ads also
+// use). On a branch page the pre-filled message names the branch, so the
+// front desk routes the chat.
 //
 // Pure functions, no React: shared by the floating buttons (client) and the
-// branch page (server), and covered by tests/branchContacts.test.mjs.
+// branch page (server), and covered by tests/brief-2026-10-24.test.mjs.
 import { locations } from '../data/locations.js'
 import { normalizePath } from './seoUtils.js'
+
+export const CENTRAL_WHATSAPP = '916292312116'
+/** @deprecated same line as CENTRAL_WHATSAPP; kept for existing imports. */
+export const BRANCH_WHATSAPP = CENTRAL_WHATSAPP
 
 export const SITE_CONTACT = {
   slug: '',
   name: 'Renew Healthcare',
   phoneDisplay: '062923 12076',
   tel: 'tel:06292312076',
-  whatsapp: '916292269060',
+  whatsapp: CENTRAL_WHATSAPP,
   message: "Hi Renew Healthcare, I'd like to know more about your fertility treatments.",
 }
 
-// Owner's decision, 24 Oct 2026: branch pages use the clinic's central
-// WhatsApp line (+91 62923 12116, the number the clinic's ads also use) with
-// a message that names the branch, so the front desk routes the chat.
-export const BRANCH_WHATSAPP = '916292312116'
+/** How each branch is named in buttons and messages (the GBP area names). */
+export const BRANCH_LABELS = {
+  saltlake: 'Salt Lake',
+  gariahat: 'Mandeville Gardens',
+  jamshedpur: 'Jamshedpur',
+}
+
+export function branchShortName(location) {
+  return BRANCH_LABELS[location.slug] || location.name.replace(/^Renew\s+/, '')
+}
 
 /** '+91 62922 69061' -> { display: '062922 69061', tel: 'tel:06292269061' } */
 export function formatPhone(raw) {
@@ -46,14 +62,15 @@ export function branchContact(location) {
   // A branch with its own WhatsApp line (locations.js `whatsapp`) uses it;
   // otherwise the central line, with the branch named in the message.
   const own = String(location.whatsapp || '').replace(/\D/g, '')
-  const shortName = location.name.replace(/^Renew\s+/, '')
+  const shortName = branchShortName(location)
   const branchName = location.gbpName === 'Renew Healthcare' ? `Renew Healthcare ${shortName}` : location.name
   return {
     slug: location.slug,
     name: branchName,
+    shortName,
     phoneDisplay: phone.display,
     tel: phone.tel,
-    whatsapp: own || BRANCH_WHATSAPP,
+    whatsapp: own || CENTRAL_WHATSAPP,
     message: own
       ? `Hi ${branchName}, I'd like to know more about your fertility treatments.`
       : `Hi Renew Healthcare, I'd like to know more about fertility treatments at your ${shortName} centre.`,

@@ -215,6 +215,11 @@
   margin-top: 14px;
 }
 
+.location-info-card .location-hours-note {
+  margin-top: 4px;
+  font-size: 0.84rem;
+}
+
 .location-contact-actions {
   display: flex;
   flex-wrap: wrap;

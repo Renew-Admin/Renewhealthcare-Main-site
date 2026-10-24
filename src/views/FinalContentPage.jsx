@@ -341,7 +341,8 @@ function PackageContent() {
 
 const quickContacts = [
   ['Call us', '062923 12076', 'tel:06292312076', 'phone'],
-  ['WhatsApp', 'Chat with our team', 'https://api.whatsapp.com/send?phone=916292269060', 'whatsapp'],
+  // The clinic's one central WhatsApp line (owner, 24 Oct 2026); see src/lib/branchContacts.js.
+  ['WhatsApp', 'Chat with our team', 'https://api.whatsapp.com/send?phone=916292312116', 'whatsapp'],
   ['Email', 'info@renewhealthcare.in', 'mailto:info@renewhealthcare.in', 'mail'],
 ]
 

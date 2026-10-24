@@ -37,7 +37,8 @@ test('RH-05: the five duplicate pairs retire the older URL onto the newest one (
     '/blogs/antagonist-vs-long-protocol-calendar': '/blogs/antagonist-vs-long-agonist-protocol-your-ivf-calendar-day-by-day',
     '/blogs/unused-embryos-india-10-year-rule': '/blogs/what-happens-to-unused-embryos-in-india-the-10-year-rule-and-your-real-choices',
     '/blogs/endometriosis-and-fertility': '/blogs/endometriosis-and-fertility-from-diagnosis-to-ivf',
-    '/blogs/can-you-get-pregnant-with-amh-below-1': '/blogs/can-you-get-pregnant-with-amh-below-1-real-answers',
+    // Since 24 Oct 2026 the survivor is retired by the website brief (task 11.27), so this goes straight to its destination.
+    '/blogs/can-you-get-pregnant-with-amh-below-1': '/blogs/the-link-between-amh-levels-and-ivf-success-what-the-science-says',
     '/blogs/the-power-of-genetics-in-ivf': '/blogs/genetic-testing-in-ivf',
   }
   for (const [from, to] of Object.entries(expected)) assert.equal(DUPLICATE_REDIRECTS.get(from), to, from)

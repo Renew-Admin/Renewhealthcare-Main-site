@@ -39,9 +39,10 @@ export default function LocationPage({ location, clinicDoctors = [] }) {
               <p><strong>{location.gbpName || location.name}</strong><br />{location.gbpAddress || location.address}</p>
               <a href={contact.tel}>{location.phone}</a>
               <span>{location.hours}</span>
+              {location.hoursNote && <span className="location-hours-note">{location.hoursNote}</span>}
               {/* Each branch's own lines, so a visitor reaches this clinic and not another. */}
               <div className="location-contact-actions">
-                <a className="location-contact-btn is-call" href={contact.tel}>Call {contact.name.replace(/^Renew Healthcare\s*/, '')}</a>
+                <a className="location-contact-btn is-call" href={contact.tel}>Call {contact.shortName}</a>
                 <a className="location-contact-btn is-whatsapp" href={whatsappUrl(contact.whatsapp, contact.message)} target="_blank" rel="noopener noreferrer">WhatsApp</a>
                 <a className="location-contact-btn is-directions" href={directionsUrl(location)} target="_blank" rel="noopener noreferrer">Get directions</a>
               </div>

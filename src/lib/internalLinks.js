@@ -9,6 +9,7 @@
 // The 301s themselves stay in place — external inbound links still need them.
 // This only fixes links the site emits itself.
 import { getDuplicateRedirect } from './seoDuplicates.js'
+import { isRemovedPath } from './seoRemoved.js'
 import { SITE, normalizePath } from './seoUtils.js'
 
 const HREF_PATTERN = /(<a\b[^>]*?\bhref=)(["'])([^"']*)\2/gi
@@ -30,6 +31,8 @@ const UNLINK_PATHS = new Set([
 function hasNoDestination(path) {
   if (!path) return false
   if (TAG_ARCHIVE_PATTERN.test(path)) return true
+  // Deleted articles (410 Gone, seoRemoved.js) must not be linked either.
+  if (isRemovedPath(path)) return true
   return UNLINK_PATHS.has(normalizePath(path))
 }
 

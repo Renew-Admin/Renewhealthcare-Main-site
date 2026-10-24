@@ -107,6 +107,13 @@ const nextConfig = {
         source: '/injection-instruction',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }],
       },
+      // Website brief (18 Oct 2026) tasks 4 and 5: WordPress-era URLs that
+      // answer 404 on this site; the header keeps them out of the index even
+      // if a page ever reappears at one of them.
+      { source: '/landing-page', headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }] },
+      { source: '/landing-page-renew-healthcare-kolkata', headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }] },
+      { source: '/ivf-cost-in-kolkata/page/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }] },
+      { source: '/newses/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }] },
     ]
   },
 }

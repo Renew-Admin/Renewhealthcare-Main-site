@@ -4,7 +4,7 @@
 // opening hours (src/data/locations.js OPENING_HOURS).
 //
 // Add a doctor ONLY from the clinic's own roster; a wrong day sends a patient
-// to the wrong building. Jamshedpur days are still to be supplied.
+// to the wrong building.
 import { locations } from '../data/locations.js'
 
 export const CONSULTATION_DAYS = {
@@ -17,7 +17,9 @@ export const CONSULTATION_DAYS = {
     { doctor: 'Dr. Arnab Kundu', days: 'Monday to Saturday' },
     { doctor: 'Dr. Sonam Agarwal', days: 'Monday to Saturday' },
   ],
-  jamshedpur: [],
+  jamshedpur: [
+    { doctor: 'Dr. Dorothy P Ghosh', days: 'Monday to Saturday' },
+  ],
 }
 
 /** [{ doctor, days }] for a branch slug. */

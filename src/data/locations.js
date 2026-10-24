@@ -3,6 +3,8 @@
 // is used by locationClinicSchema(); the text is shown on each branch page.
 // Bank-holiday handling is still to be confirmed, so it is not stated here.
 export const OPENING_HOURS = 'Monday to Saturday, 9:00 AM – 6:30 PM'
+// Owner's confirmation, 24 Oct 2026: the same closure rule at every branch.
+export const OPENING_HOURS_NOTE = 'Closed on Sundays and bank holidays.'
 export const OPENING_HOURS_SPECIFICATION = [
   {
     '@type': 'OpeningHoursSpecification',
@@ -10,6 +12,8 @@ export const OPENING_HOURS_SPECIFICATION = [
     opens: '09:00',
     closes: '18:30',
   },
+  // schema.org convention for a closed day: opens and closes at 00:00.
+  { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Sunday', opens: '00:00', closes: '00:00' },
 ]
 
 export const locations = [
@@ -29,6 +33,7 @@ export const locations = [
     // (also the primary number on its Google profile).
     phone: '+91 62922 69060',
     hours: OPENING_HOURS,
+    hoursNote: OPENING_HOURS_NOTE,
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1841.890894700904!2d88.40033064837824!3d22.58726325812174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0275e065555555%3A0x3629f2d77c8e0af1!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1721464477531!5m2!1sen!2sin',
     services: ['Conception', 'Women’s Health', 'Endoscopy', 'Genetic Health', 'Wellness & Nutrition'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Neha Yadav'],
@@ -50,6 +55,7 @@ export const locations = [
     address: '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur 831001',
     phone: '+91 62922 69061',
     hours: OPENING_HOURS,
+    hoursNote: OPENING_HOURS_NOTE,
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.1898182412465!2d86.17949957587665!3d22.79542932476553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3f61c108ad7%3A0x67728bfba5628131!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1721464534308!5m2!1sen!2sin',
     services: ['Preconception Counselling', 'Infertility Workup', 'IUI', 'IVF', 'ICSI', 'Surrogacy', 'Embryo Freezing', 'Oocyte Freezing', 'Semen Bank', 'Andrology Clinic', 'Genetic Counseling'],
     doctors: ['Dr. Dorothy P Ghosh'],
@@ -71,6 +77,7 @@ export const locations = [
     address: 'Ground Floor, 18 C, Mandeville Gardens, Ballygunge, Kolkata 700019',
     phone: '+91 62922 69060',
     hours: OPENING_HOURS,
+    hoursNote: OPENING_HOURS_NOTE,
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57830.18166452035!2d88.30285153600433!3d22.48969326997914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277589dea95db%3A0x62e182948ab063d!2sRenew%20Healthcare!5e1!3m2!1sen!2sin!4v1783329104131!5m2!1sen!2sin',
     services: ['Conception', 'Women’s Health', 'Pregnancy Care', 'Gynaecology', 'Genetic Health'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Arnab Kundu', 'Dr. Sonam Agarwal'],

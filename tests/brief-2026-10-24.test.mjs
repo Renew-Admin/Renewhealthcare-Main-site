@@ -10,7 +10,7 @@ import { getStaticDirectory } from '../src/lib/blogDirectory.js'
 import { buildBlogListing } from '../src/lib/blogListing.js'
 import { getAllSeoRoutes, getSeoForPath } from '../src/lib/seoRoutes.js'
 import { buildSitemapEntries } from '../src/lib/sitemap.js'
-import { BRANCH_WHATSAPP, SITE_CONTACT, branchContact, contactForPath, directionsUrl, formatPhone } from '../src/lib/branchContacts.js'
+import { BRANCH_WHATSAPP, CENTRAL_WHATSAPP, SITE_CONTACT, branchContact, contactForPath, directionsUrl, formatPhone } from '../src/lib/branchContacts.js'
 import { OPENING_HOURS, locations } from '../src/data/locations.js'
 import { locationClinicSchema } from '../src/lib/nextSeo.js'
 import { buildBlogPostingSchema } from '../src/lib/blogSeo.js'
@@ -67,7 +67,8 @@ test('branch pages reach their own clinic; other pages keep the site-wide pair',
 
   // Owner's confirmation, 24 Oct 2026: each branch's own line for calls, the
   // central WhatsApp (+91 62923 12116) with the branch named in the message.
-  assert.equal(BRANCH_WHATSAPP, '916292312116')
+  assert.equal(CENTRAL_WHATSAPP, '916292312116')
+  assert.equal(BRANCH_WHATSAPP, CENTRAL_WHATSAPP)
   const jamshedpur = contactForPath('/locations/jamshedpur')
   assert.equal(jamshedpur.tel, 'tel:06292269061')
   assert.equal(jamshedpur.phoneDisplay, '062922 69061')
@@ -77,18 +78,21 @@ test('branch pages reach their own clinic; other pages keep the site-wide pair',
   const ballygunge = contactForPath('/locations/gariahat/')
   assert.equal(ballygunge.tel, 'tel:06292269060')
   assert.equal(ballygunge.whatsapp, BRANCH_WHATSAPP)
-  assert.match(ballygunge.message, /Ballygunge/)
+  assert.match(ballygunge.message, /Mandeville Gardens centre/)
+  assert.equal(ballygunge.shortName, 'Mandeville Gardens')
 
   const saltlake = contactForPath('/locations/saltlake')
   assert.equal(saltlake.tel, 'tel:06292269060')
   assert.equal(saltlake.whatsapp, BRANCH_WHATSAPP)
-  assert.match(saltlake.message, /Saltlake/)
+  assert.match(saltlake.message, /Salt Lake centre/)
+  assert.equal(saltlake.shortName, 'Salt Lake')
 
   for (const path of ['/', '/blogs/what-is-embryo-glue', '/locations', '/locations/nowhere']) {
     assert.equal(contactForPath(path), SITE_CONTACT, path)
   }
   assert.equal(SITE_CONTACT.tel, 'tel:06292312076')
-  assert.equal(SITE_CONTACT.whatsapp, '916292269060')
+  // Owner, 24 Oct 2026: the site-wide button also uses the central line.
+  assert.equal(SITE_CONTACT.whatsapp, CENTRAL_WHATSAPP)
 
   for (const location of locations) {
     const contact = branchContact(location)
@@ -175,15 +179,59 @@ test('consultation days (owner, 24 Oct 2026): per branch and per doctor; Jamshed
     'Dr. Neha Yadav: Monday to Saturday',
   ])
   assert.deepEqual(consultationDaysForBranch('gariahat').map((e) => e.doctor), ['Dr. Rajeev Agarwal', 'Dr. Arnab Kundu', 'Dr. Sonam Agarwal'])
-  assert.deepEqual(consultationDaysForBranch('jamshedpur'), [])
+  assert.deepEqual(consultationDaysForBranch('jamshedpur').map((e) => `${e.doctor}: ${e.days}`), ['Dr. Dorothy P Ghosh: Monday to Saturday'])
   const rajeev = consultationDaysForDoctor('Dr. Rajeev Agarwal')
   assert.deepEqual(rajeev.map((e) => `${e.branch}: ${e.days}`), [
     'Salt Lake: Wednesday and Friday',
     'Mandeville Gardens, Ballygunge: Monday, Tuesday, Thursday and Saturday',
   ])
-  assert.deepEqual(consultationDaysForDoctor('Dr. Dorothy P Ghosh'), [])
+  assert.deepEqual(consultationDaysForDoctor('Dr. Dorothy P Ghosh').map((e) => `${e.branch}: ${e.days}`), ['Jamshedpur: Monday to Saturday'])
+  // Closure rule, same at every branch (owner, 24 Oct 2026).
+  const { locations: branches, OPENING_HOURS_SPECIFICATION } = await import('../src/data/locations.js')
+  for (const branch of branches) assert.equal(branch.hoursNote, 'Closed on Sundays and bank holidays.', branch.slug)
+  assert.ok(OPENING_HOURS_SPECIFICATION.some((spec) => spec.dayOfWeek === 'Sunday' && spec.opens === '00:00' && spec.closes === '00:00'))
   // Experience figure confirmed by the owner, used site-wide and on directories.
   const { doctors } = await import('../src/data/doctors.js')
   assert.equal(doctors.find((d) => d.slug === 'dr-rajeev-agarwal').experience_years, '27 years')
   assert.equal(doctors.find((d) => d.slug === 'dr-neha-yadav').experience_years, '')
+})
+
+
+test('website brief task 11: all 41 redirects are one-hop 301s to live pages; task 16: the seven exact titles', async () => {
+  const { DUPLICATE_REDIRECTS, RETIRED_BLOG_SLUGS } = await import('../src/lib/seoDuplicates.js')
+  const { ARTICLE_SEO_OVERRIDES } = await import('../src/lib/articleSeoOverrides.js')
+  const { rewriteInternalLinks } = await import('../src/lib/internalLinks.js')
+  const rows = `11.1	/blogs/cost-of-ivf-treatment-in-kolkata	/blogs/ivf-cost-in-kolkata
+11.4	/blogs/complete-guide-to-ivf-treatment	/blogs/the-five-stages-of-ivf-treatment
+11.12	/blogs/sperm-health-how-to-improve-motility-and-count-naturally	/blogs/foods-to-increase-sperm-count
+11.21	/blogs/male-infertility-common-causes-and-solutions	/male-infertility
+11.24	/blogs/sperm-extraction-procedure-in-azoospermia	/services/tesa-pesa
+11.26	/blogs/what-is-a-good-amh-level-to-get-pregnant	/blogs/the-link-between-amh-levels-and-ivf-success-what-the-science-says
+11.27	/blogs/can-you-get-pregnant-with-amh-below-1-real-answers	/blogs/the-link-between-amh-levels-and-ivf-success-what-the-science-says
+11.29	/blogs/polycystic-ovarian-syndrome-pcos	/blogs/pcos-and-fertility-treatment
+11.33	/blogs/the-power-of-genetics-in-ivf	/blogs/genetic-testing-in-ivf
+11.37	/blogs/top-5-reasons-why-renew-healthcare-is-the-best-ivf-centre-in-kolkata	/blogs/how-to-choose-the-right-ivf-clinic
+11.41	/blogs/common-myths-about-preconception-counselling	/blogs/pre-baby-health-plan-3-months-before-pregnancy`
+  for (const line of rows.split('\n')) {
+    const [num, from, to] = line.split('\t')
+    assert.equal(DUPLICATE_REDIRECTS.get(from), to, num)
+    assert.ok(RETIRED_BLOG_SLUGS.has(from.slice('/blogs/'.length)), `${num} unpublished`)
+  }
+  // 41 brief rows + 7 earlier pairs + Bengali Placentrex = 48 one-hop redirects, no chains.
+  assert.equal(DUPLICATE_REDIRECTS.size, 48)
+  for (const to of DUPLICATE_REDIRECTS.values()) assert.equal(DUPLICATE_REDIRECTS.has(to), false, to)
+  // The old AMH survivor now goes straight to the final page (no two-hop chain).
+  assert.equal(DUPLICATE_REDIRECTS.get('/blogs/can-you-get-pregnant-with-amh-below-1'), '/blogs/the-link-between-amh-levels-and-ivf-success-what-the-science-says')
+
+  assert.deepEqual(ARTICLE_SEO_OVERRIDES['how-to-choose-the-right-ivf-clinic'], { metaTitle: 'How to Choose the Best IVF Centre in Kolkata | Renew' })
+  assert.deepEqual(ARTICLE_SEO_OVERRIDES['egg-retrieval-process-a-complete-guide'], { metaTitle: 'Egg Retrieval in IVF: What to Expect | Renew' })
+  assert.equal(Object.keys(ARTICLE_SEO_OVERRIDES).length, 7)
+
+  // Task 8: in-body links to redirected pages follow the redirect; links to deleted pages are unlinked.
+  const ctx = { blogSlugs: new Set(['ivf-cost-in-kolkata']), routePaths: new Set(['/blogs/ivf-cost-in-kolkata']) }
+  const html = '<p><a href="/blogs/cost-of-ivf-treatment-in-kolkata">cost</a> <a class="x" href="/blogs/sperm-cramps-in-men">gone</a></p>'
+  const out = rewriteInternalLinks(html, ctx).html
+  assert.match(out, /href="\/blogs\/ivf-cost-in-kolkata"/)
+  assert.match(out, /<span class="x">gone<\/span>/)
+  assert.doesNotMatch(out, /sperm-cramps-in-men/)
 })

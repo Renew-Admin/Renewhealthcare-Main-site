@@ -1,5 +1,6 @@
 import DoctorCard from '../components/DoctorCard.jsx'
 import { branchContact, directionsUrl, whatsappUrl } from '../lib/branchContacts.js'
+import { consultationDaysForBranch } from '../lib/consultationDays.js'
 import './ContentPages.css'
 import './ServicesPages.css'
 
@@ -8,6 +9,8 @@ import './ServicesPages.css'
 export default function LocationPage({ location, clinicDoctors = [] }) {
   // This branch's own call and WhatsApp lines (src/lib/branchContacts.js).
   const contact = branchContact(location)
+  // Owner-confirmed consultation days (src/lib/consultationDays.js).
+  const consultationDays = consultationDaysForBranch(location.slug)
   return (
     <main className="content-page">
       <section className="service-banner">
@@ -55,6 +58,17 @@ export default function LocationPage({ location, clinicDoctors = [] }) {
               <div className="people-grid is-compact">
                 {clinicDoctors.map(doctor => <DoctorCard doctor={doctor} key={doctor.slug} />)}
               </div>
+              {consultationDays.length > 0 && (
+                <div className="location-consult-days">
+                  <h4>Consultation days</h4>
+                  <ul>
+                    {consultationDays.map(entry => (
+                      <li key={entry.doctor}><strong>{entry.doctor}</strong> — {entry.days}</li>
+                    ))}
+                  </ul>
+                  <p>During clinic hours, {location.hours}. Appointments are recommended.</p>
+                </div>
+              )}
             </section>
           )}
 

@@ -167,3 +167,23 @@ test('author box: Dr. Agarwal on his own pages, Renew Healthcare with a last-upd
 test('article title overrides: mechanism in place, list still pending from the brief', () => {
   assert.equal(getArticleSeoOverride('what-is-embryo-glue'), null)
 })
+
+test('consultation days (owner, 24 Oct 2026): per branch and per doctor; Jamshedpur still pending', async () => {
+  const { consultationDaysForBranch, consultationDaysForDoctor } = await import('../src/lib/consultationDays.js')
+  assert.deepEqual(consultationDaysForBranch('saltlake').map((e) => `${e.doctor}: ${e.days}`), [
+    'Dr. Rajeev Agarwal: Wednesday and Friday',
+    'Dr. Neha Yadav: Monday to Saturday',
+  ])
+  assert.deepEqual(consultationDaysForBranch('gariahat').map((e) => e.doctor), ['Dr. Rajeev Agarwal', 'Dr. Arnab Kundu', 'Dr. Sonam Agarwal'])
+  assert.deepEqual(consultationDaysForBranch('jamshedpur'), [])
+  const rajeev = consultationDaysForDoctor('Dr. Rajeev Agarwal')
+  assert.deepEqual(rajeev.map((e) => `${e.branch}: ${e.days}`), [
+    'Salt Lake: Wednesday and Friday',
+    'Mandeville Gardens, Ballygunge: Monday, Tuesday, Thursday and Saturday',
+  ])
+  assert.deepEqual(consultationDaysForDoctor('Dr. Dorothy P Ghosh'), [])
+  // Experience figure confirmed by the owner, used site-wide and on directories.
+  const { doctors } = await import('../src/data/doctors.js')
+  assert.equal(doctors.find((d) => d.slug === 'dr-rajeev-agarwal').experience_years, '27 years')
+  assert.equal(doctors.find((d) => d.slug === 'dr-neha-yadav').experience_years, '')
+})

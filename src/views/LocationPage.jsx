@@ -1,10 +1,13 @@
 import DoctorCard from '../components/DoctorCard.jsx'
+import { branchContact, directionsUrl, whatsappUrl } from '../lib/branchContacts.js'
 import './ContentPages.css'
 import './ServicesPages.css'
 
 // Server component: `location` and `clinicDoctors` (from the live doctor list)
 // are resolved in src/app/(site)/locations/[slug]/page.js.
 export default function LocationPage({ location, clinicDoctors = [] }) {
+  // This branch's own call and WhatsApp lines (src/lib/branchContacts.js).
+  const contact = branchContact(location)
   return (
     <main className="content-page">
       <section className="service-banner">
@@ -31,8 +34,14 @@ export default function LocationPage({ location, clinicDoctors = [] }) {
             <div className="location-info-card">
               <h3>Clinic Details</h3>
               <p><strong>{location.gbpName || location.name}</strong><br />{location.gbpAddress || location.address}</p>
-              <a href={`tel:${location.phone.replace(/\s/g, '')}`}>{location.phone}</a>
+              <a href={contact.tel}>{location.phone}</a>
               <span>{location.hours}</span>
+              {/* Each branch's own lines, so a visitor reaches this clinic and not another. */}
+              <div className="location-contact-actions">
+                <a className="location-contact-btn is-call" href={contact.tel}>Call {contact.name.replace(/^Renew Healthcare\s*/, '')}</a>
+                <a className="location-contact-btn is-whatsapp" href={whatsappUrl(contact.whatsapp, contact.message)} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <a className="location-contact-btn is-directions" href={directionsUrl(location)} target="_blank" rel="noopener noreferrer">Get directions</a>
+              </div>
             </div>
           </div>
 

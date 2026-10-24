@@ -7,6 +7,7 @@
 import { blogs as staticBlogs } from '../data/blogs.js'
 import { resolveBlogImage } from './blogImages.js'
 import { RETIRED_BLOG_SLUGS } from './seoDuplicates.js'
+import { REMOVED_BLOG_SLUGS } from './seoRemoved.js'
 
 export function buildBlogListing(directory = []) {
   const remote = directory.filter((entry) => entry.remote)
@@ -32,7 +33,7 @@ export function buildBlogListing(directory = []) {
     .filter((blog) => !remoteSlugs.has(blog.slug))
     .map((blog) => ({ ...blog, image: resolveBlogImage(blog) }))
 
-  return [...remoteItems, ...staticItems].filter((blog) => !RETIRED_BLOG_SLUGS.has(blog.slug))
+  return [...remoteItems, ...staticItems].filter((blog) => !RETIRED_BLOG_SLUGS.has(blog.slug) && !REMOVED_BLOG_SLUGS.has(blog.slug))
 }
 
 export function blogCategories(listing) {

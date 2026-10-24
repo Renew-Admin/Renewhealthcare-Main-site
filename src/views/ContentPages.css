@@ -215,6 +215,34 @@
   margin-top: 14px;
 }
 
+.location-contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.location-info-card .location-contact-btn {
+  display: inline-block;
+  margin-top: 0;
+  padding: 10px 16px;
+  border: 1px solid var(--navy);
+  border-radius: 999px;
+  font-size: 0.74rem;
+  line-height: 1.2;
+}
+
+.location-info-card .location-contact-btn.is-call {
+  background: var(--navy);
+  color: #fff;
+}
+
+.location-info-card .location-contact-btn.is-whatsapp {
+  border-color: #25d366;
+  background: #25d366;
+  color: #fff;
+}
+
 .location-map-card {
   overflow: hidden;
   height: 430px;

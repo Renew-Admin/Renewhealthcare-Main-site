@@ -3,6 +3,7 @@
 // server (page rendering, routes, sitemap) and the browser (admin preview,
 // hooks) build exactly the same list and cannot drift apart.
 import { doctors as staticDoctors } from '../data/doctors.js'
+import { getDoctorRegistration } from './doctorRegistrations.js'
 
 export const HIDDEN_DOCTOR_SLUGS = new Set(['dr-ruby-yadav'])
 const staticDoctorsBySlug = new Map(staticDoctors.map((doctor) => [doctor.slug, doctor]))
@@ -83,7 +84,11 @@ function normalizeRemoteDoctor(d) {
  */
 export function buildDoctorList(remoteRows = []) {
   const remote = (remoteRows || []).filter((row) => row && row.name).map(normalizeRemoteDoctor)
-  return (remote.length ? remote : staticDoctors).filter((d) => !HIDDEN_DOCTOR_SLUGS.has(d.slug))
+  return (remote.length ? remote : staticDoctors)
+    .filter((d) => !HIDDEN_DOCTOR_SLUGS.has(d.slug))
+    // Council registration numbers come from code (doctorRegistrations.js),
+    // whichever list is in use.
+    .map((d) => ({ ...d, registration: getDoctorRegistration(d.slug) }))
 }
 
 export function doctorCategories(list) {

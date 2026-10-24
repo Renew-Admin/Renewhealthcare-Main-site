@@ -15,6 +15,7 @@
 // src/data/blogs.js is the offline fallback if the query fails.
 import { blogs as staticBlogs } from '../data/blogs.js'
 import { RETIRED_BLOG_SLUGS } from './seoDuplicates.js'
+import { REMOVED_BLOG_SLUGS } from './seoRemoved.js'
 
 // Columns the directory needs. Deliberately excludes `content` — pulling full
 // article HTML for 143 posts on every cold request would be wasteful. Article
@@ -93,6 +94,9 @@ function mergeDirectory(remote) {
   // Retired duplicates (RH-02) are redirected, so they must not appear as
   // live routes or sitemap entries.
   RETIRED_BLOG_SLUGS.forEach(slug => bySlug.delete(slug))
+  // Removed off-topic articles answer 410 Gone (seoRemoved.js), whatever the
+  // CMS still holds for the slug.
+  REMOVED_BLOG_SLUGS.forEach(slug => bySlug.delete(slug))
 
   return [...bySlug.values()].sort((a, b) => String(b.iso).localeCompare(String(a.iso)))
 }

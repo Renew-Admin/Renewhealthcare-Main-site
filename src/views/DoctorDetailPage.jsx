@@ -1,4 +1,5 @@
 import { Link } from '../lib/router.js'
+import { formatRegistration } from '../lib/doctorRegistrations.js'
 import './ContentPages.css'
 import './ServicesPages.css'
 
@@ -65,7 +66,8 @@ export default function DoctorDetailPage({ doctor }) {
   const serviceAreas = asList(doctor.service_areas)
   const attachments = Array.isArray(doctor.past_attachments) ? doctor.past_attachments.filter((item) => hasText(item?.institution) || hasText(item?.description)) : []
   const faqs = Array.isArray(doctor.faqs) ? doctor.faqs.filter((item) => hasText(item?.question) && hasText(item?.answer)) : []
-  const hasClinicalDetails = hasText(doctor.experience_years) || hasText(doctor.milestone_stat) || qualifications.length > 0 || specializations.length > 0 || languages.length > 0
+  const registration = formatRegistration(doctor.registration)
+  const hasClinicalDetails = hasText(doctor.experience_years) || hasText(doctor.milestone_stat) || qualifications.length > 0 || specializations.length > 0 || languages.length > 0 || hasText(registration)
   const hasLocationDetails = hasText(doctor.clinic_address) || serviceAreas.length > 0
   const hasAttachments = attachments.length > 0
   const hasFaqs = faqs.length > 0
@@ -128,6 +130,12 @@ export default function DoctorDetailPage({ doctor }) {
                     </div>
                   )}
                   <ProfileList title="Academic Background" items={qualifications} />
+                  {hasText(registration) && (
+                    <div className="doctor-profile-subsection">
+                      <h4>Medical Registration</h4>
+                      <p className="doctor-registration">{registration}</p>
+                    </div>
+                  )}
                   <ProfileList title="Core Specializations" items={specializations} />
                   <ProfileList title="Languages" items={languages} />
                 </div>

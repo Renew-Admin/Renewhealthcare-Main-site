@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Link } from '../../lib/router.js'
+import { contactForPath, whatsappUrl } from '../../lib/branchContacts.js'
 import './FloatingActions.css'
 
-const PHONE_DISPLAY = '062923 12076'
-const TEL = 'tel:06292312076'
-const WHATSAPP = 'https://api.whatsapp.com/send?phone=916292269060&text=' +
-  encodeURIComponent("Hi Renew Healthcare, I'd like to know more about your fertility treatments.")
 const INSTAGRAM = 'https://www.instagram.com/renewhealthcare/'
 
 function Icon({ name }) {
@@ -64,6 +62,11 @@ function Icon({ name }) {
 export default function FloatingActions({ onCallback }) {
   const [open, setOpen] = useState(false)
   const [showTop, setShowTop] = useState(false)
+  // On a branch page the buttons reach that branch (src/lib/branchContacts.js).
+  const contact = contactForPath(usePathname())
+  const PHONE_DISPLAY = contact.phoneDisplay
+  const TEL = contact.tel
+  const WHATSAPP = whatsappUrl(contact.whatsapp, contact.message)
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 600)
@@ -104,7 +107,7 @@ export default function FloatingActions({ onCallback }) {
         <div className={`fab-panel ${open ? 'is-open' : ''}`} aria-hidden={!open}>
           <div className="fab-panel-head">
             <div>
-              <strong>Renew Healthcare</strong>
+              <strong>{contact.name}</strong>
               <span><span className="fab-dot" /> We usually reply within minutes</span>
             </div>
             <button type="button" className="fab-panel-close" onClick={() => setOpen(false)} aria-label="Close chat menu">
@@ -144,7 +147,7 @@ export default function FloatingActions({ onCallback }) {
           href={WHATSAPP}
           target="_blank"
           rel="noreferrer"
-          aria-label="Chat with Renew Healthcare on WhatsApp"
+          aria-label={`Chat with ${contact.name} on WhatsApp`}
         >
           <Icon name="whatsapp" />
           <span className="fab-whatsapp-pulse" aria-hidden="true" />

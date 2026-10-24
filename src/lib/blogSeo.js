@@ -2,6 +2,7 @@
 // articles. Pure functions with no platform dependencies, so the Worker can
 // call them while rendering and tests can call them directly.
 import { DOCTOR_AUTHOR, getDoctorArticle } from './doctorArticles.js'
+import { ARTICLE_REVIEWER } from './articleAuthorship.js'
 import { SITE, absoluteImageUrl, canonicalUrl, normalizePath } from './seoUtils.js'
 
 const PUBLISHER = {
@@ -181,6 +182,10 @@ export function buildBlogPostingSchema(article, { lang = 'en', image } = {}) {
     // The CMS has no per-post author column, so the organisation is the
     // author, except on pages rewritten by Dr. Agarwal (doctorArticles.js).
     author: doctor ? DOCTOR_AUTHOR : { '@type': 'Organization', name: 'Renew Healthcare', url: SITE },
+    // Articles he did not write are medically reviewed by him (articleAuthorship.js).
+    reviewedBy: !doctor && ARTICLE_REVIEWER
+      ? { '@type': 'Person', name: ARTICLE_REVIEWER.name, honorificSuffix: 'MBBS, MD (Obstetrics & Gynaecology)', url: canonicalUrl(ARTICLE_REVIEWER.url) }
+      : undefined,
     publisher: PUBLISHER,
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     articleSection: article.category || undefined,

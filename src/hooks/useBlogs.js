@@ -7,6 +7,7 @@ import { fetchPublishedPostRows } from '../lib/publicApi.js'
 import { toBlog } from '../lib/blogRow.js'
 import { resolveBlogImage } from '../lib/blogImages.js'
 import { RETIRED_BLOG_SLUGS } from '../lib/seoDuplicates.js'
+import { REMOVED_BLOG_SLUGS } from '../lib/seoRemoved.js'
 
 // Module-level cache so we fetch the remote posts once per page load and reuse
 // them as the user navigates between blog pages.
@@ -48,7 +49,7 @@ function merge(remote) {
     ...statics.map((blog) => ({ ...blog, image: resolveBlogImage(blog) })),
     // Retired duplicates (RH-02) redirect to their surviving URL, so the
     // listing must not link to them or the sitemap and the listing disagree.
-  ].filter((blog) => !RETIRED_BLOG_SLUGS.has(blog.slug))
+  ].filter((blog) => !RETIRED_BLOG_SLUGS.has(blog.slug) && !REMOVED_BLOG_SLUGS.has(blog.slug))
 }
 
 // `initial` is the finished listing built on the server (buildBlogListing).

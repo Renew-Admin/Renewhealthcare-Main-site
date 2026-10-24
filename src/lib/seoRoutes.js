@@ -5,6 +5,7 @@ import { locations } from '../data/locations.js'
 import { services } from '../data/services.js'
 import { resolveBlogImage } from './blogImages.js'
 import { getDuplicateRedirect, RETIRED_BLOG_SLUGS } from './seoDuplicates.js'
+import { NOINDEX_FINAL_PAGES, REMOVED_BLOG_SLUGS } from './seoRemoved.js'
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_SEO_IMAGE,
@@ -104,6 +105,8 @@ Object.entries(finalPages).forEach(([key, page]) => {
     title: page.title,
     description: page.intro,
     image: page.image || page.banner,
+    // Patient resources kept on the site but out of search (seoRemoved.js).
+    robots: NOINDEX_FINAL_PAGES.has(key) ? 'noindex, follow' : undefined,
   })
 })
 
@@ -134,7 +137,8 @@ doctors.forEach(doctor => {
 })
 
 // Retired duplicates (RH-02) never become routes — the Worker redirects them.
-const livingBlogs = blogs.filter(blog => !RETIRED_BLOG_SLUGS.has(blog.slug))
+// Removed articles (seoRemoved.js) answer 410 Gone instead.
+const livingBlogs = blogs.filter(blog => !RETIRED_BLOG_SLUGS.has(blog.slug) && !REMOVED_BLOG_SLUGS.has(blog.slug))
 
 livingBlogs.forEach(blog => {
   addRoute(`/blogs/${blog.slug}`, {

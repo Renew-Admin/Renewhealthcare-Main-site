@@ -1,4 +1,5 @@
 import { Link } from '../lib/router.js'
+import ArticleAuthorBox from '../components/ArticleAuthorBox.jsx'
 import './ServicesPages.css'
 import './Blog.css'
 
@@ -6,7 +7,7 @@ import './Blog.css'
 // the server (src/app/(site)/blogs/[slug]/page.js), so the full article is in
 // the HTML response — there is no client-side fetch and no loading state.
 // Metadata, hreflang and JSON-LD are emitted by that page too.
-export default function BlogPostPage({ blog, html, sidebar = [], heroImage, lang = 'en' }) {
+export default function BlogPostPage({ blog, html, sidebar = [], heroImage, lang = 'en', author = null }) {
   return (
     <main className="content-page blogx-post-page">
       <section className="blogx-post-head">
@@ -22,6 +23,19 @@ export default function BlogPostPage({ blog, html, sidebar = [], heroImage, lang
             <p className="blogx-post-byline">
               {blog.byline}
               {blog.lastUpdated ? <span className="blogx-post-updated"> · Last updated: {blog.lastUpdated}</span> : null}
+            </p>
+          ) : author?.reviewer ? (
+            // Reviewer line worded as the owner asked (24 Oct 2026); the author
+            // box at the end of the article repeats it with the profile link.
+            <p className="blogx-post-byline">
+              Medically reviewed by {author.reviewer.name}, {author.reviewer.credentials}
+              {author.date ? <span className="blogx-post-updated"> · {author.dateLabel}: {author.date}</span> : null}
+            </p>
+          ) : author?.date && author.dateIso !== blog.iso ? (
+            // Only when it differs from the publish date shown below; the
+            // author box at the end always carries the date.
+            <p className="blogx-post-byline">
+              <span className="blogx-post-updated">{author.dateLabel}: {author.date}</span>
             </p>
           ) : null}
           <div className="blogx-post-meta">
@@ -43,6 +57,8 @@ export default function BlogPostPage({ blog, html, sidebar = [], heroImage, lang
           <div className="blogx-post-layout">
             <article className="blogx-article blogx-enter blogx-enter-delay" lang={lang}>
               <div className="blogx-prose" dangerouslySetInnerHTML={{ __html: html }} />
+
+              <ArticleAuthorBox author={author} />
 
               <Link className="blogx-back" to="/blogs">← Back to all blogs</Link>
             </article>

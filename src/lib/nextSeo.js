@@ -6,6 +6,7 @@
 // route manifest (src/lib/seoRoutes.js), and JSON-LD is rendered into the page
 // HTML on the server. Nothing is patched into <head> by client JavaScript.
 import { getSeoForPath } from './seoRoutes.js'
+import { OPENING_HOURS_SPECIFICATION } from '../data/locations.js'
 import {
   SITE,
   DEFAULT_SEO_IMAGE,
@@ -116,6 +117,8 @@ export function locationClinicSchema(location) {
     url: canonicalUrl(path),
     image: absoluteImageUrl(location.image),
     telephone: location.phone || undefined,
+    // Owner-confirmed hours (src/data/locations.js), 24 Oct 2026.
+    openingHoursSpecification: OPENING_HOURS_SPECIFICATION,
     address: location.postalAddress
       ? { '@type': 'PostalAddress', ...location.postalAddress, addressCountry: 'IN' }
       : location.address ? { '@type': 'PostalAddress', streetAddress: location.address, addressCountry: 'IN' } : undefined,
@@ -141,6 +144,10 @@ export function physicianSchema(doctor) {
     image: doctor.photo ? absoluteImageUrl(doctor.photo) : undefined,
     description: description ? truncateDescription(description, 300) : undefined,
     jobTitle: doctor.role || undefined,
+    // Council registration (doctorRegistrations.js), as on the doctor's own site.
+    identifier: doctor.registration?.number
+      ? { '@type': 'PropertyValue', propertyID: `${doctor.registration.council} Registration No.`, value: doctor.registration.number }
+      : undefined,
     address: doctor.clinic_address ? { '@type': 'PostalAddress', streetAddress: doctor.clinic_address, addressCountry: 'IN' } : undefined,
     memberOf: { '@id': `${SITE}/#organization`, name: 'Renew Healthcare' },
   }

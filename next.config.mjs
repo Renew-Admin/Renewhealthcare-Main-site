@@ -102,6 +102,11 @@ const nextConfig = {
         source: '/admin',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
       },
+      {
+        // Patient resource kept for direct links only (seoRemoved.js).
+        source: '/injection-instruction',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }],
+      },
     ]
   },
 }

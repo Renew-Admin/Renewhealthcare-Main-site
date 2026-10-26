@@ -2,13 +2,15 @@
 
 - Website: https://renewhealthcare.in/
 - Last updated: 2026-10-26
-- Work status: Partially completed (1 task done in code; the rest are blocked on clinic input or external actions)
+- Work status: Partially completed. A6 is live; the other tasks remain open as described below.
+
+The first-pass and second-pass sections below preserve what was true when the work was local. The latest deployment and live-site status is in **Live verification — 2026-10-26** at the end of this file.
 
 ## Summary
 
 | Task | Status | Reason |
 |---|---|---|
-| A6 Jamshedpur PIN in footer | **Done (local only, not deployed)** | — |
+| A6 Jamshedpur PIN in footer and other address copies | **Done and visible on the live site** | Verified on 2026-10-26; see the latest section below |
 | A4 Salt Lake phone | Not done, excluded on purpose | Number not confirmed by the clinic |
 | B1 Doctor registration numbers | Not done, blocked | No verified numbers supplied |
 | B2 Branch directions | Not done, blocked | No verified landmarks, metro, road or parking details |
@@ -209,3 +211,18 @@ Not run: the OpenNext/Cloudflare build (`npm run build`), browser checks at phon
 ### Deployment status (this pass)
 
 **Local only: not committed, not pushed, not deployed, and not checked on https://renewhealthcare.in/.** The local dev server at http://localhost:3000 shows the changes.
+
+---
+
+## Live verification — 2026-10-26
+
+The earlier "local only" and "not deployed" statements above are historical. Commit `69e1382` was pushed to `origin/main`, and the live HTML now contains the Jamshedpur PIN changes from that commit. The site was checked directly at `https://renewhealthcare.in/` with `curl -L`, and the visible server-rendered text was inspected. This confirms the content is live; it does not establish which deployment job served it.
+
+| Item | Current status | Live evidence / remaining work |
+|---|---|---|
+| A6 Jamshedpur PIN | **Done; live content verified** | The full address ends in `Bistupur, Jamshedpur 831001` in the shared footer on `/`, `/why-renew`, `/contact` and `/locations/jamshedpur`. `/contact` also shows it in the clinic list. `/injection-instruction` and `/mental-health` show it in their "Locate Your Nearest IVF Center" content. These pages returned HTTP 200. The short home-page location label and the Jamshedpur page title say only `Bistupur, Jamshedpur`; they are labels, not full addresses. |
+| A4 Salt Lake phone | **Open; clinic confirmation needed** | The live `/contact` and `/locations/saltlake` pages still contain both `+91 6292312076` and `+91 62922 69060`. No phone number was changed in this release. |
+| E1 article redirect | **Open; destination still unavailable** | `/unexplained-infertility-all-reports-normal-not-pregnant/` and `/infertility-diagnosis-for-couples/` both returned HTTP 404 after following redirects. Publish and confirm the destination before adding the redirect. |
+| B1, B2, B3, B4, E2, E4 | **Open, as detailed above** | The pushed commit did not add registration numbers, directions, photos, a new Gariahat map embed, articles or GA4 configuration. Their required inputs and access are listed in the earlier sections. These items were not fully re-audited on the live site in this check. |
+
+Verification limit: this was an HTTP and server-rendered text check, not a visual browser check at phone/tablet/desktop widths. No GA4, Google Business Profile or Cloudflare dashboard state was inspected.

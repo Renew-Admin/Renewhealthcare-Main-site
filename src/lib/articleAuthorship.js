@@ -26,12 +26,13 @@ export const DOCTOR_PROFILE = {
 
 // Owner's confirmation, 24 Oct 2026: Dr. Agarwal has reviewed every article
 // that is not his own, and the box is to say exactly
-// "Medically reviewed by Dr. Rajeev Agarwal, MBBS, MD (O&G), WBMC52540".
+// "Medically reviewed by Dr. Rajeev Agarwal, MBBS, MD (O&G), WBMC 52540"
+// (registration written as the client supplied it on 26 Oct 2026, task B1).
 // REVIEW_DATE is the date of that confirmation; change it (or make it
 // per-article) when an article is re-reviewed.
 export const ARTICLE_REVIEWER = {
   name: 'Dr. Rajeev Agarwal',
-  credentials: 'MBBS, MD (O&G), WBMC52540',
+  credentials: `MBBS, MD (O&G), ${DOCTOR_REGISTRATIONS['dr-rajeev-agarwal'].number}`,
   url: '/doctor/dr-rajeev-agarwal',
 }
 export const REVIEW_DATE = '2026-10-24'

@@ -81,8 +81,9 @@ test('branch pages reach their own clinic; other pages keep the site-wide pair',
   assert.match(ballygunge.message, /Mandeville Gardens centre/)
   assert.equal(ballygunge.shortName, 'Mandeville Gardens')
 
+  // Salt Lake's own line, confirmed by the client on 26 Oct 2026 (task A4).
   const saltlake = contactForPath('/locations/saltlake')
-  assert.equal(saltlake.tel, 'tel:06292269060')
+  assert.equal(saltlake.tel, 'tel:06292312076')
   assert.equal(saltlake.whatsapp, BRANCH_WHATSAPP)
   assert.match(saltlake.message, /Salt Lake centre/)
   assert.equal(saltlake.shortName, 'Salt Lake')
@@ -133,8 +134,7 @@ test('every copy of the Jamshedpur address carries PIN 831001 (26 Oct 2026)', as
 
 test('Salt Lake and Gariahat addresses and phones are unchanged by the Jamshedpur PIN fix', async () => {
   const { readFileSync } = await import('node:fs')
-  // Current values, not confirmed ones: the Salt Lake number is still open
-  // (task A4). Update these lines when the clinic confirms it.
+  // Salt Lake number confirmed by the client on 26 Oct 2026 (task A4).
   const kolkata = [
     ["'Ground Floor, 18 C, Mandeville Gardens, Ballygunge, Kolkata 700019'", "'+91 62922 69060'"],
     ["'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata 700064'", "'+91 6292312076'"],
@@ -149,7 +149,7 @@ test('Salt Lake and Gariahat addresses and phones are unchanged by the Jamshedpu
   assert.equal(bySlug.gariahat.address, 'Ground Floor, 18 C, Mandeville Gardens, Ballygunge, Kolkata 700019')
   assert.equal(bySlug.gariahat.phone, '+91 62922 69060')
   assert.equal(bySlug.saltlake.address, 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata 700064')
-  assert.equal(bySlug.saltlake.phone, '+91 62922 69060')
+  assert.equal(bySlug.saltlake.phone, '+91 6292312076')
 })
 
 test('every branch page shows the owner-confirmed hours, on the page and in its schema', () => {
@@ -161,36 +161,37 @@ test('every branch page shows the owner-confirmed hours, on the page and in its 
     assert.equal(spec.opens, '09:00')
     assert.equal(spec.closes, '18:30')
   }
-  // Phones as confirmed on 24 Oct 2026.
+  // Phones as confirmed on 24 Oct 2026; Salt Lake as confirmed on 26 Oct (A4).
   const phones = Object.fromEntries(locations.map((location) => [location.slug, location.phone]))
-  assert.deepEqual(phones, { saltlake: '+91 62922 69060', jamshedpur: '+91 62922 69061', gariahat: '+91 62922 69060' })
+  assert.deepEqual(phones, { saltlake: '+91 6292312076', jamshedpur: '+91 62922 69061', gariahat: '+91 62922 69060' })
 })
 
 test('doctor pages carry the council registration number where one is on file', () => {
   const doctors = buildDoctorList([])
   const rajeev = doctors.find((doctor) => doctor.slug === 'dr-rajeev-agarwal')
-  assert.deepEqual(rajeev.registration, { council: 'West Bengal Medical Council', number: 'WBMC52540' })
+  assert.deepEqual(rajeev.registration, { council: 'West Bengal Medical Council', number: 'WBMC 52540' })
   const schema = physicianSchema(rajeev)
   assert.deepEqual(schema.identifier, {
     '@type': 'PropertyValue',
     propertyID: 'West Bengal Medical Council Registration No.',
-    value: 'WBMC52540',
+    value: 'WBMC 52540',
   })
-  // Doctors whose number is still pending get no registration, not a placeholder.
-  const dorothy = doctors.find((doctor) => doctor.slug === 'dr-dorothy-p-ghosh')
-  assert.equal(dorothy.registration, null)
-  assert.equal(physicianSchema(dorothy).identifier, undefined)
+  // Doctors without a number on file get no registration, not a placeholder
+  // (Dr. Sonam Agarwal: the client asked for the field to stay empty, 26 Oct).
+  const sonam = doctors.find((doctor) => doctor.slug === 'dr-sonam-agarwal')
+  assert.equal(sonam.registration, null)
+  assert.equal(physicianSchema(sonam).identifier, undefined)
   // The same holds when the list comes from the CMS.
-  const remote = buildDoctorList([{ name: 'Dr. Rajeev Agarwal' }, { name: 'Dr. Dorothy P Ghosh' }])
-  assert.equal(remote.find((doctor) => doctor.slug === 'dr-rajeev-agarwal').registration.number, 'WBMC52540')
-  assert.equal(remote.find((doctor) => doctor.slug === 'dr-dorothy-p-ghosh').registration, null)
+  const remote = buildDoctorList([{ name: 'Dr. Rajeev Agarwal' }, { name: 'Dr. Sonam Agarwal' }])
+  assert.equal(remote.find((doctor) => doctor.slug === 'dr-rajeev-agarwal').registration.number, 'WBMC 52540')
+  assert.equal(remote.find((doctor) => doctor.slug === 'dr-sonam-agarwal').registration, null)
 })
 
 test('author box: Dr. Agarwal on his own pages, Renew Healthcare with a last-updated date elsewhere', () => {
   const doctor = articleAuthorship({ slug: 'placentrex-injection-uses-benefits-risks-dosage', iso: '2026-03-23', modifiedIso: '2026-10-23' })
   assert.equal(doctor.kind, 'doctor')
   assert.equal(doctor.name, 'Dr. Rajeev Agarwal')
-  assert.equal(doctor.registration, 'West Bengal Medical Council Reg. No. WBMC52540')
+  assert.equal(doctor.registration, 'West Bengal Medical Council Reg. No. WBMC 52540')
   assert.equal(doctor.date, 'October 23, 2026')
   assert.equal(doctor.url, '/doctor/dr-rajeev-agarwal')
 
@@ -202,7 +203,7 @@ test('author box: Dr. Agarwal on his own pages, Renew Healthcare with a last-upd
   assert.equal(team.dateLabel, 'Last reviewed')
   assert.equal(team.dateIso, '2026-10-24')
   assert.equal(team.date, 'October 24, 2026')
-  assert.equal(`Medically reviewed by ${team.reviewer.name}, ${team.reviewer.credentials}`, 'Medically reviewed by Dr. Rajeev Agarwal, MBBS, MD (O&G), WBMC52540')
+  assert.equal(`Medically reviewed by ${team.reviewer.name}, ${team.reviewer.credentials}`, 'Medically reviewed by Dr. Rajeev Agarwal, MBBS, MD (O&G), WBMC 52540')
   assert.equal(ARTICLE_REVIEWER.url, '/doctor/dr-rajeev-agarwal')
   const posting = buildBlogPostingSchema({ slug: 'what-is-embryo-glue', title: 'T', iso: '2025-01-10', modifiedIso: '2026-10-22' })
   assert.equal(posting.author['@type'], 'Organization')

@@ -2,9 +2,9 @@
 
 - Website: https://renewhealthcare.in/
 - Last updated: 2026-10-26
-- Work status: Partially completed. A6 is live; the other tasks remain open as described below.
+- Work status: Partially completed. A6 is live. A4, B1, B2 and B4 are done locally (not yet deployed); the rest are open. The current status of every task is in **Update — 2026-10-26 (third pass: client-confirmed data)** at the end of this file.
 
-The first-pass and second-pass sections below preserve what was true when the work was local. The latest deployment and live-site status is in **Live verification — 2026-10-26** at the end of this file.
+The earlier sections below preserve what was true when they were written; the summary table directly below is from the first pass and is superseded by the third-pass table.
 
 ## Summary
 
@@ -226,3 +226,97 @@ The earlier "local only" and "not deployed" statements above are historical. Com
 | B1, B2, B3, B4, E2, E4 | **Open, as detailed above** | The pushed commit did not add registration numbers, directions, photos, a new Gariahat map embed, articles or GA4 configuration. Their required inputs and access are listed in the earlier sections. These items were not fully re-audited on the live site in this check. |
 
 Verification limit: this was an HTTP and server-rendered text check, not a visual browser check at phone/tablet/desktop widths. No GA4, Google Business Profile or Cloudflare dashboard state was inspected.
+
+---
+
+## Update — 2026-10-26 (third pass: client-confirmed data)
+
+Inputs used: the client's confirmations of 26 Oct 2026 (Salt Lake number, four registration numbers and an empty field for Dr. Sonam Agarwal, the three PIN codes, the Gariahat embed URL, "use the latest IVF-cost version", "only approved stories are provided"). Everything in this section was checked during this pass unless marked historical.
+
+### Status
+
+| Task | Status | Evidence / what is still needed |
+|---|---|---|
+| A4 Salt Lake phone | **Done locally** | `+91 6292312076` on the Salt Lake page, its call button (`tel:06292312076`) and its MedicalClinic schema; footer and contact list already had it. |
+| B1 Registration numbers | **Done locally** | WBMC 52540 / 56403 / 67050 / 85882 on the four doctor pages and in their Physician schema; nothing shown for Dr. Sonam Agarwal. |
+| B2 PIN codes | **Verified, regression-tested** | 700019 / 700064 / 831001 correct in every address copy and schema. Fixed the contact page's "Renew Healthcare Clinics" list, which still had the WordPress addresses. |
+| B3 Branch photos | **Waiting for photos (Thursday)** | See below. |
+| B4 Gariahat map | **Done locally; place and zoom verified** | See below. Not yet checked visually in a browser. |
+| E1 Infertility redirect | **Blocked: destination 404** | See below. |
+| E2 Five November articles | **Blocked: no approved content** | Unchanged from the first pass; no drafts in the repo. |
+| E4 GA4 key events | **Done (client-confirmed)** | Code checked only; no change needed. |
+| E5 Evidence report | **This section** | — |
+| RH-05 IVF-cost article | **Already consistent; no change** | See below. |
+| RH-15 Success stories | **Blocked: no approval record** | See below. |
+
+### Changes
+
+| File | Change |
+|---|---|
+| `src/data/locations.js` | Salt Lake `phone` → `+91 6292312076` (was `+91 62922 69060`, the Gariahat line). Gariahat `mapEmbed` → client's embed at street-level zoom. |
+| `src/lib/doctorRegistrations.js` | Added Dr. Dorothy P. Ghosh, Dr. Arnab Kundu, Dr. Neha Yadav; Dr. Rajeev Agarwal's number written as supplied (`WBMC 52540`, was `WBMC52540`). No entry for Dr. Sonam Agarwal. |
+| `src/lib/articleAuthorship.js` | "Medically reviewed by" line reads the number from the registration list, so it now shows `WBMC 52540` and cannot drift. |
+| `src/data/finalPageLookup.js` | `/contact` clinic list built from `locations.js` (removed `EN-26, Sector V` and `46B, Rafi Ahmed Kidwai Road`); timings from the owner-confirmed `OPENING_HOURS` (was "9:00 AM - 6:00 PM"). |
+| `src/views/FinalContentPage.jsx` | Contact card timings use `OPENING_HOURS` (was "9:00 AM - 6:00 PM"). |
+| `tests/brief-2026-10-24.test.mjs` | Salt Lake phone and registration format updated to the confirmed values. |
+| `tests/brief-2026-10-26.test.mjs` | New: A4, B1, B2, contact list and B4 regression tests. |
+
+The hours change on `/contact` goes beyond A4/B2. The page contradicted the owner-confirmed hours (24 Oct) shown on every branch page, so it was corrected along with the addresses.
+
+### B4 Gariahat map
+
+- The client's embed points to place `0x3a0277589dea95db:0x62e182948ab063d` (= the branch's `cid` 445319978748151357). Fetching that embed, Google resolves it to "Ground Floor, Renew Healthcare, 18 C, Mandeville Gardens, Ekdalia, Ballygunge, Kolkata, West Bengal 700019" at 22.5224052, 88.3669942.
+- As supplied, its viewport is about 59 km (`1d58981…`), centred well south-west of Ballygunge. That is too broad, so the embed is used with only the viewport changed: `1d1841.8` (same scale as the Salt Lake map) centred on those coordinates. Fetching the adjusted URL returns HTTP 200 and resolves to the same place and address. Roadmap mode as in the client's URL (`5e0`; the old embed was satellite).
+- Not done: a visual check of the rendered map in a browser.
+
+### B3 Branch photos: needed by Thursday
+
+| Branch | In use now (`gallery`) | Assessment |
+|---|---|---|
+| Salt Lake | `2025/03/renew-ivf-saltlake.jpg` (building exterior with "RENEW Healthcare" sign), `2025/03/ivf-saltlake.jpg` (consultation) | Real clinic photos, but only 436×290 px |
+| Jamshedpur | `2025/03/renew-ivf-jamshedpur.jpg` (entrance with "RENEW Fertility" sign), `2025/03/renew-healthcare-jamshedpur.jpg` (consultation) | Real; the second is only 202×270 px |
+| Gariahat | `2026/07/renew-healthcare-mandeville-gardens.webp` (interior corridor), `2024/12/Inner-Page-Banner-2.jpg` (consultation) | The banner is a generic site banner also used on service pages; its branch is not identifiable. No exterior/signboard photo. |
+
+Needed: for each branch, an exterior/signboard photo, reception or waiting area, and a consultation room, at least 1200 px wide, with no identifiable patients or patient data on screen, and a one-line description of each (used for alt text). Highest priority: a Gariahat exterior to replace `Inner-Page-Banner-2.jpg` in its gallery, and higher-resolution Salt Lake and Jamshedpur photos. No images were changed.
+
+### E1 Infertility redirect
+
+- Live checks this pass (`curl -L`): `/unexplained-infertility-all-reports-normal-not-pregnant`, its trailing-slash form and `/blogs/unexplained-infertility-all-reports-normal-not-pregnant` all return **404**. The source `/infertility-diagnosis-for-couples` (with and without slash, and under `/blogs/`) also returns 404.
+- A live article on the same topic exists: `/blogs/unexplained-infertility-next-steps`, "Unexplained Infertility: When Every Test Is Normal, What Happens Next?" (HTTP 200, self-canonical, indexable, published 2026-10-14), plus a Bengali version `/blogs/unexplained-infertility-sob-test-normal-tahole-ki`.
+- Not added: the recorded destination slug does not exist, and redirecting to a different slug is a content decision. Needed: confirmation that `/blogs/unexplained-infertility-next-steps` is the intended destination (then the redirect is one line in `src/lib/seoDuplicates.js`), or the URL where the intended article will be published.
+
+### E4 GA4 key events
+
+Client-confirmed as done. Code check only: `generate_lead` (`src/hooks/useLeadSubmit.js`), `phone_click` and `whatsapp_click` (`src/components/ContactTracking.js`), one measurement ID `G-VL7SJC7ENL` (`src/lib/analytics.js`). The live home page loads gtag once for that ID (the second match is the escaped copy in the Next.js payload). No GA4 access was used, so key-event configuration in GA4 itself was not checked here.
+
+### RH-05 IVF-cost article
+
+- Versions: `/blogs/cost-of-ivf-treatment-in-kolkata` (longer, ~630 words, dated 6 May 2023; content last changed 5 Aug 2026, link rewrite only) and `/blogs/ivf-cost-in-kolkata` (shorter, ~580 words, dated 29 Jan 2023; last updated 2026-07-21 per its schema, edited again 10 Oct 2026, commit `76e682e`).
+- The latest version is `ivf-cost-in-kolkata`, which is also the destination in the client's brief (row 11.1). It is already the primary everywhere: live HTTP 200 and self-canonical; `/blogs/cost-of-ivf-treatment-in-kolkata` (with and without slash) 301s to it in one hop; only it is in the sitemap. No change made.
+- Limit: no explicit approval record exists in the repo; "latest" is taken from the commit history and `dateModified`. If the CMS holds a newer unpublished draft, that was not visible from here.
+
+### RH-15 Success stories
+
+- `/success-stories` is a single page (no per-story URLs). It is deliberately suspended for NMC compliance review: `SHOW_PATIENT_TESTIMONIALS = false` in `src/views/SuccessStoriesPage.jsx`, `noindex, follow` in `src/lib/seoRoutes.js`, and left out of the sitemap. Confirmed live: HTTP 200, `noindex, follow`, not in `sitemap.xml`.
+- The CMS `testimonials` table has only an `active` flag; there is no approval or indexing field. Nothing in the repo records which stories are approved.
+- Not changed. Needed: the list of approved stories (names or CMS rows) and written confirmation that the compliance suspension can be lifted for them. Then: flip `SHOW_PATIENT_TESTIMONIALS`, remove the `noindex`, and the page joins the sitemap in the same deploy.
+
+### Verification (this pass)
+
+| Check | Result |
+|---|---|
+| `npm test` | 73 tests, 73 passed, 0 failed (68 before + 5 new) |
+| New A4 test with the old Salt Lake number put back | Failed as expected; file restored, passes again |
+| `npm run lint` | 791 errors, same as the pre-existing baseline; changed files add none |
+| `npm run build:offline` | Exit 0. `src/lib/buildStamp.js` restored afterwards |
+| Built `/locations/saltlake` | `tel:06292312076` ×7, schema `telephone` `+91 6292312076`; `62922 69060` appears once, in the footer's Gariahat entry |
+| Built `/contact` | No `EN-26`, no `6:00 PM`; `Kolkata 700064` ×4, `6:30 PM` ×4 |
+| Built doctor pages | "Reg. No." and schema `identifier` WBMC 52540 / 56403 / 67050 / 85882; Dr. Sonam Agarwal page has no registration text or identifier |
+| Gariahat embed (client URL and adjusted URL) | Both HTTP 200, same place and address; adjusted viewport 1841.8 m |
+| Live (`curl`, today) | `/`, `/contact`, `/locations/saltlake`, `/locations/gariahat`, `/locations/jamshedpur`, `/doctor/dr-rajeev-agarwal`, `/doctor/dr-sonam-agarwal`, `/blogs/ivf-cost-in-kolkata`, `/success-stories`, `/sitemap.xml`, `/robots.txt`: 200. `/blogs/cost-of-ivf-treatment-in-kolkata` (and `/`): 301 → 200, 1 hop. `/blogs/what-is-usg-full-form`: 410 |
+
+Not run: the OpenNext build (`npm run build`; `workerd` missing locally, as before), browser or visual checks, screenshots, GA4, Google Business Profile or Cloudflare dashboards. No directory sheet was available, and no crawl totals were produced.
+
+### Deployment status (this pass)
+
+**Local only: not committed, not pushed, not deployed.** The live site still shows the old Salt Lake number on `/locations/saltlake`, the WordPress addresses on `/contact` and no registration numbers for the three new doctors until this is merged to `main`.

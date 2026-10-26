@@ -2,6 +2,7 @@
 import { useRef, useState } from 'react'
 import { Link } from '../lib/router.js'
 import { useLeadSubmit, validateLeadForm } from '../hooks/useLeadSubmit.js'
+import { OPENING_HOURS } from '../data/locations.js'
 import TodayDateInput from '../components/TodayDateInput.js'
 import PurposeOtherInput, { OTHER_PURPOSE } from '../components/PurposeOtherInput.js'
 import './FinalPages.css'
@@ -430,7 +431,7 @@ function ContactBlock() {
           <p>Want to get in touch? We would love to hear from you. Here is how you can reach us.</p>
           <a href="tel:06292312076">062923 12076</a>
           <a href="mailto:info@renewhealthcare.in">info@renewhealthcare.in</a>
-          <span>Clinic Timings Monday to Saturday 9:00 AM - 6:00 PM</span>
+          <span>Clinic Timings {OPENING_HOURS}</span>
           <div className="contact-social-row">
             <a href="https://www.facebook.com/renewhealthcare.in" target="_blank" rel="noreferrer">Facebook</a>
             <a href="https://www.instagram.com/renewhealthcare/" target="_blank" rel="noreferrer">Instagram</a>

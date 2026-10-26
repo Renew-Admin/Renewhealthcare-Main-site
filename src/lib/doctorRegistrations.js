@@ -8,19 +8,23 @@
 // use. Add a doctor ONLY with the number from their council certificate; a
 // wrong number on a medical page is worse than none.
 //
-// Pending from the clinic (24 Oct 2026): Dr. Dorothy P Ghosh, Dr. Neha Yadav,
-// Dr. Sonam Agarwal, Dr. Arnab Kundu and the visiting consultants.
+// Numbers as supplied by the client (task B1, 26 Oct 2026), written exactly
+// as given. Dr. Sonam Agarwal has no entry on purpose (the client asked for
+// the field to stay empty), so her page shows no registration line. Still
+// pending: the visiting consultants.
 
 export const DOCTOR_REGISTRATIONS = {
-  // Same number the doctor's own site shows in its footer and Physician schema.
-  'dr-rajeev-agarwal': { council: 'West Bengal Medical Council', number: 'WBMC52540' },
+  'dr-rajeev-agarwal': { council: 'West Bengal Medical Council', number: 'WBMC 52540' },
+  'dr-dorothy-p-ghosh': { council: 'West Bengal Medical Council', number: 'WBMC 56403' },
+  'dr-arnab-kundu': { council: 'West Bengal Medical Council', number: 'WBMC 67050' },
+  'dr-neha-yadav': { council: 'West Bengal Medical Council', number: 'WBMC 85882' },
 }
 
 export function getDoctorRegistration(slug) {
   return DOCTOR_REGISTRATIONS[String(slug || '')] || null
 }
 
-/** "West Bengal Medical Council Reg. No. WBMC52540" */
+/** "West Bengal Medical Council Reg. No. WBMC 52540" */
 export function formatRegistration(registration) {
   if (!registration?.number) return ''
   return `${registration.council} Reg. No. ${registration.number}`

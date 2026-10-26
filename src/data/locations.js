@@ -29,9 +29,10 @@ export const locations = [
     mapsUrl: 'https://maps.google.com/?cid=3902917559414819569',
     name: 'Saltlake',
     address: 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata 700064',
-    // Owner's confirmation, 24 Oct 2026: the branch's own line is 062922 69060
-    // (also the primary number on its Google profile).
-    phone: '+91 62922 69060',
+    // Client's confirmation (task A4, 26 Oct 2026): the Salt Lake number is
+    // +91 6292312076, the same as the footer and the contact page. It replaces
+    // 062922 69060 (the Gariahat line), which was set here on 24 Oct.
+    phone: '+91 6292312076',
     hours: OPENING_HOURS,
     hoursNote: OPENING_HOURS_NOTE,
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1841.890894700904!2d88.40033064837824!3d22.58726325812174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0275e065555555%3A0x3629f2d77c8e0af1!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1721464477531!5m2!1sen!2sin',
@@ -78,7 +79,13 @@ export const locations = [
     phone: '+91 62922 69060',
     hours: OPENING_HOURS,
     hoursNote: OPENING_HOURS_NOTE,
-    mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57830.18166452035!2d88.30285153600433!3d22.48969326997914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277589dea95db%3A0x62e182948ab063d!2sRenew%20Healthcare!5e1!3m2!1sen!2sin!4v1783329104131!5m2!1sen!2sin',
+    // Task B4 (26 Oct 2026): the client's embed for this place
+    // (0x3a0277589dea95db:0x62e182948ab063d = cid 445319978748151357) showed
+    // about 59 km of map. Same embed, zoomed to street level (1d) and centred
+    // on the coordinates Google returns for the place in that embed, which it
+    // resolves to "Ground Floor, Renew Healthcare, 18 C, Mandeville Gardens,
+    // Ekdalia, Ballygunge, Kolkata 700019".
+    mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1841.8!2d88.3669942!3d22.5224052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277589dea95db%3A0x62e182948ab063d!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1793010930767!5m2!1sen!2sin',
     services: ['Conception', 'Women’s Health', 'Pregnancy Care', 'Gynaecology', 'Genetic Health'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Arnab Kundu', 'Dr. Sonam Agarwal'],
     image: '/images/renew/uploads/2026/07/renew-healthcare-mandeville-gardens.webp',

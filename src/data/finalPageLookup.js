@@ -1,6 +1,9 @@
 // finalPageLookup — resolves the content pages rendered by FinalContentPage
 // (packages, contact, courses, policies, patient resources) on the server.
 import { finalPages } from './finalPages.js'
+import { OPENING_HOURS, OPENING_HOURS_NOTE, locations } from './locations.js'
+
+const BRANCH_NAMES = { saltlake: 'Salt Lake', gariahat: 'Gariahat', jamshedpur: 'Jamshedpur' }
 
 export const contactPage = {
   title: 'Contact',
@@ -11,11 +14,14 @@ export const contactPage = {
   sections: [
     {
       heading: 'Renew Healthcare Clinics',
-      body: 'Call us at 062923 12076 or email info@renewhealthcare.in for appointments and patient support.\n- Saltlake: EN-26, Sector V, Saltlake City, Kolkata, West Bengal\n- Gariahat: 46B, Rafi Ahmed Kidwai Road, Kolkata, West Bengal\n- Jamshedpur: Renew Healthcare, Jamshedpur, Jharkhand',
+      // Branch addresses and hours from src/data/locations.js (26 Oct 2026):
+      // this list still carried the old WordPress addresses (EN-26, Sector V
+      // and 46B Rafi Ahmed Kidwai Road) and no PIN codes.
+      body: `Call us at 062923 12076 or email info@renewhealthcare.in for appointments and patient support.\n${locations.map((location) => `- ${BRANCH_NAMES[location.slug]}: ${location.address}`).join('\n')}`,
     },
     {
       heading: 'Clinic Timings',
-      body: 'Clinic Timings Monday to Saturday 9:00 AM - 6:00 PM. Appointment slots, doctor availability, and consultation timing can vary by clinic, so please call before visiting.',
+      body: `Clinic Timings ${OPENING_HOURS}. ${OPENING_HOURS_NOTE} Appointment slots, doctor availability, and consultation timing can vary by clinic, so please call before visiting.`,
     },
   ],
 }

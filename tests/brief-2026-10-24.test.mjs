@@ -108,6 +108,50 @@ test('the Jamshedpur address shows its PIN code and still matches its schema', (
   assert.equal(jamshedpur.postalAddress.postalCode, '831001')
 })
 
+test('the shared footer shows the Jamshedpur PIN code (task A6, 26 Oct 2026)', async () => {
+  const { readFileSync } = await import('node:fs')
+  const footer = readFileSync(new URL('../src/components/SiteFooter/SiteFooter.js', import.meta.url), 'utf8')
+  assert.match(footer, /address: '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur 831001'/)
+})
+
+test('every copy of the Jamshedpur address carries PIN 831001 (26 Oct 2026)', async () => {
+  const { readFileSync } = await import('node:fs')
+  const { finalPages } = await import('../src/data/finalPages.js')
+  const source = (path) => readFileSync(new URL(path, import.meta.url), 'utf8')
+  const withPin = /Bistupur, Jamshedpur 831001/g
+  const withoutPin = /Bistupur, Jamshedpur(?! 831001)/
+  for (const path of ['../src/components/SiteFooter/SiteFooter.js', '../src/views/FinalContentPage.jsx', '../src/data/finalPages.js']) {
+    assert.doesNotMatch(source(path), withoutPin, path)
+  }
+  assert.equal(source('../src/views/FinalContentPage.jsx').match(withPin).length, 1)
+  // "Locate Your Nearest IVF Center" on /injection-instruction and /mental-health.
+  for (const key of ['injection-instruction', 'mental-health']) {
+    const section = finalPages[key].sections.find((s) => s.heading === 'Locate Your Nearest IVF Center')
+    assert.equal(section.body, '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur 831001', key)
+  }
+})
+
+test('Salt Lake and Gariahat addresses and phones are unchanged by the Jamshedpur PIN fix', async () => {
+  const { readFileSync } = await import('node:fs')
+  // Current values, not confirmed ones: the Salt Lake number is still open
+  // (task A4). Update these lines when the clinic confirms it.
+  const kolkata = [
+    ["'Ground Floor, 18 C, Mandeville Gardens, Ballygunge, Kolkata 700019'", "'+91 62922 69060'"],
+    ["'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata 700064'", "'+91 6292312076'"],
+  ]
+  for (const path of ['../src/components/SiteFooter/SiteFooter.js', '../src/views/FinalContentPage.jsx']) {
+    const text = readFileSync(new URL(path, import.meta.url), 'utf8')
+    for (const [address, phone] of kolkata) {
+      assert.ok(text.includes(`address: ${address},\n    phone: ${phone},`), `${path}: ${address}`)
+    }
+  }
+  const bySlug = Object.fromEntries(locations.map((location) => [location.slug, location]))
+  assert.equal(bySlug.gariahat.address, 'Ground Floor, 18 C, Mandeville Gardens, Ballygunge, Kolkata 700019')
+  assert.equal(bySlug.gariahat.phone, '+91 62922 69060')
+  assert.equal(bySlug.saltlake.address, 'CB 69, CB Block, Sector 1, Bidhannagar, Kolkata 700064')
+  assert.equal(bySlug.saltlake.phone, '+91 62922 69060')
+})
+
 test('every branch page shows the owner-confirmed hours, on the page and in its schema', () => {
   assert.equal(OPENING_HOURS, 'Monday to Saturday, 9:00 AM – 6:30 PM')
   for (const location of locations) {

@@ -65,7 +65,7 @@ const locations = [
   },
   {
     name: 'Jamshedpur',
-    address: '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur',
+    address: '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur 831001',
     phone: '+91 62922 69061',
   },
 ]

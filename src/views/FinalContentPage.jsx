@@ -24,7 +24,7 @@ const clinics = [
   },
   {
     name: 'Jamshedpur',
-    address: '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur',
+    address: '1st Floor, Michael John Tower, 6 K Road, Bistupur, Jamshedpur 831001',
     phone: '+91 62922 69061',
     map: 'https://www.google.com/maps?q=Renew+Healthcare+Bistupur+Jamshedpur',
   },

@@ -16,7 +16,7 @@ import { locationClinicSchema } from '../src/lib/nextSeo.js'
 import { buildBlogPostingSchema } from '../src/lib/blogSeo.js'
 import { buildDoctorList } from '../src/lib/doctorsModel.js'
 import { physicianSchema } from '../src/lib/nextSeo.js'
-import { articleAuthorship, ARTICLE_REVIEWER } from '../src/lib/articleAuthorship.js'
+import { articleAuthorship } from '../src/lib/articleAuthorship.js'
 import { getArticleSeoOverride } from '../src/lib/articleSeoOverrides.js'
 
 const REMOVED = [
@@ -187,7 +187,7 @@ test('doctor pages carry the council registration number where one is on file', 
   assert.equal(remote.find((doctor) => doctor.slug === 'dr-sonam-agarwal').registration, null)
 })
 
-test('author box: Dr. Agarwal on his own pages, Renew Healthcare with a last-updated date elsewhere', () => {
+test('author box: Dr. Agarwal as author on his own pages, as medical reviewer elsewhere', () => {
   const doctor = articleAuthorship({ slug: 'placentrex-injection-uses-benefits-risks-dosage', iso: '2026-03-23', modifiedIso: '2026-10-23' })
   assert.equal(doctor.kind, 'doctor')
   assert.equal(doctor.name, 'Dr. Rajeev Agarwal')
@@ -195,16 +195,17 @@ test('author box: Dr. Agarwal on his own pages, Renew Healthcare with a last-upd
   assert.equal(doctor.date, 'October 23, 2026')
   assert.equal(doctor.url, '/doctor/dr-rajeev-agarwal')
 
-  // Owner's confirmation, 24 Oct 2026: every other article is medically
-  // reviewed by Dr. Agarwal, worded exactly as the owner asked.
+  // Owner's confirmation, 24 Oct 2026: other articles are medically reviewed
+  // by Dr. Agarwal, worded exactly as the owner asked (since 29 Oct 2026, only
+  // those that name no other doctor; see brief-2026-10-29.test.mjs).
   const team = articleAuthorship({ slug: 'what-is-embryo-glue', iso: '2025-01-10', modifiedIso: '2026-10-22' })
-  assert.equal(team.kind, 'team')
-  assert.equal(team.name, 'Renew Healthcare')
+  assert.equal(team.kind, 'reviewed')
+  assert.equal(team.name, 'Dr. Rajeev Agarwal')
+  assert.equal(team.publisher.name, 'Renew Healthcare')
   assert.equal(team.dateLabel, 'Last reviewed')
   assert.equal(team.dateIso, '2026-10-24')
   assert.equal(team.date, 'October 24, 2026')
   assert.equal(`Medically reviewed by ${team.reviewer.name}, ${team.reviewer.credentials}`, 'Medically reviewed by Dr. Rajeev Agarwal, MBBS, MD (O&G), WBMC 52540')
-  assert.equal(ARTICLE_REVIEWER.url, '/doctor/dr-rajeev-agarwal')
   const posting = buildBlogPostingSchema({ slug: 'what-is-embryo-glue', title: 'T', iso: '2025-01-10', modifiedIso: '2026-10-22' })
   assert.equal(posting.author['@type'], 'Organization')
   assert.equal(posting.reviewedBy.name, 'Dr. Rajeev Agarwal')
@@ -235,9 +236,10 @@ test('consultation days (owner, 24 Oct 2026): per branch and per doctor; Jamshed
   const { locations: branches, OPENING_HOURS_SPECIFICATION } = await import('../src/data/locations.js')
   for (const branch of branches) assert.equal(branch.hoursNote, 'Closed on Sundays and bank holidays.', branch.slug)
   assert.ok(OPENING_HOURS_SPECIFICATION.some((spec) => spec.dayOfWeek === 'Sunday' && spec.opens === '00:00' && spec.closes === '00:00'))
-  // Experience figure confirmed by the owner, used site-wide and on directories.
+  // Experience figure confirmed by the owner, used site-wide and on directories
+  // (27 years on 24 Oct 2026, replaced by 25+ years on 29 Oct 2026).
   const { doctors } = await import('../src/data/doctors.js')
-  assert.equal(doctors.find((d) => d.slug === 'dr-rajeev-agarwal').experience_years, '27 years')
+  assert.equal(doctors.find((d) => d.slug === 'dr-rajeev-agarwal').experience_years, '25+ years')
   assert.equal(doctors.find((d) => d.slug === 'dr-neha-yadav').experience_years, '')
 })
 

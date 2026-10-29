@@ -2,7 +2,7 @@
 // articles. Pure functions with no platform dependencies, so the Worker can
 // call them while rendering and tests can call them directly.
 import { DOCTOR_AUTHOR, getDoctorArticle } from './doctorArticles.js'
-import { ARTICLE_REVIEWER } from './articleAuthorship.js'
+import { articleReviewer } from './articleAuthorship.js'
 import { SITE, absoluteImageUrl, canonicalUrl, normalizePath } from './seoUtils.js'
 
 const PUBLISHER = {
@@ -167,8 +167,9 @@ export function extractFaqs(html) {
 // RH-05 — JSON-LD
 // ---------------------------------------------------------------------------
 
-export function buildBlogPostingSchema(article, { lang = 'en', image } = {}) {
+export function buildBlogPostingSchema(article, { lang = 'en', image, html = '' } = {}) {
   const doctor = getDoctorArticle(article.slug)
+  const reviewer = doctor ? null : articleReviewer(html)
   const path = normalizePath(`/blogs/${article.slug}`)
   const url = canonicalUrl(path)
   return {
@@ -182,9 +183,9 @@ export function buildBlogPostingSchema(article, { lang = 'en', image } = {}) {
     // The CMS has no per-post author column, so the organisation is the
     // author, except on pages rewritten by Dr. Agarwal (doctorArticles.js).
     author: doctor ? DOCTOR_AUTHOR : { '@type': 'Organization', name: 'Renew Healthcare', url: SITE },
-    // Articles he did not write are medically reviewed by him (articleAuthorship.js).
-    reviewedBy: !doctor && ARTICLE_REVIEWER
-      ? { '@type': 'Person', name: ARTICLE_REVIEWER.name, honorificSuffix: 'MBBS, MD (Obstetrics & Gynaecology)', url: canonicalUrl(ARTICLE_REVIEWER.url) }
+    // Other articles name their medical reviewer (articleAuthorship.js).
+    reviewedBy: reviewer
+      ? { '@type': 'Person', name: reviewer.name, honorificSuffix: reviewer.qualifications || undefined, url: canonicalUrl(reviewer.url) }
       : undefined,
     publisher: PUBLISHER,
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
@@ -228,7 +229,7 @@ export function buildFaqSchema(faqs, article) {
 /** Every schema an article should carry, ready to serialise. */
 export function buildArticleSchemas(article, articleHtml, { lang = 'en', image } = {}) {
   return [
-    buildBlogPostingSchema(article, { lang, image }),
+    buildBlogPostingSchema(article, { lang, image, html: articleHtml }),
     buildBreadcrumbSchema(article),
     buildFaqSchema(getDoctorArticle(article.slug)?.faqs || extractFaqs(articleHtml), article),
   ].filter(Boolean)

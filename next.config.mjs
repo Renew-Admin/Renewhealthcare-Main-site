@@ -13,6 +13,7 @@
 
 import { DUPLICATE_REDIRECTS } from './src/lib/seoDuplicates.js'
 import { getLegacyRedirects } from './src/lib/seoRoutes.js'
+import { getLiveExternalRedirects } from './src/lib/externalRedirects.js'
 
 const offline = process.env.RENEW_OFFLINE === '1'
 const pick = (...names) => {
@@ -64,7 +65,10 @@ const nextConfig = {
   // final URL. Retired WordPress URLs answer 410 from route handlers
   // (src/app/comment.php, content.php, products/[id]).
   async redirects() {
-    const pairs = [...DUPLICATE_REDIRECTS.entries(), ...getLegacyRedirects()]
+    // Articles moved to drrajeevagarwal.co.in redirect only once the new page
+    // is live (src/lib/externalRedirects.js, checked on every build).
+    const moved = await getLiveExternalRedirects({ offline })
+    const pairs = [...moved, ...DUPLICATE_REDIRECTS.entries(), ...getLegacyRedirects()]
     return [
       // The www host is a duplicate of the apex and must collapse onto it.
       // A Cloudflare redirect rule (www -> apex at the edge) is the recommended

@@ -44,7 +44,7 @@ const SLIDES = [
 const HERO_H1 = 'IVF & Fertility Centre in Kolkata'
 
 const HERO_STATS = [
-  { label: 'Years of Experience', value: 27 },
+  { label: 'Years of Experience', value: 25 },
   { label: 'Patients Seen', value: 12000, short: 'k' },
   { label: 'Number Of Babies Delivered', value: 6000, short: 'k' },
   { label: 'Number of IVFs', value: 9000, short: 'k' },
@@ -69,7 +69,7 @@ const total = SLIDES.length
 const SLIDE_SCROLL = 600 // px of fake-scroll per slide
 const PIN_DISTANCE = SLIDE_SCROLL * total // total pinned scroll distance
 
-// Starts at the real value so the server HTML (and crawlers) read "+27", not
+// Starts at the real value so the server HTML (and crawlers) read "+25", not
 // "+0"; the count-up animation replays from zero once the page is interactive.
 function useCountUp(target, duration = 1400) {
   const [count, setCount] = useState(target)

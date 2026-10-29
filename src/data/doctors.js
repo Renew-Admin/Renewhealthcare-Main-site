@@ -90,21 +90,27 @@ const rows = [
   ['Sales', 'Milun Sarkar', '', 'Senior Executive Business Development', '2024/12/Milun-Sarkar.jpg'],
 ]
 
-// Owner's confirmation, 24 Oct 2026: the one experience figure to use for
-// Dr. Agarwal everywhere (website and directory listings).
-const experienceYears = {
-  'Dr. Rajeev Agarwal': '27 years',
+// Client-confirmed details (checklist, 29 Oct 2026): Dr. Agarwal's
+// qualifications, and "25+ years" replacing the 27 years confirmed on
+// 24 Oct 2026 as the one experience figure for the website and every
+// directory listing. Keyed by page slug. These also override the CMS row
+// (src/lib/doctorsModel.js), so his page cannot show an older figure.
+export const CONFIRMED_DOCTOR_DETAILS = {
+  'dr-rajeev-agarwal': {
+    qualification: 'MBBS, MD (Obstetrics & Gynaecology)',
+    experience_years: '25+ years',
+  },
 }
 
 export const doctors = rows.map(([category, name, qualification, role, photoPath]) => ({
   slug: slug(name),
   name,
-  qualification,
+  qualification: CONFIRMED_DOCTOR_DETAILS[slug(name)]?.qualification || qualification,
   role,
   category,
   photo: photo(photoPath),
   bio: doctorBios[name] || '',
-  experience_years: experienceYears[name] || '',
+  experience_years: CONFIRMED_DOCTOR_DETAILS[slug(name)]?.experience_years || '',
 }))
 
 export const doctorCategories = [...new Set(doctors.map(doctor => doctor.category))]

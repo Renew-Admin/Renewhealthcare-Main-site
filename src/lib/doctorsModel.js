@@ -2,7 +2,7 @@
 // merged with the built-in list in src/data/doctors.js. Pure functions, so the
 // server (page rendering, routes, sitemap) and the browser (admin preview,
 // hooks) build exactly the same list and cannot drift apart.
-import { doctors as staticDoctors } from '../data/doctors.js'
+import { CONFIRMED_DOCTOR_DETAILS, doctors as staticDoctors } from '../data/doctors.js'
 import { getDoctorRegistration } from './doctorRegistrations.js'
 
 export const HIDDEN_DOCTOR_SLUGS = new Set(['dr-ruby-yadav'])
@@ -89,6 +89,19 @@ export function buildDoctorList(remoteRows = []) {
     // Council registration numbers come from code (doctorRegistrations.js),
     // whichever list is in use.
     .map((d) => ({ ...d, registration: getDoctorRegistration(d.slug) }))
+    .map(applyConfirmedDetails)
+}
+
+// Client-confirmed qualifications and experience (src/data/doctors.js) win
+// over the CMS, the same way the registration numbers do.
+function applyConfirmedDetails(doctor) {
+  const confirmed = CONFIRMED_DOCTOR_DETAILS[doctor.slug]
+  if (!confirmed) return doctor
+  return {
+    ...doctor,
+    ...confirmed,
+    qualifications: confirmed.qualification ? [confirmed.qualification] : doctor.qualifications,
+  }
 }
 
 export function doctorCategories(list) {

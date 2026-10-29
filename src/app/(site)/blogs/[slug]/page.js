@@ -85,7 +85,7 @@ export default async function BlogArticleRoute({ params }) {
     blog.lastUpdated = formatLastUpdated(doctor.updated || article.modifiedIso || article.iso)
   }
   // Author box and the date line at the end of every article.
-  const author = articleAuthorship(article)
+  const author = articleAuthorship(article, html)
 
   return (
     <>

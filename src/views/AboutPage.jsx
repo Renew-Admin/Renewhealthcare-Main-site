@@ -12,7 +12,7 @@ const reveal = {
 }
 
 const stats = [
-  ['27+', 'Years of experience'],
+  ['25+', 'Years of experience'],
   ['12,000+', 'Clients'],
   ['6,000+', 'Babies delivered'],
   ['9,000+', 'IVF procedures'],

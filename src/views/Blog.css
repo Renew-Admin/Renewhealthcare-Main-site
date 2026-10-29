@@ -1155,12 +1155,6 @@
   background: #fff;
 }
 
-.blogx-author-box.is-team .blogx-author-photo img {
-  object-fit: contain;
-  padding: 10px;
-  border: 1px solid rgba(27, 30, 37, 0.08);
-}
-
 .blogx-author-body { flex: 1; min-width: 0; }
 
 .blogx-author-eyebrow {
@@ -1189,6 +1183,9 @@
 }
 
 .blogx-author-line.is-registration { font-variant-numeric: tabular-nums; }
+
+.blogx-author-line.is-publisher { margin-top: 6px; color: #59636e; }
+.blogx-author-line.is-publisher a { color: inherit; }
 
 .blogx-author-date {
   margin: 10px 0 0;

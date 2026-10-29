@@ -5,7 +5,6 @@ import { Link } from '../lib/router.js'
 // agree on who is named and which date is shown.
 export default function ArticleAuthorBox({ author }) {
   if (!author) return null
-  const reviewer = author.reviewer
   return (
     <aside className={`blogx-author-box is-${author.kind}`} aria-label={`${author.heading} ${author.name}`}>
       <div className="blogx-author-photo">
@@ -19,9 +18,9 @@ export default function ArticleAuthorBox({ author }) {
         {author.qualifications ? <p className="blogx-author-line">{author.qualifications}</p> : null}
         {author.role ? <p className="blogx-author-line">{author.role}</p> : null}
         {author.registration ? <p className="blogx-author-line is-registration">{author.registration}</p> : null}
-        {reviewer ? (
-          <p className="blogx-author-line is-reviewer">
-            Medically reviewed by <Link to={reviewer.url}>{reviewer.name}</Link>, {reviewer.credentials}
+        {author.publisher ? (
+          <p className="blogx-author-line is-publisher">
+            Published by <Link to={author.publisher.url}>{author.publisher.name}</Link>
           </p>
         ) : null}
         {author.date ? (
@@ -30,7 +29,7 @@ export default function ArticleAuthorBox({ author }) {
           </p>
         ) : null}
         <Link className="blogx-author-link" to={author.url}>
-          {author.kind === 'doctor' ? `About ${author.name} →` : 'About Renew Healthcare →'}
+          {`About ${author.name} →`}
         </Link>
       </div>
     </aside>

@@ -20,7 +20,7 @@ const SHOW_PATIENT_TESTIMONIALS = false
 const stats = [
   ['6,000+', 'Babies delivered'],
   ['9,000+', 'IVF procedures'],
-  ['27+', 'Years of experience'],
+  ['25+', 'Years of experience'],
   ['4.9 ★', '2,500+ Google reviews'],
 ]
 

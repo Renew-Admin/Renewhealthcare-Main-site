@@ -10,7 +10,7 @@ const SLIDES = [
 ]
 
 const STATS = [
-  ['27+', 'Years of expertise'],
+  ['25+', 'Years of expertise'],
   ['9,000+', 'IVF procedures'],
   ['6,000+', 'Babies delivered'],
 ]

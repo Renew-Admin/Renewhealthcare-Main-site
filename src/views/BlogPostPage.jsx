@@ -26,7 +26,8 @@ export default function BlogPostPage({ blog, html, sidebar = [], heroImage, lang
             </p>
           ) : author?.reviewer ? (
             // Reviewer line worded as the owner asked (24 Oct 2026); the author
-            // box at the end of the article repeats it with the profile link.
+            // box at the end of the article shows the reviewer in full, with
+            // photo, registration and profile link.
             <p className="blogx-post-byline">
               Medically reviewed by {author.reviewer.name}, {author.reviewer.credentials}
               {author.date ? <span className="blogx-post-updated"> · {author.dateLabel}: {author.date}</span> : null}

@@ -1,4 +1,5 @@
 import DoctorCard from '../components/DoctorCard.jsx'
+import ClinicPhotoGallery from '../components/ClinicPhotoGallery.jsx'
 import { branchContact, directionsUrl, whatsappUrl } from '../lib/branchContacts.js'
 import { consultationDaysForBranch } from '../lib/consultationDays.js'
 import './ContentPages.css'
@@ -11,6 +12,13 @@ export default function LocationPage({ location, clinicDoctors = [] }) {
   const contact = branchContact(location)
   // Owner-confirmed consultation days (src/lib/consultationDays.js).
   const consultationDays = consultationDaysForBranch(location.slug)
+  // Clinic-supplied directions (src/data/locations.js); blank fields are skipped.
+  const directions = [
+    ['Nearest landmark', location.directions?.landmark],
+    ['Main road', location.directions?.road],
+    ['Metro / transport', location.directions?.transit],
+    ['Parking', location.directions?.parking],
+  ].filter(([, text]) => text && String(text).trim())
   return (
     <main className="content-page">
       <section className="service-banner">
@@ -53,6 +61,20 @@ export default function LocationPage({ location, clinicDoctors = [] }) {
             <iframe src={location.mapEmbed} loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={`${location.name} map`} />
           </div>
 
+          {directions.length > 0 && (
+            <section className="content-panel">
+              <h3>How To Reach Us</h3>
+              <dl className="location-directions">
+                {directions.map(([label, text]) => (
+                  <div key={label}>
+                    <dt>{label}</dt>
+                    <dd>{text}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          )}
+
           {clinicDoctors.length > 0 && (
             <section className="content-panel">
               <h3>Doctors At This Clinic</h3>
@@ -83,11 +105,12 @@ export default function LocationPage({ location, clinicDoctors = [] }) {
           {location.gallery?.length > 0 && (
             <section className="content-panel">
               <h3>Clinic Photos</h3>
-              <div className="location-photo-grid">
-                {location.gallery.map((src, index) => (
-                  <img key={src} src={src} alt={`${location.gbpName || location.name}, ${location.name}: clinic photo ${index + 1}`} loading="lazy" decoding="async" />
-                ))}
-              </div>
+              <ClinicPhotoGallery
+                photos={location.gallery.map((photo, index) => ({
+                  ...photo,
+                  alt: photo.alt || `${location.gbpName || location.name}, ${location.name}: clinic photo ${index + 1}`,
+                }))}
+              />
             </section>
           )}
 

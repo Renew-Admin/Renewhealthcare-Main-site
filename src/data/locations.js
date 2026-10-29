@@ -39,7 +39,25 @@ export const locations = [
     services: ['Conception', 'Women’s Health', 'Endoscopy', 'Genetic Health', 'Wellness & Nutrition'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Neha Yadav'],
     image: '/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg',
-    gallery: ['/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg', '/images/renew/uploads/2025/03/ivf-saltlake.jpg'],
+    // Clinic photos (checklist item 4, photos supplied 29 Oct 2026). `position`
+    // keeps the signboard in frame when a tall photo is cropped to 4:3.
+    gallery: [
+      { src: '/images/renew/uploads/2026/10/renew-healthcare-salt-lake-building-entrance.webp', alt: 'Renew Healthcare signboard over the entrance of the clinic building at CB 69, Salt Lake', position: 'center 72%' },
+      { src: '/images/renew/uploads/2026/10/renew-healthcare-salt-lake-reception-waiting-area.webp', alt: 'Reception desk and waiting area at Renew Healthcare, Salt Lake' },
+      { src: '/images/renew/uploads/2026/10/renew-healthcare-salt-lake-brand-wall.webp', alt: 'Renew Woman Care, Fertility, USG and Genetics wall at Renew Healthcare, Salt Lake' },
+      { src: '/images/renew/uploads/2025/03/ivf-saltlake.jpg', alt: 'Consultation room at Renew Healthcare, Salt Lake' },
+      { src: '/images/renew/uploads/2026/10/renew-healthcare-salt-lake-building-front.webp', alt: 'Front of the Renew Healthcare building, CB Block, Sector 1, Salt Lake', position: 'center 70%' },
+      { src: '/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg', alt: 'Renew Healthcare clinic building, Salt Lake, seen from the street' },
+    ],
+    // "How to reach us" (checklist item 5, 29 Oct 2026). Distances are straight-
+    // line, measured from the branch's Google Maps pin to OpenStreetMap places;
+    // the clinic can correct any line here. Empty fields are not shown.
+    directions: {
+      landmark: 'CB Block, Sector 1, about 600 m from City Centre 1 mall (DC Block).',
+      road: 'Close to 1st Avenue, Sector 1. The EM Bypass is about 1 km away.',
+      transit: 'City Centre metro station (Green Line) is about 550 m away and Bengal Chemical metro station about 800 m. Bidhannagar Road railway station is about 1.3 km away.',
+      parking: 'Please call the clinic about parking before you come by car. The nearest large car park is the paid one at City Centre 1 mall, about 600 m away.',
+    },
     intro: 'Renew Healthcare Saltlake offers fertility, gynaecology, genetic health, endoscopy, wellness, and nutrition support from a modern clinic in Bidhannagar.',
   },
   {
@@ -61,7 +79,22 @@ export const locations = [
     services: ['Preconception Counselling', 'Infertility Workup', 'IUI', 'IVF', 'ICSI', 'Surrogacy', 'Embryo Freezing', 'Oocyte Freezing', 'Semen Bank', 'Andrology Clinic', 'Genetic Counseling'],
     doctors: ['Dr. Dorothy P Ghosh'],
     image: '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg',
-    gallery: ['/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg', '/images/renew/uploads/2025/03/renew-healthcare-jamshedpur.jpg'],
+    // Clinic photos (checklist item 4, photos supplied 29 Oct 2026).
+    gallery: [
+      { src: '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg', alt: 'Renew Fertility entrance at Michael John Tower, Bistupur, Jamshedpur', position: 'center 35%' },
+      { src: '/images/renew/uploads/2026/10/renew-fertility-jamshedpur-reception.webp', alt: 'Reception desk and services board at Renew Fertility, Jamshedpur' },
+      { src: '/images/renew/uploads/2026/10/renew-fertility-jamshedpur-waiting-area.webp', alt: 'Waiting area at Renew Fertility, Jamshedpur' },
+      { src: '/images/renew/uploads/2025/03/renew-healthcare-jamshedpur.jpg', alt: 'Consultation room at Renew Fertility, Jamshedpur' },
+    ],
+    // "How to reach us" (checklist item 5, 29 Oct 2026). Distances are straight-
+    // line, measured from the branch's Google Maps pin to OpenStreetMap places;
+    // the clinic can correct any line here. Empty fields are not shown.
+    directions: {
+      landmark: 'In Bistupur, about 500 m from Bistupur market and close to the Bistupur petrol pump on K Road.',
+      road: 'On K Road, Bistupur. Kharkai Link Road is about 200 m away.',
+      transit: 'Tatanagar Junction railway station is about 3.5 km away. Jamshedpur has no metro; auto-rickshaws and taxis run to Bistupur.',
+      parking: 'Bistupur public parking area on L Road, about 200 m from the clinic.',
+    },
     intro: 'Renew Health Care Jamshedpur, “Renew Fertility” is for couples who are still deprived of the joy of having a child. Here you can consult our infertility specialist Dr. Dorothy Ghosh.',
   },
   {
@@ -89,7 +122,23 @@ export const locations = [
     services: ['Conception', 'Women’s Health', 'Pregnancy Care', 'Gynaecology', 'Genetic Health'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Arnab Kundu', 'Dr. Sonam Agarwal'],
     image: '/images/renew/uploads/2026/07/renew-healthcare-mandeville-gardens.webp',
-    gallery: ['/images/renew/uploads/2026/07/renew-healthcare-mandeville-gardens.webp', '/images/renew/uploads/2024/12/Inner-Page-Banner-2.jpg'],
+    // Clinic photos (checklist item 4, photos supplied 29 Oct 2026). The
+    // generic Inner-Page-Banner-2.jpg was dropped: its branch could not be
+    // identified (it is also a banner on service pages).
+    gallery: [
+      { src: '/images/renew/uploads/2026/10/renew-healthcare-mandeville-gardens-entrance.webp', alt: 'Renew Healthcare entrance at 18C Mandeville Gardens, Ballygunge', position: 'center 55%' },
+      { src: '/images/renew/uploads/2026/10/renew-healthcare-mandeville-gardens-reception.webp', alt: 'Reception and waiting area at Renew Healthcare, Mandeville Gardens' },
+      { src: '/images/renew/uploads/2026/07/renew-healthcare-mandeville-gardens.webp', alt: 'Corridor to the consultation rooms, injection room and IVF laboratory at Renew Healthcare, Mandeville Gardens' },
+    ],
+    // "How to reach us" (checklist item 5, 29 Oct 2026). Distances are straight-
+    // line, measured from the branch's Google Maps pin to OpenStreetMap places;
+    // the clinic can correct any line here. Empty fields are not shown.
+    directions: {
+      landmark: 'Next to South Point School (16 Mandeville Gardens), about 300 m from Ballygunge Phari.',
+      road: 'Off Gariahat Road, about 450 m away. Gariahat Market and Rashbehari Avenue are about 350 m away.',
+      transit: 'Ballygunge Junction railway station is about 600 m away. The nearest metro station is Kalighat (Blue Line), about 2.2 km away.',
+      parking: 'Mandeville Gardens is a residential lane, so please call the clinic about parking before you come by car.',
+    },
     intro: 'Renew Ballygunge supports fertility, gynaecology, pregnancy care, and women’s health services from Mandeville Gardens, Ballygunge.',
   },
 ]

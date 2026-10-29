@@ -12,7 +12,7 @@ const reasons = [
 ]
 
 const proofItems = [
-  ['+27', 'Years of Experience'],
+  ['+25', 'Years of Experience'],
   ['+12k', 'Clients'],
   ['+6k', 'Babies Delivered'],
   ['+9k', 'IVF Journeys'],

@@ -281,6 +281,29 @@
   font-size: 0.85rem;
 }
 
+.location-directions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 0;
+}
+
+.location-directions dt {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #59636e;
+}
+
+.location-directions dd {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #3d4652;
+}
+
 .location-map-card {
   overflow: hidden;
   height: 430px;
@@ -1185,15 +1208,115 @@
 
 .location-photo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
 }
 
-.location-photo-grid img {
+.location-photo {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #eef1f4;
+  cursor: zoom-in;
+}
+
+.location-photo img {
+  display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  border-radius: 14px;
+  transition: transform 0.35s ease;
+}
+
+.location-photo:hover img,
+.location-photo:focus-visible img { transform: scale(1.04); }
+
+.location-photo:focus-visible { outline: 3px solid var(--navy, #1B1E25); outline-offset: 3px; }
+
+.location-photo-zoom {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1b1e25;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* Full-size viewer (src/components/ClinicPhotoGallery.jsx). */
+.photo-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 56px 64px;
+  background: rgba(10, 12, 16, 0.92);
+  cursor: zoom-out;
+}
+
+.photo-viewer figure {
+  margin: 0;
+  max-width: 100%;
+  max-height: 100%;
+  cursor: default;
+}
+
+.photo-viewer figure img {
+  display: block;
+  max-width: min(1400px, 100%);
+  max-height: calc(100vh - 150px);
+  margin: 0 auto;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.photo-viewer figcaption {
+  margin-top: 12px;
+  color: #e6e9ee;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.photo-viewer figcaption span { margin-left: 8px; opacity: 0.7; white-space: nowrap; }
+
+.photo-viewer-close,
+.photo-viewer-nav {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.photo-viewer-close:hover,
+.photo-viewer-nav:hover { background: rgba(255, 255, 255, 0.26); }
+
+.photo-viewer-close { top: 14px; right: 14px; }
+.photo-viewer-nav { top: 50%; transform: translateY(-50%); }
+.photo-viewer-nav.is-prev { left: 12px; }
+.photo-viewer-nav.is-next { right: 12px; }
+
+@media (max-width: 720px) {
+  .location-photo-grid { grid-template-columns: 1fr; gap: 14px; }
+  .photo-viewer { padding: 64px 12px; }
+  .photo-viewer-nav { top: auto; bottom: 14px; transform: none; }
 }
 
 .location-maps-link {

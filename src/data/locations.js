@@ -35,7 +35,7 @@ export const locations = [
     phone: '+91 6292312076',
     hours: OPENING_HOURS,
     hoursNote: OPENING_HOURS_NOTE,
-    mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1841.890894700904!2d88.40033064837824!3d22.58726325812174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0275e065555555%3A0x3629f2d77c8e0af1!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1721464477531!5m2!1sen!2sin',
+    mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29470.25484117943!2d88.36774717910158!3d22.587260799999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0275e065555555%3A0x3629f2d77c8e0af1!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1793265626553!5m2!1sen!2sin',
     services: ['Conception', 'Women’s Health', 'Endoscopy', 'Genetic Health', 'Wellness & Nutrition'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Neha Yadav'],
     image: '/images/renew/uploads/2025/03/renew-ivf-saltlake.jpg',
@@ -75,7 +75,7 @@ export const locations = [
     phone: '+91 62922 69061',
     hours: OPENING_HOURS,
     hoursNote: OPENING_HOURS_NOTE,
-    mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.1898182412465!2d86.17949957587665!3d22.79542932476553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3f61c108ad7%3A0x67728bfba5628131!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1721464534308!5m2!1sen!2sin',
+    mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.189818241254!2d86.17949957602481!3d22.79542932476524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3f61c108ad7%3A0x67728bfba5628131!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1793265656402!5m2!1sen!2sin',
     services: ['Preconception Counselling', 'Infertility Workup', 'IUI', 'IVF', 'ICSI', 'Surrogacy', 'Embryo Freezing', 'Oocyte Freezing', 'Semen Bank', 'Andrology Clinic', 'Genetic Counseling'],
     doctors: ['Dr. Dorothy P Ghosh'],
     image: '/images/renew/uploads/2025/03/renew-ivf-jamshedpur.jpg',
@@ -112,13 +112,7 @@ export const locations = [
     phone: '+91 62922 69060',
     hours: OPENING_HOURS,
     hoursNote: OPENING_HOURS_NOTE,
-    // Task B4 (26 Oct 2026): the client's embed for this place
-    // (0x3a0277589dea95db:0x62e182948ab063d = cid 445319978748151357) showed
-    // about 59 km of map. Same embed, zoomed to street level (1d) and centred
-    // on the coordinates Google returns for the place in that embed, which it
-    // resolves to "Ground Floor, Renew Healthcare, 18 C, Mandeville Gardens,
-    // Ekdalia, Ballygunge, Kolkata 700019".
-    mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1841.8!2d88.3669942!3d22.5224052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277589dea95db%3A0x62e182948ab063d!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1793010930767!5m2!1sen!2sin',
+    mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29484.33027766274!2d88.30627107039716!3d22.52138756533923!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277589dea95db%3A0x62e182948ab063d!2sRenew%20Healthcare!5e0!3m2!1sen!2sin!4v1793265577103!5m2!1sen!2sin',
     services: ['Conception', 'Women’s Health', 'Pregnancy Care', 'Gynaecology', 'Genetic Health'],
     doctors: ['Dr. Rajeev Agarwal', 'Dr. Arnab Kundu', 'Dr. Sonam Agarwal'],
     image: '/images/renew/uploads/2026/07/renew-healthcare-mandeville-gardens.webp',

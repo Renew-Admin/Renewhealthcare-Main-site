@@ -58,7 +58,7 @@ export default function LocationPage({ location, clinicDoctors = [] }) {
           </div>
 
           <div className="location-map-card">
-            <iframe src={location.mapEmbed} loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={`${location.name} map`} />
+            <iframe src={location.mapEmbed} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen title={`${location.name} map`} />
           </div>
 
           {directions.length > 0 && (

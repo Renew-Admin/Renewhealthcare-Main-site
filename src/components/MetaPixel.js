@@ -1,37 +1,27 @@
 'use client'
 // MetaPixel — Meta Pixel base code for the public site (not the admin panel).
 // Sends PageView on the first load and on every client-side navigation.
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Script from 'next/script'
 import { usePathname } from 'next/navigation'
 import { META_PIXEL_ID, trackMetaEvent } from '../lib/metaPixel.js'
-import { CONSENT_EVENT, adsConsentGranted } from '../lib/consent.js'
 
 export default function MetaPixel() {
   const pathname = usePathname()
   const isFirstView = useRef(true)
-  // The Pixel is an advertising tag: it loads only after the visitor allows
-  // ad measurement in the consent banner.
-  const [allowed, setAllowed] = useState(false)
-
+  // No consent banner since 5 Nov 2026 (owner's decision): the Pixel loads for
+  // every visitor of the public site.
   useEffect(() => {
-    setAllowed(adsConsentGranted())
-    const onChange = () => setAllowed(adsConsentGranted())
-    window.addEventListener(CONSENT_EVENT, onChange)
-    return () => window.removeEventListener(CONSENT_EVENT, onChange)
-  }, [])
-
-  useEffect(() => {
-    if (!META_PIXEL_ID || !allowed) return
+    if (!META_PIXEL_ID) return
     // The base code below already tracks the first PageView.
     if (isFirstView.current) {
       isFirstView.current = false
       return
     }
     trackMetaEvent('PageView')
-  }, [pathname, allowed])
+  }, [pathname])
 
-  if (!META_PIXEL_ID || !allowed) return null
+  if (!META_PIXEL_ID) return null
 
   return (
     <>

@@ -11,7 +11,6 @@ import {
   faYoutube,
 } from '@fortawesome/free-brands-svg-icons'
 import { useLeadSubmit, validateLeadForm } from '../../hooks/useLeadSubmit.js'
-import { openConsentSettings } from '../../lib/consent.js'
 import './SiteFooter.css'
 import TodayDateInput from '../TodayDateInput.js'
 import PurposeOtherInput, { OTHER_PURPOSE } from '../PurposeOtherInput.js'
@@ -276,7 +275,6 @@ export default function SiteFooter({ onCallback }) {
               <ul className="d-flex gap-3 flex-end">
                 <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                 <li><Link to="/patient-rights-responsibilities">Patient Rights &amp; Responsibilities</Link></li>
-                <li><button type="button" className="footer-cookie-settings" onClick={openConsentSettings} style={{ background: 'none', border: 0, padding: 0, color: 'inherit', font: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}>Cookie settings</button></li>
               </ul>
             </div>
           </div>

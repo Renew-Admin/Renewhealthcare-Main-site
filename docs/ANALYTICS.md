@@ -37,13 +37,11 @@ Owner: website developer. Last reviewed: 16 Oct 2026.
 - `/admin` never sends data.
 - `RENEW_OFFLINE=1` builds do not load gtag at all.
 
-## Consent (Consent Mode v2)
-- Defaults before gtag loads: everything **denied**; `ads_data_redaction` on.
-- Banner (`src/components/ConsentBanner.js`): Accept all / Customise / Reject non-essential. Choice is stored in `localStorage.rh_consent` (v1) and re-applied on every page.
-- `ad_personalization` is **always denied**: no remarketing or personalised audiences from fertility browsing.
-- Meta Pixel loads only after ad-measurement consent.
-- Footer "Cookie settings" reopens the banner (withdrawal).
-- Legal review of the privacy notice under the DPDP Act 2023 is still required.
+## Consent
+- No consent banner since 5 Nov 2026 (owner's decision, to restore full visitor counts in GA4).
+- The `<head>` snippet sets Consent Mode defaults to granted for `analytics_storage`, `ad_storage` and `ad_user_data`; `ad_personalization` stays **denied** (no remarketing or personalised audiences from fertility browsing).
+- The Meta Pixel loads for every visitor of the public site (not /admin).
+- Revisit before the DPDP Rules 2025 consent obligations take effect (about May 2027). The previous banner (`src/components/ConsentBanner.js`, `src/lib/consent.js`) is in git history, PR #5 (commit 034f24a).
 
 ## Lead forwarding (`/api/lead`)
 Browser → `/api/lead` (this Worker) → Make.com. The webhook URL is the Worker secret `MAKE_WEBHOOK_URL`; it is never in client JS.

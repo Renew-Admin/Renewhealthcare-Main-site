@@ -10,7 +10,6 @@ import SiteFooter from './SiteFooter/SiteFooter.js'
 import FloatingActions from './FloatingActions/FloatingActions.js'
 import { PageTracking } from '../hooks/usePageTracking.js'
 import MetaPixel from './MetaPixel.js'
-import ConsentBanner from './ConsentBanner.js'
 import ContactTracking from './ContactTracking.js'
 import '../App.css'
 
@@ -31,7 +30,6 @@ export default function SiteShell({ children }) {
       <PageTracking />
       <ContactTracking />
       <MetaPixel />
-      <ConsentBanner />
       <div className="rh-root">
         <AnnouncementBanner />
         <GlobalHeader onCallback={openCallback} />

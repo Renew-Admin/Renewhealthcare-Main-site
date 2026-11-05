@@ -41,8 +41,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <div id="root">{children}</div>
-        {/* Google tag (gtag.js). The init snippet runs beforeInteractive so Consent Mode
-            defaults (all denied until the visitor chooses) and the production-host guard
+        {/* Google tag (gtag.js). No consent banner since 5 Nov 2026 (owner's decision): the
+            init snippet grants analytics and ad measurement by default (ad_personalization
+            stays denied) and sets the production-host guard
             are in place before gtag.js loads. Page views come only from usePageTracking. */}
         {analyticsEnabled && (
           <>

@@ -36,7 +36,9 @@ test('admin is never tracked', () => {
 test('init snippet sets consent defaults before config', () => {
   const s = gtagInitScript()
   assert.ok(s.indexOf("'consent', 'default'") < s.indexOf("'config'"))
-  assert.ok(s.includes("analytics_storage: 'denied'"))
+  assert.ok(s.includes("analytics_storage: 'granted'"))
+  assert.ok(s.includes("ad_personalization: 'denied'"))
+  assert.ok(!s.includes('rh_consent'))
   assert.ok(s.includes('ga-disable-G-VL7SJC7ENL'))
 })
 

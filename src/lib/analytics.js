@@ -134,15 +134,9 @@ export function track(name, params = {}) {
 export function gtagInitScript() {
   return `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
-gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', wait_for_update: 500 });
+gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'denied' });
 gtag('set', 'ads_data_redaction', true);
 gtag('set', 'url_passthrough', false);
-try {
-  var c = JSON.parse(localStorage.getItem('rh_consent') || 'null');
-  if (c && c.v === 1 && c.analytics === 'granted') {
-    gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: c.ads === 'granted' ? 'granted' : 'denied', ad_user_data: c.ads === 'granted' ? 'granted' : 'denied' });
-  }
-} catch (e) {}
 (function () {
   var hosts = ${JSON.stringify(PRODUCTION_HOSTS)};
   var p = location.pathname;

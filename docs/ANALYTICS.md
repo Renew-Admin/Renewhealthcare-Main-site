@@ -40,7 +40,7 @@ Owner: website developer. Last reviewed: 16 Oct 2026.
 ## Consent
 - No consent banner since 5 Nov 2026 (owner's decision, to restore full visitor counts in GA4).
 - The `<head>` snippet sets Consent Mode defaults to granted for `analytics_storage`, `ad_storage` and `ad_user_data`; `ad_personalization` stays **denied** (no remarketing or personalised audiences from fertility browsing).
-- The Meta Pixel loads for every visitor of the public site (not /admin).
+- The Meta Pixel (271529562308828, "Renew Healthcare's pixel") loads for every visitor of the public site (not /admin). The ID is the default in `next.config.mjs`; a `META_PIXEL_ID` build variable overrides it.
 - Revisit before the DPDP Rules 2025 consent obligations take effect (about May 2027). The previous banner (`src/components/ConsentBanner.js`, `src/lib/consent.js`) is in git history, PR #5 (commit 034f24a).
 
 ## Lead forwarding (`/api/lead`)

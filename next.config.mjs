@@ -44,12 +44,15 @@ const nextConfig = {
     NEXT_PUBLIC_GMB_WEBHOOK_BALLYGUNGE: offline ? '' : process.env.VITE_GMB_WEBHOOK_BALLYGUNGE || '',
     NEXT_PUBLIC_GMB_WEBHOOK_SALTLAKE: offline ? '' : process.env.VITE_GMB_WEBHOOK_SALTLAKE || '',
     NEXT_PUBLIC_GMB_WEBHOOK_JAMSHEDPUR: offline ? '' : process.env.VITE_GMB_WEBHOOK_JAMSHEDPUR || '',
-    // Meta Pixel (dataset) ID from Events Manager. Offline runs never load it,
-    // unless META_PIXEL_ALLOW_OFFLINE=1 is set to test the integration locally.
+    // Meta Pixel (dataset) ID from Events Manager. A Pixel ID is public (it is
+    // in every page's source), so the production ID is the default here; a
+    // META_PIXEL_ID build variable still overrides it. Offline runs never load
+    // it, unless META_PIXEL_ALLOW_OFFLINE=1 is set to test the integration locally.
+    // 271529562308828 = "Renew Healthcare's pixel", ad account 1005892860439064.
     NEXT_PUBLIC_META_PIXEL_ID:
       offline && process.env.META_PIXEL_ALLOW_OFFLINE !== '1'
         ? ''
-        : process.env.META_PIXEL_ID || process.env.NEXT_PUBLIC_META_PIXEL_ID || process.env.VITE_META_PIXEL_ID || '',
+        : process.env.META_PIXEL_ID || process.env.NEXT_PUBLIC_META_PIXEL_ID || process.env.VITE_META_PIXEL_ID || '271529562308828',
     RENEW_OFFLINE: offline ? '1' : '',
   },
 
